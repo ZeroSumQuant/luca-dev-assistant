@@ -1,0 +1,37 @@
+name: Update Changelog
+
+permissions:
+  contents: write      # allow git push from workflow
+  pull-requests: write # future-proof
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+    if: github.event.pull_request.merged == true
+
+jobs:
+  update-changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install conventional-changelog
+        run: npm install -g conventional-changelog-cli
+
+      - name: Regenerate changelog
+        run: conventional-changelog -p angular -i docs/handoff/changelog.md -s
+
+      - name: Commit changelog if it changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/handoff/changelog.md
+          git diff --quiet || git commit -m "chore: update changelog [skip ci]"
+
+      - name: Push commit
+        run: git push
