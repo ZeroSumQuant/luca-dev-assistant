@@ -1,0 +1,6 @@
+model: gpt-4o            # default; swap to ft:gpt-4.1-… when ready
+temperature: 0.2
+api_key_env: ZEROSUM_OPENAI_KEY   # keep secrets in env vars
+system_prompt: >
+  You are Luca, the AutoGen development assistant for ZeroSumQuant.
+  Answer succinctly, one command at a time.
