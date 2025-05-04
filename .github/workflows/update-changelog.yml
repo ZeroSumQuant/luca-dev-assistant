@@ -1,37 +1,46 @@
 name: Update Changelog
 
-permissions:
-  contents: write      # allow git push from workflow
-  pull-requests: write # future-proof
-
 on:
+  # fire when a PR into `main` is closed (merged == true)
   pull_request:
     types: [closed]
     branches: [main]
-    if: github.event.pull_request.merged == true
+  # fire again when the resulting squash-merge commit lands on `main`
+  push:
+    branches: [main]
+
+permissions:
+  contents: write   # allow the workflow to push the changelog
 
 jobs:
-  update-changelog:
+  build:
+    # run if the PR was merged _or_ the event is a push to main
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
 
-      - name: Install conventional-changelog
+      - name: Install conventional-changelog-cli
         run: npm install -g conventional-changelog-cli
 
       - name: Regenerate changelog
         run: conventional-changelog -p angular -i docs/handoff/changelog.md -s
 
-      - name: Commit changelog if it changed
+      - name: Commit changelog if changed
+        id: diff
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/handoff/changelog.md
-          git diff --quiet || git commit -m "chore: update changelog [skip ci]"
+          git diff --quiet docs/handoff/changelog.md || {
+            git config user.name  "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add docs/handoff/changelog.md
+            git commit -m "chore: update changelog [skip ci]"
+          }
 
       - name: Push commit
-        run: git push
+        if: steps.diff.outcome == 'success'
+        uses: ad-m/github-push-action@v0.8.0
