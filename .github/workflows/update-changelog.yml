@@ -1,5 +1,9 @@
 name: Update Changelog
 
+permissions:
+  contents: write      # allow git push from workflow
+  pull-requests: write # future-proof (optional)
+
 on:
   pull_request:
     types: [closed]
