@@ -1,5 +1,6 @@
 from subprocess import run
 
+
 def test_bootstrap_runs():
     """Smoke-test: Luca’s bootstrap script should run without crashing
     and print its readiness banner. We don’t care whether the key is ✔ or ✖
