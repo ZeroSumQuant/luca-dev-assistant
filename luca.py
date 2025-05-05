@@ -1,39 +1,42 @@
-#!/usr/bin/env python3
-"""
-Luca Dev Assistant – Phase 2 scaffold (AgentChat 0.5.6)
+"""Luca Dev Assistant – minimal CLI scaffold.
 
-• Wires File-access and Docker-executor tools from the new packages:
-      autogen_agentchat.tools
-      autogen_ext.code_executors.docker
-• For now it simply echoes the prompt so tests stay lightweight; the
-  tools are instantiated but not yet invoked.
+* Prints a placeholder banner + usage when called with no prompt (exit 0).
+* Echoes the prompt for now when one is supplied (exit 0).
+* Registers safe file-I/O and Git helpers so the agent can call them later.
 """
 
 import sys
 
-from autogen_ext.code_executors.docker import DockerCommandLineCodeExecutor
+from autogen.agentchat.tools import FunctionTool
 
-# removed – unused
+# Project helpers
+from tools.file_io import read_text, write_text
+from tools.git_tools import get_git_diff, git_commit
 
-# --- Tool fences ----------------------------------------------------------
 
-docker_tool = DockerCommandLineCodeExecutor(
-    work_dir="docker_exec",  # container workdir
-    image="python:3.13-slim",  # minimal base image
-)
-
-# --------------------------------------------------------------------------
+def build_tools():
+    """Return Luca's initial FunctionTool registry."""
+    return [
+        FunctionTool.from_defaults(read_text),
+        FunctionTool.from_defaults(write_text),
+        FunctionTool.from_defaults(get_git_diff),
+        FunctionTool.from_defaults(git_commit),
+    ]
 
 
 def main() -> int:
-    if len(sys.argv) < 2:
+    """Entry-point invoked by cli wrapper & __main__ guard."""
+    if len(sys.argv) == 1:
+        print("Placeholder: Luca ready for prompts.")
         print('Usage: python luca.py "<prompt>"')
         return 0
 
     prompt = sys.argv[1]
-    print(prompt)  # simple echo; full LLM loop comes next
+    tools = build_tools()  # noqa: F841 – used later when we wire the agent loop
+    # TODO: replace this echo with an AutoGen agent call.
+    print(f"Luca received prompt: {prompt}")
     return 0
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     sys.exit(main())
