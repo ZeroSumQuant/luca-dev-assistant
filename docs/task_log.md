@@ -17,5 +17,3 @@
 - **Safe file I/O** – added `tools/file_io.py`; purged deprecated `DirectoryReadTool` import.
 - **Docker exec fix** – removed unsupported `network=` kw-arg from `DockerCommandLineCodeExecutor`.
 - **Research deep-dive** – confirmed tool-set best practices and MCP integration roadmap.
-
-EOF
