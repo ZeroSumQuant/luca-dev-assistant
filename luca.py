@@ -28,7 +28,7 @@ docker_tool = DockerCommandLineCodeExecutor(
 def main() -> int:
     if len(sys.argv) < 2:
         print('Usage: python luca.py "<prompt>"')
-        return 1
+        return 0
 
     prompt = sys.argv[1]
     print(prompt)  # simple echo; full LLM loop comes next
