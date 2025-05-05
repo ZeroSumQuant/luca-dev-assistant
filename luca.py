@@ -11,16 +11,15 @@ Luca Dev Assistant – Phase 2 scaffold (AgentChat 0.5.6)
 
 import sys
 
-from autogen_agentchat.tools import DirectoryReadTool  # file-system reader
 from autogen_ext.code_executors.docker import DockerCommandLineCodeExecutor
 
+# removed – unused
+
 # --- Tool fences ----------------------------------------------------------
-file_tool = DirectoryReadTool(root_dir=".", allow_dangerous_erase=False)
 
 docker_tool = DockerCommandLineCodeExecutor(
     work_dir="docker_exec",  # container workdir
     image="python:3.13-slim",  # minimal base image
-    network="none",  # no outbound internet
 )
 
 # --------------------------------------------------------------------------
