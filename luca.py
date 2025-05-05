@@ -7,7 +7,7 @@
 
 import sys
 
-from autogen.agentchat import FunctionTool
+from autogen.agentchat.contrib.tool_utils import FunctionTool
 
 # Project helpers
 from tools.file_io import read_text, write_text
