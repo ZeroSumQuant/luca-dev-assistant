@@ -1,3 +1,5 @@
+from autogen_core.tools import FunctionTool
+
 """Luca Dev Assistant – minimal CLI scaffold.
 
 * Prints a placeholder banner + usage when called with no prompt (exit 0).
@@ -7,8 +9,6 @@
 
 import sys
 
-from autogen.agentchat.contrib.tool_utils import FunctionTool
-
 # Project helpers
 from tools.file_io import read_text, write_text
 from tools.git_tools import get_git_diff, git_commit
@@ -17,10 +17,10 @@ from tools.git_tools import get_git_diff, git_commit
 def build_tools():
     """Return Luca's initial FunctionTool registry."""
     return [
-        FunctionTool.from_defaults(read_text),
-        FunctionTool.from_defaults(write_text),
-        FunctionTool.from_defaults(get_git_diff),
-        FunctionTool.from_defaults(git_commit),
+        FunctionTool(read_text, description="Read a UTF-8 text file"),
+        FunctionTool(write_text, description="Write text to a file"),
+        FunctionTool(get_git_diff, description="Return combined Git diff"),
+        FunctionTool(git_commit, description="Stage and commit all changes"),
     ]
 
 
