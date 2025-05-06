@@ -21,7 +21,7 @@ def get_git_diff() -> str:
     """Return the combined unstaged + staged diff for review."""
     unstaged = _run("git diff")
     staged = _run("git diff --staged")
-    return f"--- unstaged ---\\n{unstaged}\\n\\n--- staged ---\\n{staged}"
+    return f"--- unstaged ---\n{unstaged}\n\n--- staged ---\n{staged}"
 
 
 def git_commit(message: str) -> str:

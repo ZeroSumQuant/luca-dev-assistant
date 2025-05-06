@@ -1,5 +1,3 @@
-from autogen_core.tools import FunctionTool
-
 """Luca Dev Assistant – minimal CLI scaffold.
 
 * Prints a placeholder banner + usage when called with no prompt (exit 0).
@@ -8,6 +6,8 @@ from autogen_core.tools import FunctionTool
 """
 
 import sys
+
+from autogen_core.tools import FunctionTool
 
 # Project helpers
 from tools.file_io import read_text, write_text
