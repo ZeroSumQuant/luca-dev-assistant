@@ -1,5 +1,3 @@
-import os
-
 import streamlit as st
 from dotenv import load_dotenv
 
@@ -73,7 +71,11 @@ def main():
         st.session_state.messages = [
             {
                 "role": "assistant",
-                "content": "👋 Hello! I'm Luca, your AI development assistant. I specialize in QuantConnect strategies and full-stack development. How can I help you today?",
+                "content": (
+                    "👋 Hello! I'm Luca, your AI development assistant. "
+                    "I specialize in QuantConnect strategies and full-stack "
+                    "development. How can I help you today?"
+                ),
             }
         ]
 
@@ -94,7 +96,11 @@ def main():
             message_placeholder = st.empty()
             with st.spinner("Luca is thinking..."):
                 # Simulate streaming response
-                full_response = f"You asked: '{prompt}'\n\nI'm currently in MVP mode. The agent orchestration will be implemented to handle your request."
+                full_response = (
+                    f"You asked: '{prompt}'\n\n"
+                    "I'm currently in MVP mode. The agent orchestration "
+                    "will be implemented to handle your request."
+                )
                 message_placeholder.markdown(full_response)
 
                 # Add assistant response to chat history
