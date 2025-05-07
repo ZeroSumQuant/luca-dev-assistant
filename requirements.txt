@@ -1,14 +1,19 @@
 python-dotenv==1.1.0
 PyYAML==6.0.2
 pytest==8.3.5
+
+# AutoGen Stack - current versions
 pyautogen==0.9.0
 autogen-agentchat==0.5.6
 autogen-ext[docker]==0.5.6
-streamlit
+
+# UI - Let's try a newer streamlit version
+streamlit==1.43.0  # This was before the pillow<11 requirement
 graphviz
 plotly
 pandas
-# MCP dependencies
+
+# MCP dependencies - flexible versions
 mcp>=1.0.0
-aiohttp>=3.8.0
-python-socketio>=5.8.0
+aiohttp>=3.8.0,<4.0.0
+python-socketio>=5.8.0,<6.0.0
