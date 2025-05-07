@@ -53,3 +53,8 @@
   - Fixed line length violations by breaking long strings into multiple lines
   - Applied black, isort, and flake8 formatting throughout codebase
   - All linting checks now pass with 100% compliance
+- **11:00 pm — CI dependency conflict fix** – resolved pillow dependency conflict causing CI failures:
+  - Identified conflict between streamlit 1.38.0 (requires pillow<11) and autogen-core 0.5.6 (requires pillow>=11)
+  - Pinned streamlit to version 1.43.0 which accepts pillow<12, resolving the conflict
+  - Used flexible version ranges for MCP dependencies for better compatibility 
+  - All local tests pass; expecting CI to now build successfully
