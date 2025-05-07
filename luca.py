@@ -1,13 +1,15 @@
 from autogen_core.tools import FunctionTool
 
-"""Luca Dev Assistant – minimal CLI scaffold.
+"""Luca Dev Assistant – main entry point.
 
-* Prints a placeholder banner + usage when called with no prompt (exit 0).
-* Echoes the prompt for now when one is supplied (exit 0).
-* Registers safe file-I/O and Git helpers so the agent can call them later.
+* When called with no arguments, launches the Streamlit UI
+* When called with a prompt, processes it using the agent system
+* Registers safe file-I/O and Git helpers
 """
 
 import sys
+import subprocess
+import os
 
 # Project helpers
 from tools.file_io import read_text, write_text
@@ -24,17 +26,42 @@ def build_tools():
     ]
 
 
+def launch_ui():
+    """Launch the Streamlit UI interface."""
+    try:
+        print("🚀 Launching Luca Dev Assistant UI...")
+        app_path = os.path.join(os.path.dirname(__file__), "app", "main.py")
+        subprocess.run([sys.executable, "-m", "streamlit", "run", app_path])
+    except KeyboardInterrupt:
+        print("\n👋 Goodbye!")
+    except Exception as e:
+        print(f"❌ Error launching UI: {e}")
+        sys.exit(1)
+
+
+def process_prompt(prompt: str):
+    """Process a command-line prompt using the agent system."""
+    tools = build_tools()  # noqa: F841 – will be used when agent is implemented
+    
+    # TODO: Replace this with actual AutoGen agent orchestration
+    print(f"📝 Processing prompt: {prompt}")
+    print("🤖 Agent response: I'm currently in MVP mode. Please use the UI for full functionality.")
+    
+    # Launch UI as fallback
+    print("\n🔄 Launching UI for full functionality...")
+    launch_ui()
+
+
 def main() -> int:
     """Entry-point invoked by cli wrapper & __main__ guard."""
     if len(sys.argv) == 1:
-        print("Placeholder: Luca ready for prompts.")
-        print('Usage: python luca.py "<prompt>"')
+        # No arguments - launch UI
+        launch_ui()
         return 0
-
+    
+    # Process command-line prompt
     prompt = sys.argv[1]
-    tools = build_tools()  # noqa: F841 – used later when we wire the agent loop
-    # TODO: replace this echo with an AutoGen agent call.
-    print(f"Luca received prompt: {prompt}")
+    process_prompt(prompt)
     return 0
 
 
