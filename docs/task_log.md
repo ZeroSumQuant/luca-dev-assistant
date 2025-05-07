@@ -30,3 +30,13 @@
 - **12:00 pm — First Conventional Commit** – made first example commit following proper format: `feat(changelog): add conventional commits helper`.
 - **01:30 pm — Handoff report** – created detailed handoff document at `docs/handoff/2025-05-05-1.md` summarizing changelog fixes and next steps.
 - **02:15 pm — Task log overhaul** – audited all previous handoffs and updated task log with previously missing entries to ensure complete project history.
+
+
+## 2025-05-06
+- **07:45 pm — MVP Sprint Planning** – created git snapshot `pre-mvp-experiment-2025-05-06` tag and file backup for safety; Docker image built and pushed as `zerosumquant/luca-dev:2025-05-06`.
+- **08:00 pm — Streamlit UI Implementation** – created multi-page Streamlit application with:
+  - Main chat interface for interacting with Luca
+  - Agent Manager page with tree visualization using graphviz
+  - Agent model selection feature for each team member
+  - Support for Luca, Coder, Tester, Doc Writer, and Analyst agents
+- **08:15 pm — Updated Launcher** – modified main `luca.py` to launch Streamlit UI by default; added `run_streamlit.py` startup script; all tests passing with new UI components.
