@@ -40,3 +40,11 @@
   - Agent model selection feature for each team member
   - Support for Luca, Coder, Tester, Doc Writer, and Analyst agents
 - **08:15 pm — Updated Launcher** – modified main `luca.py` to launch Streamlit UI by default; added `run_streamlit.py` startup script; all tests passing with new UI components.
+- **09:30 pm — MCP Integration Phase 1** – implemented Model Context Protocol support:
+  - Added MCP dependencies to requirements.txt
+  - Created MCPClientManager for managing MCP server connections
+  - Developed filesystem MCP server for testing
+  - Built MCPAutogenBridge to integrate MCP tools with AutoGen agents
+  - Added MCP Manager page to Streamlit UI for server management
+  - Created comprehensive tests for MCP integration
+  - Successfully connected AutoGen agents to external tools via MCP protocol

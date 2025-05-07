@@ -8,3 +8,7 @@ streamlit
 graphviz
 plotly
 pandas
+# MCP dependencies
+mcp>=1.0.0
+aiohttp>=3.8.0
+python-socketio>=5.8.0
