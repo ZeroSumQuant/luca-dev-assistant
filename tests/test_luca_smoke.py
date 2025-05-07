@@ -3,6 +3,7 @@ import sys
 import pytest
 
 
+
 def test_luca_cli_runs():
     """Ensure luca.py launches and exits cleanly."""
     try:
