@@ -1,5 +1,3 @@
-from autogen_core.tools import FunctionTool
-
 """Luca Dev Assistant – main entry point.
 
 * When called with no arguments, launches the Streamlit UI
@@ -7,9 +5,11 @@ from autogen_core.tools import FunctionTool
 * Registers safe file-I/O and Git helpers
 """
 
-import sys
-import subprocess
 import os
+import subprocess
+import sys
+
+from autogen_core.tools import FunctionTool
 
 # Project helpers
 from tools.file_io import read_text, write_text
@@ -28,6 +28,11 @@ def build_tools():
 
 def launch_ui():
     """Launch the Streamlit UI interface."""
+    # Check if we're in testing mode - if so, don't launch UI
+    if os.environ.get("LUCA_TESTING") == "1":
+        print("🧪 Testing mode detected, skipping UI launch")
+        return
+
     try:
         print("🚀 Launching Luca Dev Assistant UI...")
         app_path = os.path.join(os.path.dirname(__file__), "app", "main.py")
@@ -39,29 +44,45 @@ def launch_ui():
         sys.exit(1)
 
 
-def process_prompt(prompt: str):
+def process_prompt(prompt: str, launch_ui_after=True):
     """Process a command-line prompt using the agent system."""
+    # Check if we're in testing mode
+    testing_mode = os.environ.get("LUCA_TESTING") == "1"
+    if testing_mode:
+        print("🧪 Testing mode detected in process_prompt")
+
     tools = build_tools()  # noqa: F841 – will be used when agent is implemented
-    
+
     # TODO: Replace this with actual AutoGen agent orchestration
     print(f"📝 Processing prompt: {prompt}")
-    print("🤖 Agent response: I'm currently in MVP mode. Please use the UI for full functionality.")
-    
-    # Launch UI as fallback
-    print("\n🔄 Launching UI for full functionality...")
-    launch_ui()
+    print(
+        "🤖 Agent response: I'm currently in MVP mode. Please use the UI for full functionality."
+    )
+
+    # Launch UI as fallback, unless testing
+    if launch_ui_after and not testing_mode:
+        print("\n🔄 Launching UI for full functionality...")
+        launch_ui()
 
 
 def main() -> int:
     """Entry-point invoked by cli wrapper & __main__ guard."""
+    # Debug: Print all environment variables to help debugging
+    testing_mode = os.environ.get("LUCA_TESTING") == "1"
+    print(f"🔍 LUCA_TESTING environment variable: {os.environ.get('LUCA_TESTING')}")
+    print(f"🔍 Testing mode detected: {testing_mode}")
+
     if len(sys.argv) == 1:
-        # No arguments - launch UI
-        launch_ui()
+        # No arguments - launch UI unless in testing mode
+        if not testing_mode:
+            launch_ui()
+        else:
+            print("🧪 Testing mode detected, skipping UI launch in no-args case")
         return 0
-    
+
     # Process command-line prompt
     prompt = sys.argv[1]
-    process_prompt(prompt)
+    process_prompt(prompt, launch_ui_after=not testing_mode)
     return 0
 
 

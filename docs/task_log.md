@@ -58,3 +58,13 @@
   - Pinned streamlit to version 1.43.0 which accepts pillow<12, resolving the conflict
   - Used flexible version ranges for MCP dependencies for better compatibility 
   - All local tests pass; expecting CI to now build successfully
+
+## 2025-05-07
+- **09:30 am — Fixed hanging test and import issues** – resolved issues in the May 6th branch:
+  - Fixed import order in `luca.py` by moving `FunctionTool` import after module docstring
+  - Implemented robust testing mode in `luca.py` via `LUCA_TESTING` environment variable
+  - Added comprehensive testing mode checks in all UI-launching code paths
+  - Updated `test_luca_echo.py` to use environment variable for test isolation
+  - Added assertions to verify UI is not launched during tests
+  - Created detailed documentation of issues and solutions
+  - Tests now run successfully without hanging or launching Streamlit UI
