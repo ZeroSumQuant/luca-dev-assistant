@@ -68,3 +68,18 @@
   - Added assertions to verify UI is not launched during tests
   - Created detailed documentation of issues and solutions
   - Tests now run successfully without hanging or launching Streamlit UI
+- **10:45 am — Created comprehensive handoff document** – documented progress toward MVP (80-85%):
+  - Added detailed handoff with current project status at `docs/handoff/2025-05-07-1.md`
+  - Outlined immediate next steps for resolving remaining CI issues
+  - Included root cause analysis of hanging tests problem
+  - Documented future vision for IDE integration and macOS app packaging
+  - Created ready-up checklist for next development session
+
+## 2025-05-08
+- **10:00 am — CI reliability enhancements** – implemented recommended fixes for test hanging issues:
+  - Added `pytest-timeout` and `psutil` dependencies for robust test execution
+  - Created comprehensive `tests/conftest.py` with multiprocessing configuration and environment setup
+  - Updated `test_luca_smoke.py` with proper timeout handling and environment variable awareness
+  - Enhanced CI workflow with memory monitoring, verbose test output, and global timeout
+  - Verified all tests pass locally with the new timeout infrastructure
+  - All tests now correctly handle multiprocessing, resources, and environment isolation
