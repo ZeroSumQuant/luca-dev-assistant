@@ -30,3 +30,56 @@
 - **12:00 pm — First Conventional Commit** – made first example commit following proper format: `feat(changelog): add conventional commits helper`.
 - **01:30 pm — Handoff report** – created detailed handoff document at `docs/handoff/2025-05-05-1.md` summarizing changelog fixes and next steps.
 - **02:15 pm — Task log overhaul** – audited all previous handoffs and updated task log with previously missing entries to ensure complete project history.
+
+
+## 2025-05-06
+- **07:45 pm — MVP Sprint Planning** – created git snapshot `pre-mvp-experiment-2025-05-06` tag and file backup for safety; Docker image built and pushed as `zerosumquant/luca-dev:2025-05-06`.
+- **08:00 pm — Streamlit UI Implementation** – created multi-page Streamlit application with:
+  - Main chat interface for interacting with Luca
+  - Agent Manager page with tree visualization using graphviz
+  - Agent model selection feature for each team member
+  - Support for Luca, Coder, Tester, Doc Writer, and Analyst agents
+- **08:15 pm — Updated Launcher** – modified main `luca.py` to launch Streamlit UI by default; added `run_streamlit.py` startup script; all tests passing with new UI components.
+- **09:30 pm — MCP Integration Phase 1** – implemented Model Context Protocol support:
+  - Added MCP dependencies to requirements.txt
+  - Created MCPClientManager for managing MCP server connections
+  - Developed filesystem MCP server for testing
+  - Built MCPAutogenBridge to integrate MCP tools with AutoGen agents
+  - Added MCP Manager page to Streamlit UI for server management
+  - Created comprehensive tests for MCP integration
+  - Successfully connected AutoGen agents to external tools via MCP protocol
+- **10:30 pm — Linting cleanup** – resolved all linting errors across the project:
+  - Removed unused imports (`os` from `app/main.py`, `Dict/List/Optional` from `app/pages/agent_manager.py`)
+  - Fixed line length violations by breaking long strings into multiple lines
+  - Applied black, isort, and flake8 formatting throughout codebase
+  - All linting checks now pass with 100% compliance
+- **11:00 pm — CI dependency conflict fix** – resolved pillow dependency conflict causing CI failures:
+  - Identified conflict between streamlit 1.38.0 (requires pillow<11) and autogen-core 0.5.6 (requires pillow>=11)
+  - Pinned streamlit to version 1.43.0 which accepts pillow<12, resolving the conflict
+  - Used flexible version ranges for MCP dependencies for better compatibility 
+  - All local tests pass; expecting CI to now build successfully
+
+## 2025-05-07
+- **09:30 am — Fixed hanging test and import issues** – resolved issues in the May 6th branch:
+  - Fixed import order in `luca.py` by moving `FunctionTool` import after module docstring
+  - Implemented robust testing mode in `luca.py` via `LUCA_TESTING` environment variable
+  - Added comprehensive testing mode checks in all UI-launching code paths
+  - Updated `test_luca_echo.py` to use environment variable for test isolation
+  - Added assertions to verify UI is not launched during tests
+  - Created detailed documentation of issues and solutions
+  - Tests now run successfully without hanging or launching Streamlit UI
+- **10:45 am — Created comprehensive handoff document** – documented progress toward MVP (80-85%):
+  - Added detailed handoff with current project status at `docs/handoff/2025-05-07-1.md`
+  - Outlined immediate next steps for resolving remaining CI issues
+  - Included root cause analysis of hanging tests problem
+  - Documented future vision for IDE integration and macOS app packaging
+  - Created ready-up checklist for next development session
+
+## 2025-05-08
+- **10:00 am — CI reliability enhancements** – implemented recommended fixes for test hanging issues:
+  - Added `pytest-timeout` and `psutil` dependencies for robust test execution
+  - Created comprehensive `tests/conftest.py` with multiprocessing configuration and environment setup
+  - Updated `test_luca_smoke.py` with proper timeout handling and environment variable awareness
+  - Enhanced CI workflow with memory monitoring, verbose test output, and global timeout
+  - Verified all tests pass locally with the new timeout infrastructure
+  - All tests now correctly handle multiprocessing, resources, and environment isolation

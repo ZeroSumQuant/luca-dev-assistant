@@ -1,6 +1,21 @@
 python-dotenv==1.1.0
 PyYAML==6.0.2
 pytest==8.3.5
+pytest-timeout==2.2.0
+psutil==5.9.8  # For CI memory monitoring
+
+# AutoGen Stack - current versions
 pyautogen==0.9.0
 autogen-agentchat==0.5.6
 autogen-ext[docker]==0.5.6
+
+# UI - Let's try a newer streamlit version
+streamlit==1.43.0  # This was before the pillow<11 requirement
+graphviz
+plotly
+pandas
+
+# MCP dependencies - flexible versions
+mcp>=1.0.0
+aiohttp>=3.8.0,<4.0.0
+python-socketio>=5.8.0,<6.0.0

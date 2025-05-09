@@ -8,7 +8,8 @@ on:
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 15  # Global job timeout
+    
     steps:
       - uses: actions/checkout@v4
 
@@ -21,8 +22,19 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Run tests
-        run: pytest -q
+          
+      - name: Display environment info
+        run: |
+          python -c "import sys; print(f'Python version: {sys.version}')"
+          python -c "import psutil; print(f'Available memory: {psutil.virtual_memory().available / (1024**3):.2f} GB')"
+          pip list
+      
+      - name: Run tests with timeout
+        run: |
+          python -m pytest --timeout=60 --timeout_method=thread -v
+        env:
+          LUCA_TESTING: 1
+          CI: true
 
       - name: Docker build
         uses: docker/build-push-action@v5
