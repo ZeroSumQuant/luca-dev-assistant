@@ -126,6 +126,10 @@ cython_debug/
 *.orig
 *.save
 
+# Artifact files
+=*.*
+=*
+
 # Vim swap files
 *.swp
 *.swo

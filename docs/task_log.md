@@ -83,3 +83,9 @@
   - Enhanced CI workflow with memory monitoring, verbose test output, and global timeout
   - Verified all tests pass locally with the new timeout infrastructure
   - All tests now correctly handle multiprocessing, resources, and environment isolation
+- **02:00 pm — Repository cleanup and structure documentation** – addressed code review findings:
+  - Removed unnecessary files (`=1.0.0` and `luca.py.bak`)
+  - Created comprehensive repository structure documentation in `docs/repository-structure.md`
+  - Updated `.gitignore` to explicitly exclude artifact files with unusual names
+  - Created `docs/pending-github-issues.md` documenting TODOs found in codebase
+  - Improved project structure and documentation for better onboarding
