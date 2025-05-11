@@ -134,3 +134,10 @@
   - Added cross-reference to `docs/repository-structure.md` for detailed structure information
   - Updated handoff document to reflect the documentation approach changes
   - Maintained separation of concerns in documentation while eliminating redundancy
+- **08:15 pm — Developer guide enhancements** – made critical improvements:
+  - Added explicit "Repository Structure Updates" section to enforce structure documentation maintenance
+  - Documented the requirement to update `repository-structure.md` when making structural changes
+  - Added "Python Command Usage" guidance to address Python vs Python3 command differences
+  - Standardized on `python3` command usage throughout the documentation
+  - Updated UI run command to use `python3 run_streamlit.py` for consistency
+  - Enhanced documentation to improve developer workflow

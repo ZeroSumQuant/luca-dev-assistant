@@ -93,6 +93,12 @@ For a detailed and comprehensive view of the repository structure, please refer 
      autogen-ext[docker]==0.5.6
      ```
 
+4. **Python Command Usage**:
+   - Always use `python3` instead of `python` for command execution
+   - The `python` command may not be available on macOS and some Linux distributions
+   - Use `python3` for running scripts, installing packages, and executing one-off commands
+   - Example: `python3 -m pip install -r requirements.txt`
+
 ## Important Technical Notes
 
 ### AutoGen Integration
@@ -155,6 +161,12 @@ For a detailed and comprehensive view of the repository structure, please refer 
 2. **Task Log Updates**:
    - Update `docs/task_log.md` with each completed task
    - Format: `- **HH:MM am/pm — Task name** – brief description of what was done.`
+
+3. **Repository Structure Updates**:
+   - Update `docs/repository-structure.md` whenever you add, remove, or relocate directories/files
+   - This document is the single source of truth for repository structure
+   - Make structure updates in the same PR as the structural changes themselves
+   - Include the update in your task log entry and handoff documentation
 
 ### Testing
 
@@ -224,7 +236,7 @@ message = format_commit_message(
 
 2. **Running the UI**:
    ```bash
-   python run_streamlit.py
+   python3 run_streamlit.py
    ```
 
 3. **UI Components**:
