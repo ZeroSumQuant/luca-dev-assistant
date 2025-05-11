@@ -18,6 +18,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Need full git history for changelog generation
+          fetch-depth: 0
+          # Use a token with write permissions
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-node@v4
         with:
@@ -42,8 +47,41 @@ jobs:
             echo "has_changes=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Push commit
+      - name: Push commit with robust sync handling
         if: steps.commit.outputs.has_changes == 'true'
         run: |
-          git pull --rebase origin main
-          git push origin HEAD:main
+          # First fetch latest changes from origin
+          git fetch origin main
+          
+          # Try to rebase our changes on top of latest main
+          if ! git rebase origin/main; then
+            # If rebase fails, abort it and try a different approach
+            git rebase --abort
+            
+            # Save our current changelog changes
+            cp docs/handoff/changelog.md /tmp/changelog.md.new
+            
+            # Get the latest main branch state
+            git checkout main
+            git pull origin main
+            
+            # Apply our saved changes
+            cp /tmp/changelog.md.new docs/handoff/changelog.md
+            
+            # Re-stage and commit
+            git add docs/handoff/changelog.md
+            git commit -m "chore: update changelog [skip ci]"
+          fi
+          
+          # Finally push changes to main branch with extra safeguards
+          git push origin HEAD:main || {
+            echo "Push failed, trying one more time with forced update of local state"
+            git fetch origin main --force
+            git reset --hard origin/main
+            
+            # Apply our changelog changes again
+            cp /tmp/changelog.md.new docs/handoff/changelog.md
+            git add docs/handoff/changelog.md
+            git commit -m "chore: update changelog [skip ci]"
+            git push origin HEAD:main
+          }
