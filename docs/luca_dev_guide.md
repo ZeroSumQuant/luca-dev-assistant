@@ -4,55 +4,17 @@ This document outlines the established practices for developing the LUCA Dev Ass
 
 ## Repository Structure
 
-```
-/Users/dustinkirby/dev/luca-dev-assistant/
-├── .env                   # Environment variables (not committed)
-├── .git/                  # Git repository data
-├── .github/               # GitHub workflows
-│   └── workflows/         
-│       ├── ci.yml         # CI workflow
-│       └── update-changelog.yml  # Changelog automation
-├── .gitignore             # Git ignore rules
-├── .pre-commit-config.yaml # Pre-commit hooks configuration
-├── .venv/                 # Python virtual environment
-├── app/                   # Streamlit application UI
-│   ├── components/        # Reusable UI components
-│   │   └── ...
-│   ├── pages/             # UI page definitions
-│   │   ├── agent_manager.py  # Agent configuration UI
-│   │   └── mcp_manager.py    # MCP server management UI
-│   └── main.py            # Main Streamlit application entry point
-├── config/
-│   └── assistant_config.yaml  # Luca configuration
-├── docker_exec/           # Docker execution environment files
-├── docs/                  # Documentation
-│   ├── handoff/           # Handoff documentation
-│   │   ├── YYYY-MM-DD-N.md   # Daily handoff reports
-│   │   ├── vision/        # Vision/design documents
-│   │   └── changelog.md   # Auto-generated changelog
-│   ├── snapshot/          # Point-in-time repository snapshots
-│   ├── task_log.md        # Log of all completed tasks
-│   ├── mcp-implementation-plan.md  # Plan for MCP integration
-│   └── repository-structure.md  # Repository structure documentation
-├── luca.py                # Main application file
-├── mcp_servers/           # Model Context Protocol servers
-│   └── filesystem_server.py  # MCP server for filesystem operations
-├── requirements.txt       # Project dependencies
-├── run_streamlit.py       # Bootstrap script for Streamlit UI
-├── scripts/               # Utility scripts
-│   └── start_assistant.py # Bootstrap script
-├── tests/                 # Test directory
-│   ├── test_basic.py      # Basic smoke tests
-│   ├── test_changelog_helper.py  # Tests for changelog helper
-│   └── test_luca_*.py     # Tests for Luca functionality
-└── tools/                 # Utility modules
-    ├── __init__.py        # Package marker
-    ├── changelog_helper.py  # Helper for commit messages
-    ├── file_io.py         # File I/O utilities
-    ├── git_tools.py       # Git integration utilities
-    ├── mcp_client.py      # MCP client functionality
-    └── mcp_autogen_bridge.py  # Bridge between MCP and AutoGen
-```
+The LUCA project follows a structured organization of directories and files. Key components include:
+
+- `app/` - Streamlit UI application with main interface and management pages
+- `config/` - Configuration files including assistant settings
+- `docker_exec/` - Docker execution environment files
+- `docs/` - Documentation, handoff reports, and project logs
+- `mcp_servers/` - Model Context Protocol server implementations
+- `tools/` - Utility modules for file I/O, git operations, and MCP integration
+- `tests/` - Test files for all project components
+
+For a detailed and comprehensive view of the repository structure, please refer to [Repository Structure Documentation](repository-structure.md).
 
 ## Key Development Practices
 
