@@ -1,27 +1,70 @@
 # LUCA · Developer Assistant
 
-*A plug‑and‑play agent‑orchestrator that turns any QuantConnect user into an effective quantitative engineer.* ✨🧠📈
+*A powerful general-purpose development assistant built on agent orchestration technology that helps developers across the entire software development lifecycle.* ✨🧠💻
 
 ---
 
 ## Mission
 
-Empower traders, data scientists, and makers to build, test, and ship production‑grade code through **one conversational agent**. LUCA excels at Lean and QuantConnect Cloud, yet can just as easily scaffold Streamlit dashboards, FastAPI services, or pure‑Python data jobs. 🚀📊💻
+Empower developers to efficiently build, test, and ship production-grade code through **one conversational AI assistant**. LUCA guides you through the entire development process - from scaffolding new projects to writing code, testing implementations, and creating documentation. While offering broad development capabilities, LUCA also provides specialized expertise for quantitative finance applications, particularly in the QuantConnect ecosystem. 🚀📊💻
 
 ---
 
 ## Key Features
 
-| Feature                    | Description                                                                                                          |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| QuantConnect‑native brain  | Ships with Lean API docs and QC company context embedded for instant recall.                                         |
-| Multi‑domain "packs"       | Plug‑in modules (`qc`, `web`, `data`, …) let LUCA swap toolsets based on your prompt.                                |
-| Strategy & project planner | Translates plain requests (“Design an MNQ scalper” / “Spin up a Streamlit dashboard”) into step‑by‑step agent plans. |
-| Teacher‑first UX           | Explains *why* as well as *what*; walks new devs through Git, LinkedIn, or Cloud deploys.                            |
-| Safe local execution       | Runs unit tests and linting inside Docker before touching your repo.                                                 |
-| QC Cloud back‑testing      | All strategy back‑tests execute on QuantConnect Cloud; LUCA streams results back to you.                             |
-| Out‑of‑the‑box RAG         | Chroma DB + LightRAG + Graffiti pre‑wired—no extra setup.                                                            |
-| Autogen orchestration      | Manages specialist agents (coder, tester, doc‑writer) and signs off only when checks pass. 🛠️🔍✅                    |
+| Feature                     | Description                                                                                                          |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Adaptive Agent Architecture | LUCA dynamically adjusts its team of specialist agents based on conversation context and project needs.              |
+| Intelligent Orchestration   | Behind the scenes, LUCA automatically selects and coordinates the optimal specialist agents for each task.           |
+| Domain Presets              | Quickly switch between development domains (general, web, data science, quantitative finance) with a simple dropdown.|
+| Modular MCP Server Design   | Plug-and-play Model Context Protocol servers for different capabilities (file system, Chroma DB, LightRAG, etc.).   |
+| Strategy & project planner  | Translates plain requests ("Build a web app" / "Design a trading strategy") into step-by-step agent plans.           |
+| Teacher-first UX            | Explains *why* as well as *what*; walks developers through complex workflows and best practices.                     |
+| Safe local execution        | Runs unit tests and linting inside Docker before touching your repo.                                                 |
+| QuantConnect Integration    | Deep integration with QuantConnect for strategy development, back-testing, and deployment.                           |
+| Autogen orchestration       | Manages specialist agents (coder, tester, doc-writer) and signs off only when checks pass. 🛠️🔍✅                    |
+
+---
+
+## Adaptive Intelligence
+
+LUCA's architecture transforms based on your project and conversation:
+
+- **Seamless Context Switching**: As your conversation evolves from planning to coding to testing, LUCA adjusts its specialist team without disrupting your workflow.
+
+- **Task-Optimized Teams**: Different projects require different expertise. Building a web app? LUCA assembles UI, backend, and deployment specialists. Creating a trading strategy? LUCA brings in algorithmic trading experts and data analysts.
+
+- **Transparent Orchestration**: While complexity is managed behind the scenes, LUCA keeps you informed about which agents are working on your behalf and why they were selected.
+
+---
+
+## Extensible MCP Architecture
+
+LUCA leverages the Model Context Protocol (MCP) to provide a highly extensible system:
+
+- **Pre-configured Servers**: Ships with essential MCP servers enabled by default (filesystem, Chroma DB, LightRAG, Graffiti) - zero configuration required.
+
+- **Modular Design**: Each capability is encapsulated in its own MCP server, communicating through a standardized protocol.
+
+- **Custom Servers**: Advanced users can create, modify, or swap out MCP servers to extend LUCA's capabilities or integrate with specialized tools.
+
+- **Server Management**: The built-in MCP Manager interface provides a simple way to enable, disable, or configure servers as needed.
+
+This architecture allows LUCA to evolve with your needs, from simple coding assistance to complex, customized development workflows.
+
+---
+
+## Personalized Learning Modes
+
+LUCA adapts its communication style to match your preferences:
+
+- **Noob Mode**: A judgment-free zone for beginners or those learning new domains. LUCA provides comprehensive explanations, breaks down complex concepts, offers frequent checkpoints, and suggests next steps. Perfect for those who want to learn while building.
+
+- **Pro Mode**: Streamlined for experienced developers who know what they want. LUCA focuses on efficient execution, provides concise information, and assumes familiarity with development workflows. Get more done with fewer explanations.
+
+- **Guru Mode**: Deep knowledge unleashed. LUCA explains the "why" behind recommendations, discusses underlying principles, explores alternative approaches, and connects concepts to broader development theory. Ideal for mastering a domain rather than just using it.
+
+Switch modes anytime through the dropdown or simply ask LUCA to "switch to Guru mode" during your conversation. Your experience, your choice.
 
 ---
 
@@ -30,11 +73,11 @@ Empower traders, data scientists, and makers to build, test, and ship production
 | Step | What Happens                                                                                         |
 | ---- | ---------------------------------------------------------------------------------------------------- |
 | 1    | **Install LUCA**.                                                                                    |
-| 2    | **Ask** → “LUCA, build an MNQ futures strategy.” or “LUCA, scaffold a Streamlit dashboard.”          |
+| 2    | **Ask** → "LUCA, build a React dashboard." or "LUCA, create a data pipeline for stock analysis."     |
 | 3    | LUCA drafts a plan and dispatches agent jobs.                                                        |
 | 4    | Code is generated, unit‑tested, lint‑clean, and committed.                                           |
-| 5    | If it’s a trading strategy, LUCA triggers a Lean Cloud back‑test and streams stats to the dashboard. |
-| 6    | Iterate; then deploy or go live. 🔄📤📊                                                              |
+| 5    | LUCA provides documentation and guidance for extending the project.                                  |
+| 6    | Iterate, deploy, and maintain with LUCA's continued assistance. 🔄📤📊                                |
 
 ---
 
@@ -75,8 +118,9 @@ luca
 
 | Output           | Example                                              |
 | ---------------- | ---------------------------------------------------- |
-| Git commits      | `feat(strategy): add MNQ momentum model`             |
-| QC Cloud reports | JSON & equity curve image                            |
+| Git commits      | `feat(api): add REST endpoint for data processing`   |
+| Project scaffolds| React apps, Python services, data pipelines          |
+| QC Cloud reports | JSON & equity curve image for trading strategies     |
 | Web builds       | Streamlit or FastAPI app scaffold                    |
 | Guidance notes   | Stepwise instructions and best‑practice tips. 📈📝📬 |
 
@@ -88,8 +132,9 @@ luca
 | ------------------- | ------------------------------------------------ |
 | Code read/write     | AutoGen.FileTool + Docker sandbox                |
 | Secure exec         | Pytest + custom runner with resource caps        |
-| Data access         | QuantConnect APIs; optional local CSV/SQL mounts |
-| Knowledge retrieval | Chroma DB + LightRAG + Graffiti 🔍🧠📚           |
+| Knowledge retrieval | Chroma DB + LightRAG + Graffiti                  |
+| Data access         | General APIs + QuantConnect APIs + local mounts  |
+| Agent orchestration | AutoGen framework with custom termination logic 🔍🧠📚  |
 
 ---
 
@@ -100,6 +145,24 @@ luca
 | Never reads raw keys        | Keys stay in your env; LUCA pipes without logging.     |
 | Never deletes data silently | Destructive ops require `--force` or Y/N confirm.      |
 | Never commits red tests     | Build & unit tests must pass before `git push`. ⛔🛡️✔️ |
+
+---
+
+## Use Cases
+
+LUCA excels at a wide range of development tasks:
+
+### General Development
+- Scaffolding and building web applications (React, Vue, Angular)
+- Creating Python services and APIs (FastAPI, Flask, Django)
+- Building data processing pipelines
+- Implementing ML models and data science workflows
+
+### Quantitative Finance
+- Developing trading strategies for QuantConnect
+- Creating back-testing frameworks
+- Implementing risk management systems
+- Building financial data analysis tools
 
 ---
 
