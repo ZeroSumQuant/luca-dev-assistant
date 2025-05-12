@@ -84,6 +84,8 @@ For a detailed and comprehensive view of the repository structure, please refer 
    - Runtime dependencies and CI dependencies are in `requirements.txt`
    - Additional development-only dependencies are in `requirements-dev.txt`
    - Use specific versions when possible
+   - CI-required packages (pytest, pytest-timeout, pytest-forked, psutil) are kept in requirements.txt
+   - Pure development tools (linting, formatting) are in requirements-dev.txt
    - Install runtime and CI dependencies:
      ```bash
      python3 -m pip install -r requirements.txt

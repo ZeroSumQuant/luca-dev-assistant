@@ -167,8 +167,10 @@
   - Verified optimized configuration with successful pre-commit run
 - **11:45 pm — Dependency management improvement** – implemented best-practice dependency separation:
   - Created separate requirements-dev.txt file for development dependencies
-  - Updated requirements.txt to contain only runtime dependencies
-  - Moved testing, linting, and CI tools to requirements-dev.txt
+  - Updated requirements.txt to contain only runtime dependencies and CI essentials
+  - Moved purely development tools (linting, formatting) to requirements-dev.txt
+  - Kept CI-required packages (pytest, pytest-timeout, pytest-forked, psutil) in requirements.txt
   - Added bandit and bandit[toml] to development dependencies
   - Updated developer guide with dependency management instructions
   - Documented recommended installation commands for different scenarios
+  - Fixed multiple CI issues by ensuring all testing dependencies needed for CI are in requirements.txt
