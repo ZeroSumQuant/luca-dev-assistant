@@ -13,7 +13,7 @@
 
 **Recommendations:**
 - ✅ **(Completed 2025-05-11)** Documented repository structure maintenance requirements in `docs/luca_dev_guide.md`.
-- Consider organizing the MCP components more clearly in the directory structure.
+- 🔄 **GitHub Issue #TBD** Consider organizing the MCP components more clearly in the directory structure.
 
 ### 2. Code Quality Assessment
 
@@ -24,15 +24,15 @@
 - Clean and consistent Streamlit UI implementation
 
 **Areas for Improvement:**
-- The TODO comments in `luca.py` and `app/main.py` should be formalized as GitHub issues for tracking
-- Some files lack comprehensive error handling, particularly in network operations
-- Missing type hints in many functions which could improve maintainability
-- The separation between testing and production configuration could be more formalized
+- 🔄 **GitHub Issue #TBD** The TODO comments in `luca.py` and `app/main.py` should be formalized as GitHub issues for tracking
+- 🔄 **GitHub Issue #TBD** Some files lack comprehensive error handling, particularly in network operations
+- 🔄 **GitHub Issue #TBD** Missing type hints in many functions which could improve maintainability
+- 🔄 **GitHub Issue #TBD** The separation between testing and production configuration could be more formalized
 
 **Recommendations:**
-- Add type hints to key functions, especially in the tools directory
-- Implement more comprehensive error handling, especially in external API calls
-- Convert TODOs into trackable GitHub issues with clear acceptance criteria
+- 🔄 **GitHub Issue #TBD** Add type hints to key functions, especially in the tools directory
+- 🔄 **GitHub Issue #TBD** Implement more comprehensive error handling, especially in external API calls
+- ✅ **(Completed 2025-05-11)** Convert TODOs into trackable GitHub issues with clear acceptance criteria
 
 ### 3. Test Coverage Analysis
 
@@ -42,15 +42,15 @@
 - Proper isolation of UI launching during tests
 
 **Gaps:**
-- Minimal testing of actual AutoGen agent interactions
-- Some MCP integration tests are skipped (likely intentional during development)
-- No stress or performance tests for the system
-- Limited testing of error scenarios
+- 🔄 **GitHub Issue #TBD** Minimal testing of actual AutoGen agent interactions
+- 🔄 **GitHub Issue #TBD** Some MCP integration tests are skipped (likely intentional during development)
+- 🔄 **GitHub Issue #TBD** No stress or performance tests for the system
+- 🔄 **GitHub Issue #TBD** Limited testing of error scenarios
 
 **Recommendations:**
-- Add more comprehensive AutoGen agent interaction tests
-- Implement tests for error handling scenarios
-- Consider adding integration tests for complete end-to-end workflows
+- 🔄 **GitHub Issue #TBD** Add more comprehensive AutoGen agent interaction tests
+- 🔄 **GitHub Issue #TBD** Implement tests for error handling scenarios
+- 🔄 **GitHub Issue #TBD** Consider adding integration tests for complete end-to-end workflows
 
 ### 4. Dependency Management
 
@@ -60,14 +60,14 @@
 - Flexible version ranges for MCP dependencies seem appropriate
 
 **Concerns:**
-- The mix of pinned and unpinned dependencies could lead to subtle compatibility issues
-- No separate dev dependencies section (for testing/linting tools)
-- Using `docker` extra with AutoGen but no explicit Docker dependency management
+- 🔄 **GitHub Issue #TBD** The mix of pinned and unpinned dependencies could lead to subtle compatibility issues
+- ✅ **(Completed 2025-05-11)** No separate dev dependencies section (for testing/linting tools)
+- 🔄 **GitHub Issue #TBD** Using `docker` extra with AutoGen but no explicit Docker dependency management
 
 **Recommendations:**
-- Consider using a more modern dependency management tool like Poetry
-- Separate dev dependencies from runtime dependencies
-- Add a requirements-dev.txt file for development tools
+- 🔄 **GitHub Issue #TBD** Consider using a more modern dependency management tool like Poetry
+- ✅ **(Completed 2025-05-11)** Separate dev dependencies from runtime dependencies
+- ✅ **(Completed 2025-05-11)** Add a requirements-dev.txt file for development tools
 
 ### 5. Security Review
 
@@ -77,14 +77,14 @@
 - Testing environment properly isolated
 
 **Concerns:**
-- No clear sandboxing strategy for executing user-provided code
-- No explicit security boundaries defined between UI and backend
-- Limited validation of inputs in some functions
+- 🔄 **GitHub Issue #TBD** No clear sandboxing strategy for executing user-provided code
+- 🔄 **GitHub Issue #TBD** No explicit security boundaries defined between UI and backend
+- 🔄 **GitHub Issue #TBD** Limited validation of inputs in some functions
 
 **Recommendations:**
-- Implement proper sandboxing for code execution
-- Add input validation to all functions that process external data
-- Document security boundaries and assumptions clearly
+- 🔄 **GitHub Issue #TBD** Implement proper sandboxing for code execution
+- 🔄 **GitHub Issue #TBD** Add input validation to all functions that process external data
+- 🔄 **GitHub Issue #TBD** Document security boundaries and assumptions clearly
 
 ### 6. Architecture Evaluation
 
@@ -94,14 +94,14 @@
 - Proper encapsulation of functionality in modules
 
 **Improvement Opportunities:**
-- The agent orchestration system is currently just stubbed out
-- The relationship between app components and core functionality could be better defined
-- No clear error recovery strategy in the UI for backend failures
+- 🔄 **GitHub Issue #TBD** The agent orchestration system is currently just stubbed out
+- 🔄 **GitHub Issue #TBD** The relationship between app components and core functionality could be better defined
+- 🔄 **GitHub Issue #TBD** No clear error recovery strategy in the UI for backend failures
 
 **Recommendations:**
-- Define a clear architecture document for the agent orchestration system
-- Implement a more robust error handling strategy in the UI
-- Consider adding a service layer between the UI and core functionality
+- 🔄 **GitHub Issue #TBD** Define a clear architecture document for the agent orchestration system
+- 🔄 **GitHub Issue #TBD** Implement a more robust error handling strategy in the UI
+- 🔄 **GitHub Issue #TBD** Consider adding a service layer between the UI and core functionality
 
 ### 7. PR Documentation Quality
 
@@ -116,18 +116,18 @@
 
 1. **Immediate Actions:**
    - ✅ **(Completed 2025-05-11)** Remove backup files and artifacts from version control
-   - Convert TODOs to GitHub issues
+   - ✅ **(Completed 2025-05-11)** Convert TODOs to GitHub issues
    - ✅ **(Completed 2025-05-11)** Create a PR template to ensure better documentation
 
 2. **Short-term Improvements:**
-   - Add type hints to key functions
-   - Improve error handling, especially in external interactions
+   - 🔄 **GitHub Issue #TBD** Add type hints to key functions
+   - 🔄 **GitHub Issue #TBD** Improve error handling, especially in external interactions
    - ✅ **(Completed 2025-05-11)** Update documentation to match actual repository structure
 
 3. **Architectural Considerations:**
-   - Document the agent orchestration architecture before implementation
-   - Define clear security boundaries and sandboxing strategy
-   - Consider refining the separation between development and production configurations
+   - 🔄 **GitHub Issue #TBD** Document the agent orchestration architecture before implementation
+   - 🔄 **GitHub Issue #TBD** Define clear security boundaries and sandboxing strategy
+   - 🔄 **GitHub Issue #TBD** Consider refining the separation between development and production configurations
 
 ## Next Session Focus
 

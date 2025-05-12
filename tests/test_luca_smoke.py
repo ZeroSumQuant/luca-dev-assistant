@@ -13,16 +13,16 @@ def test_luca_cli_runs():
     # Set environment variable to prevent UI launch
     env = os.environ.copy()
     env["LUCA_TESTING"] = "1"
-    
+
     # Run luca.py with testing environment
     result = subprocess.run(
         [sys.executable, "luca.py"],
         capture_output=True,
         text=True,
         env=env,
-        timeout=5  # Add explicit subprocess timeout as well
+        timeout=5,  # Add explicit subprocess timeout as well
     )
-    
+
     # Verify results
     assert result.returncode == 0
     assert "testing mode detected" in result.stdout.lower()

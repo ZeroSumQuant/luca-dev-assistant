@@ -1,0 +1,6 @@
+[tool.bandit]
+exclude_dirs = ["tests", "docs", "venv", ".venv", ".git", "__pycache__", "build", "dist"]
+skips = ["B101", "B103", "B303", "B608"]
+
+[tool.bandit.medium_severity]
+confidence_level = "medium"

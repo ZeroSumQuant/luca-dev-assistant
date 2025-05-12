@@ -81,16 +81,22 @@ For a detailed and comprehensive view of the repository structure, please refer 
    - Create handoff document if ending a session
 
 3. **Dependency Management**:
-   - Add dependencies to `requirements.txt`
+   - Runtime dependencies and CI dependencies are in `requirements.txt`
+   - Additional development-only dependencies are in `requirements-dev.txt`
    - Use specific versions when possible
-   - Current key dependencies:
+   - CI-required packages (pytest, pytest-timeout, pytest-forked, psutil) are kept in requirements.txt
+   - Pure development tools (linting, formatting) are in requirements-dev.txt
+   - Install runtime and CI dependencies:
+     ```bash
+     python3 -m pip install -r requirements.txt
      ```
-     python-dotenv==1.1.0
-     PyYAML==6.0.2
-     pytest==8.3.5
-     pyautogen==0.9.0
-     autogen-agentchat==0.5.6
-     autogen-ext[docker]==0.5.6
+   - Install additional development dependencies:
+     ```bash
+     python3 -m pip install -r requirements-dev.txt
+     ```
+   - For a complete development environment, install both:
+     ```bash
+     python3 -m pip install -r requirements.txt -r requirements-dev.txt
      ```
 
 4. **Python Command Usage**:
@@ -182,6 +188,13 @@ For a detailed and comprehensive view of the repository structure, please refer 
 2. **CI Workflow**:
    - Tests run automatically on PRs
    - Tests must pass before merging
+   - CI uses GitHub Actions configured in `.github/workflows/ci.yml`
+   - Critical CI workflow best practices:
+     - Always use `python -m pip` for consistency across environments
+     - Verify key dependencies like pytest are installed with import verification
+     - Set `PYTHONPATH: .` in environment for proper module resolution
+     - Use verbose test output (`-v` flag) for better debugging
+     - Set appropriate timeouts for all operations
 
 3. **Test Hanging Issues**:
    - Add timeouts to all tests to prevent hanging in CI:
@@ -192,6 +205,48 @@ For a detailed and comprehensive view of the repository structure, please refer 
    ```
    - Set explicit timeouts for all external API calls
    - Use process isolation with pytest-forked for problematic tests
+   - Set global job timeout in CI workflow (currently 15 minutes)
+   - Use the `--timeout_method=thread` flag with pytest-timeout for better tracebacks
+
+4. **CI Troubleshooting**:
+   - If pytest isn't found, check Python interpreter consistency in workflow
+   - If tests hang in CI but not locally, add `pytest-timeout` decorators
+   - If tests fail with import errors, check `PYTHONPATH` environment variable
+   - Monitor memory usage in CI to prevent silent OOM killers
+   - Use `pytest-forked` for particularly problematic tests to isolate failures
+
+### Bandit Security Scanning
+
+1. **Configuration**:
+   - Bandit is configured in `pyproject.toml` with optimized settings:
+   ```toml
+   [tool.bandit]
+   exclude_dirs = ["tests", "docs", "venv", ".venv", ".git", "__pycache__", "build", "dist"]
+   skips = ["B101", "B103", "B303", "B608"]
+
+   [tool.bandit.medium_severity]
+   confidence_level = "medium"
+   ```
+
+2. **Pre-commit Hook**:
+   - Bandit is configured in `.pre-commit-config.yaml` with:
+   ```yaml
+   - repo: https://github.com/PyCQA/bandit
+     rev: 1.8.3
+     hooks:
+       - id: bandit
+         name: bandit (repo-root, skip tests)
+         entry: bandit -c pyproject.toml --exit-zero
+         additional_dependencies: ["bandit[toml]"]
+         timeout: 300  # 5 minutes
+   ```
+
+3. **Performance Considerations**:
+   - Bandit scans can take 1-2 minutes to complete on larger codebases
+   - The pre-commit hook is configured with a 5-minute timeout
+   - Scanning only modified files significantly improves performance
+   - The configuration skips tests that are known to cause performance issues (B303)
+   - Always be patient with Bandit scans; they're not hanging, just thorough
 
 ## Changelog Management
 

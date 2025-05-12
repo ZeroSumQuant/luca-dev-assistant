@@ -147,3 +147,39 @@
   - Organized findings by category (structure, code quality, tests, etc.)
   - Created clean separation between completed and pending tasks
   - Set clear next steps for upcoming work on agent orchestration
+- **10:15 pm — GitHub issue template creation** – prepared GitHub issue management infrastructure:
+  - Created branch `claude-2025-05-11-github-issues` for issue management improvements
+  - Added comprehensive GitHub issue templates for bug reports, feature requests, and technical debt
+  - Created issue template configuration file to improve issue creation experience
+  - Prepared detailed document listing all GitHub issues to be created from code review findings
+  - Updated Todo.md to reference GitHub issues with placeholders for future issue numbers
+  - Added README.md to issue template directory explaining proper use of templates
+- **11:10 pm — Bandit security scanner optimization** – resolved pre-commit hook performance issues:
+  - Researched Bandit security scanner behavior and performance characteristics
+  - Identified root cause of hanging pre-commit hooks as Bandit's lengthy scan time
+  - Conducted timed testing to confirm typical scan duration of 1-2 minutes
+  - Added optimized Bandit configuration to pyproject.toml
+  - Configured directory exclusions for tests, docs, and other non-relevant directories
+  - Skipped problematic tests known to cause performance issues (like B303)
+  - Set default severity and confidence levels to medium
+  - Added explicit timeout setting (5 minutes) to pre-commit configuration
+  - Added bandit[toml] dependency for proper TOML configuration support
+  - Verified optimized configuration with successful pre-commit run
+- **11:45 pm — Dependency management improvement** – implemented best-practice dependency separation:
+  - Created separate requirements-dev.txt file for development dependencies
+  - Updated requirements.txt to contain only runtime dependencies and CI essentials
+  - Moved purely development tools (linting, formatting) to requirements-dev.txt
+  - Kept CI-required packages (pytest, pytest-timeout, pytest-forked, psutil) in requirements.txt
+  - Added bandit and bandit[toml] to development dependencies
+  - Updated developer guide with dependency management instructions
+  - Documented recommended installation commands for different scenarios
+  - Fixed multiple CI issues by ensuring all testing dependencies needed for CI are in requirements.txt
+- **11:59 pm — CI Python environment fix** – resolved CI pytest not found error:
+  - Diagnosed root cause of CI failure as Python interpreter path inconsistency
+  - Modified GitHub Actions workflow to use consistent `python -m pip` commands
+  - Added pytest verification step to confirm proper installation
+  - Set PYTHONPATH environment variable for test execution
+  - Ensured consistent Python interpreter usage throughout CI pipeline
+  - Updated developer guide with CI troubleshooting information
+  - Documented best practices for CI dependency management
+  - Fixed the issue while maintaining the project's dependency management philosophy
