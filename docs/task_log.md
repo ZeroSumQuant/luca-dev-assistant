@@ -206,3 +206,20 @@
   - Documented installation, authentication, issue management, label operations, and PR workflows
   - Included examples for all common GitHub CLI operations
   - Ensured future developers can effectively use GitHub CLI for project management tasks
+- **02:00 pm — Agent orchestration architecture documentation** – created comprehensive architecture document:
+  - Created branch `claude-2025-05-12-agent-orchestration` for architecture documentation
+  - Implemented comprehensive `docs/agent-orchestration.md` document defining:
+    - Four core skeleton components (ContextStore, ToolRegistry, ErrorPayload, LucaManager)
+    - Phased implementation approach with clear entry/exit criteria
+    - Agent hierarchy and communication patterns
+    - Intelligent agent selection process
+    - Metric collection and adaptation engine
+    - Project management architecture with ticket export functionality
+    - Sandbox architecture with per-task DockerSandbox strategy
+    - MCP integration architecture
+  - Addressed all review feedback including:
+    - Added schema ownership clarification (luca_core/schemas/ package)
+    - Specified per-task vs. per-agent sandbox usage
+    - Implemented ticket export functionality
+    - Added complete MetricRecord model specification
+  - Created a solid foundation document for implementing the agent orchestration in Issue #16
