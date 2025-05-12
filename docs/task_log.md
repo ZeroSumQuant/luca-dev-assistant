@@ -226,6 +226,17 @@
 - **04:00 pm — Changelog workflow enhancements** – implemented comprehensive fix for GitHub Actions race conditions:
   - Created branch `claude-2025-05-12-fix-changelog-race` for workflow improvements
   - Added GitHub Actions concurrency group to prevent simultaneous workflow runs
+- **07:00 pm — Test fixes for agent orchestration** – resolved test failures with new async architecture:
+  - Updated `tests/test_luca_echo.py` to work with the new asynchronous processing:
+    - Increased timeout from 10 to 20 seconds to accommodate agent initialization
+    - Modified assertions to check for LucaManager response patterns instead of direct echoing
+    - Added better error messages for test failures
+    - Improved timeout error messages to aid debugging
+  - Added pytest-asyncio and pytest-mock to requirements-dev.txt:
+    - Added necessary dependencies for testing async code
+    - Fixed import errors in tests that require async support
+    - Ensured proper isolation for async tests
+  - Updated task log with latest changes and progress
   - Implemented a progressive retry strategy with 6 different approaches:
     - Direct push (fastest, lowest overhead)
     - Rebase strategy (standard Git workflow)
