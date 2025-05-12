@@ -1,3 +1,18 @@
+#  (2025-05-12)
+
+
+### Bug Fixes
+
+* **ci:** enhance changelog workflow to handle parallel updates ([#11](https://github.com/ZeroSumQuant/luca-dev-assistant/issues/11)) ([bf53706](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/bf537066a9e45a6978f01229a431749e915fa447))
+
+
+### Features
+
+* **luca:** scaffold core (placeholder entry-point + smoke test) ([#3](https://github.com/ZeroSumQuant/luca-dev-assistant/issues/3)) ([cf49f45](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/cf49f45e3402f363e572595c3a550c9389003796))
+* seed changelog test entry ([1766b66](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/1766b66685b463d158e248a74dd228f091a5c93d))
+
+
+
 #  (2025-05-11)
 
 
