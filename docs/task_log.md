@@ -165,3 +165,10 @@
   - Added explicit timeout setting (5 minutes) to pre-commit configuration
   - Added bandit[toml] dependency for proper TOML configuration support
   - Verified optimized configuration with successful pre-commit run
+- **11:45 pm — Dependency management improvement** – implemented best-practice dependency separation:
+  - Created separate requirements-dev.txt file for development dependencies
+  - Updated requirements.txt to contain only runtime dependencies
+  - Moved testing, linting, and CI tools to requirements-dev.txt
+  - Added bandit and bandit[toml] to development dependencies
+  - Updated developer guide with dependency management instructions
+  - Documented recommended installation commands for different scenarios

@@ -61,13 +61,13 @@
 
 **Concerns:**
 - 🔄 **GitHub Issue #TBD** The mix of pinned and unpinned dependencies could lead to subtle compatibility issues
-- 🔄 **GitHub Issue #TBD** No separate dev dependencies section (for testing/linting tools)
+- ✅ **(Completed 2025-05-11)** No separate dev dependencies section (for testing/linting tools)
 - 🔄 **GitHub Issue #TBD** Using `docker` extra with AutoGen but no explicit Docker dependency management
 
 **Recommendations:**
 - 🔄 **GitHub Issue #TBD** Consider using a more modern dependency management tool like Poetry
-- 🔄 **GitHub Issue #TBD** Separate dev dependencies from runtime dependencies
-- 🔄 **GitHub Issue #TBD** Add a requirements-dev.txt file for development tools
+- ✅ **(Completed 2025-05-11)** Separate dev dependencies from runtime dependencies
+- ✅ **(Completed 2025-05-11)** Add a requirements-dev.txt file for development tools
 
 ### 5. Security Review
 

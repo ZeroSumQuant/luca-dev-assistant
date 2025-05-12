@@ -1,0 +1,22 @@
+# Development dependencies for LUCA Dev Assistant
+# Install with: python3 -m pip install -r requirements-dev.txt
+
+# Testing
+pytest==8.3.5
+pytest-timeout==2.2.0
+pytest-forked==1.6.0
+psutil==5.9.8  # For CI memory monitoring
+
+# Linting and formatting
+black==25.1.0
+isort==6.0.1
+flake8==7.2.0
+mypy==1.15.0
+types-PyYAML==6.0.12.20240311
+
+# Security
+bandit==1.8.3
+bandit[toml]  # For pyproject.toml configuration
+
+# Pre-commit
+pre-commit==3.6.2
