@@ -81,14 +81,14 @@ For a detailed and comprehensive view of the repository structure, please refer 
    - Create handoff document if ending a session
 
 3. **Dependency Management**:
-   - Runtime dependencies are in `requirements.txt`
-   - Development dependencies are in `requirements-dev.txt`
+   - Runtime dependencies and CI dependencies are in `requirements.txt`
+   - Additional development-only dependencies are in `requirements-dev.txt`
    - Use specific versions when possible
-   - Install runtime dependencies:
+   - Install runtime and CI dependencies:
      ```bash
      python3 -m pip install -r requirements.txt
      ```
-   - Install development dependencies:
+   - Install additional development dependencies:
      ```bash
      python3 -m pip install -r requirements-dev.txt
      ```

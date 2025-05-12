@@ -1,9 +1,7 @@
 # Development dependencies for LUCA Dev Assistant
 # Install with: python3 -m pip install -r requirements-dev.txt
 
-# Testing
-pytest==8.3.5
-pytest-timeout==2.2.0
+# Additional testing tools
 pytest-forked==1.6.0
 
 # Linting and formatting
