@@ -1,6 +1,6 @@
 # LUCA Developer Guide
 
-This document outlines the established practices for developing the LUCA Dev Assistant project, based on our latest work through May 11, 2025.
+This document outlines the established practices for developing the LUCA Dev Assistant project, based on our latest work through May 12, 2025.
 
 ## Repository Structure
 
@@ -62,6 +62,74 @@ For a detailed and comprehensive view of the repository structure, please refer 
    - Push to GitHub and create PR with detailed description
    - Ensure CI passes (all tests green)
    - Squash and merge when approved
+
+### GitHub CLI Usage
+
+The GitHub CLI (`gh`) is used to interact with GitHub from the command line, providing a convenient way to work with issues, pull requests, and other GitHub features.
+
+1. **Installation and Authentication**:
+   - GitHub CLI is available via Homebrew: `brew install gh`
+   - Authenticate with `gh auth login` and follow the prompts
+   - Verify authentication with `gh auth status`
+
+2. **Managing Issues**:
+   - Create a new issue:
+     ```bash
+     gh issue create --title "Issue title" --body "Description" --label "label1,label2" --assignee "username"
+     ```
+   - List issues:
+     ```bash
+     gh issue list
+     ```
+   - View issue details:
+     ```bash
+     gh issue view ISSUE_NUMBER
+     ```
+   - Close an issue:
+     ```bash
+     gh issue close ISSUE_NUMBER
+     ```
+
+3. **Working with Labels**:
+   - List all labels:
+     ```bash
+     gh label list
+     ```
+   - Create a new label:
+     ```bash
+     gh label create "label-name" --description "Description" --color "HEX_COLOR"
+     ```
+
+4. **Pull Request Operations**:
+   - Create a PR:
+     ```bash
+     gh pr create --title "PR title" --body "Description"
+     ```
+   - Update a PR:
+     ```bash
+     gh pr edit PR_NUMBER --title "New title" --body "New description"
+     ```
+   - Add a comment to a PR:
+     ```bash
+     gh pr comment PR_NUMBER --body "Comment text"
+     ```
+   - Review PRs:
+     ```bash
+     gh pr list
+     gh pr view PR_NUMBER
+     ```
+
+5. **Repository Operations**:
+   - Clone a repository:
+     ```bash
+     gh repo clone OWNER/REPO
+     ```
+   - View repository details:
+     ```bash
+     gh repo view
+     ```
+
+For more details about GitHub CLI, see the [official documentation](https://cli.github.com/manual/).
 
 ### Development Process
 
