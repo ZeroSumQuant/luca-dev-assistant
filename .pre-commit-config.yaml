@@ -17,8 +17,10 @@ repos:
     hooks:
       - id: bandit
         name: bandit (repo-root, skip tests)
-        entry: bandit -r . -x tests --severity-level medium --confidence-level high --exit-zero
-        pass_filenames: false
+        # Use config file and scan only modified files for much faster operation
+        entry: bandit -c .bandit --exit-zero
+        # Set timeout to 300 seconds (5 minutes)
+        timeout: 300
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.15.0
     hooks:

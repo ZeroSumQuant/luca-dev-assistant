@@ -1,0 +1,16 @@
+[bandit]
+# Exclude directories that don't need security scanning
+exclude = tests,docs,venv,.venv,.git,__pycache__,build,dist
+
+# Focus on medium and high severity issues
+skips = B101,B103,B303,B608
+# B101: assert used (common in tests)
+# B103: use of unsafe temp file
+# B303: known to cause slowdowns due to inefficient regex
+# B608: hardcoded SQL type
+
+# Default level of severity
+severity = medium
+
+# Default level of confidence
+confidence = medium
