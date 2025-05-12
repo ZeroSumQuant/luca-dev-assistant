@@ -18,28 +18,31 @@ These tasks must be completed to reach the Minimum Viable Product (MVP) mileston
 - [ ] Address any remaining test failures
 
 ### 1.2 Core Agent Implementation
-- [ ] Complete AutoGen agent orchestration in `luca.py`
+- [ ] Create agent orchestration architecture document (Issue #28)
+- [ ] Complete AutoGen agent orchestration in `luca.py` (Issue #16)
 - [ ] Implement proper agent termination conditions
-- [ ] Connect agent responses to Streamlit UI
+- [ ] Connect agent responses to Streamlit UI (Issue #19)
 - [ ] Add logging for agent actions and conversations
 - [ ] Implement adaptive agent architecture for dynamic team composition
 - [ ] Add transparent agent selection mechanism
 
 ### 1.3 File & Project Management
-- [ ] Complete safe file I/O operations
-- [ ] Implement Git integration with proper error handling
+- [x] Implement safe file I/O operations
+- [x] Implement Git integration with basic functionality
+- [ ] Add error handling to Git integration
 - [ ] Add project initialization capabilities
 - [ ] Create general project templates (web, API, data pipeline)
 - [ ] Create domain-specific templates (including QuantConnect strategies)
 
 ### 1.4 UI/UX Features
+- [x] Implement basic MCP server management interface
 - [ ] Implement domain presets dropdown
 - [ ] Create Noob/Pro/Guru learning mode selector
 - [ ] Add mode-specific response formatting
-- [ ] Create MCP server management interface
-- [ ] Design agent visualization system
+- [ ] Enhance agent visualization system
 
 ### 1.5 Documentation
+- [x] Create developer documentation
 - [ ] Create user documentation
 - [ ] Update API documentation
 - [ ] Add example workflows and use cases
@@ -56,7 +59,7 @@ These features are planned for implementation immediately after the MVP is compl
 - [ ] Add code completion and syntax highlighting
 
 ### 2.2 Security Architecture
-- [ ] Implement isolated workspace model
+- [ ] Implement isolated workspace model (Issue #26)
 - [ ] Use container-based execution for all code
 - [ ] Create permission model for file access
 
@@ -67,6 +70,8 @@ These features are planned for implementation immediately after the MVP is compl
 - [ ] Implement QuantConnect Cloud API integration
 
 ### 2.4 MCP Ecosystem Expansion
+- [ ] Implement HTTP connection support in MCP Client Manager (Issue #17)
+- [ ] Implement MCP server configuration loading from config files (Issue #18)
 - [ ] Create and document MCP server development workflow
 - [ ] Implement additional MCP servers (Chroma DB, LightRAG, Graffiti)
 - [ ] Create server discovery and auto-configuration mechanism
