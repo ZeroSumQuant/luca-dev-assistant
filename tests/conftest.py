@@ -32,7 +32,7 @@ def pytest_configure(config):
 
     # Set the default fixture loop scope
     setattr(config.option, "asyncio_default_fixture_loop_scope", "function")
-    
+
     # Set multiprocessing start method to "spawn" - more reliable in test environments
     try:
         mp.set_start_method("spawn", force=True)

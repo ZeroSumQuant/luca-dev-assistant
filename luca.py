@@ -331,7 +331,7 @@ def process_prompt(prompt: str, launch_ui_after=True):
         # Print the response
         if response.startswith("LucaString: "):
             # Extract the actual response text
-            response_text = response[len("LucaString: "):]
+            response_text = response[len("LucaString: ") :]
             print(f"🤖 {response_text}")
         else:
             # Just print the raw response

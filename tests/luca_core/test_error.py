@@ -11,15 +11,9 @@ if parent_dir not in sys.path:
 import pytest
 from pydantic import ValidationError
 
-from luca_core.schemas.error import (
-    ErrorCategory,
-    ErrorCode,
-    ErrorPayload,
-    ErrorSeverity,
-    create_system_error,
-    create_timeout_error,
-    create_user_error,
-)
+from luca_core.schemas.error import (ErrorCategory, ErrorCode, ErrorPayload,
+                                     ErrorSeverity, create_system_error,
+                                     create_timeout_error, create_user_error)
 
 
 def test_error_payload_creation():
@@ -31,7 +25,7 @@ def test_error_payload_creation():
         context={"test_key": "test_value"},
         recovery_hint="Try this instead",
     )
-    
+
     assert error.category == ErrorCategory.USER_ERROR
     assert error.severity == ErrorSeverity.WARNING
     assert error.message == "Test error message"
@@ -43,7 +37,7 @@ def test_error_payload_from_exception():
     """Test creating an ErrorPayload from an exception."""
     exception = ValueError("Invalid value")
     error = ErrorPayload.from_exception(exception)
-    
+
     assert error.category == ErrorCategory.SYSTEM_ERROR
     assert error.severity == ErrorSeverity.ERROR
     assert error.message == "Invalid value"
@@ -59,7 +53,7 @@ def test_error_payload_get_user_message():
         message="System failure",
     )
     assert error1.get_user_message() == "System failure"
-    
+
     # With recovery hint
     error2 = ErrorPayload(
         category=ErrorCategory.SYSTEM_ERROR,
@@ -67,13 +61,15 @@ def test_error_payload_get_user_message():
         message="System failure",
         recovery_hint="Try restarting the application",
     )
-    assert error2.get_user_message() == "System failure - Try restarting the application"
+    assert (
+        error2.get_user_message() == "System failure - Try restarting the application"
+    )
 
 
 def test_create_user_error():
     """Test the create_user_error utility function."""
     error = create_user_error("Invalid input", "Please check your input and try again")
-    
+
     assert error.category == ErrorCategory.USER_ERROR
     assert error.severity == ErrorSeverity.ERROR
     assert error.message == "Invalid input"
@@ -83,7 +79,7 @@ def test_create_user_error():
 def test_create_system_error():
     """Test the create_system_error utility function."""
     error = create_system_error("Database connection failed", {"db_host": "localhost"})
-    
+
     assert error.category == ErrorCategory.SYSTEM_ERROR
     assert error.severity == ErrorSeverity.ERROR
     assert error.message == "Database connection failed"
@@ -93,7 +89,7 @@ def test_create_system_error():
 def test_create_timeout_error():
     """Test the create_timeout_error utility function."""
     error = create_timeout_error("API call", 30)
-    
+
     assert error.category == ErrorCategory.TIMEOUT_ERROR
     assert error.severity == ErrorSeverity.ERROR
     assert error.message == "Operation 'API call' timed out after 30 seconds"

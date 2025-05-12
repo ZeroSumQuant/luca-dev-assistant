@@ -14,16 +14,9 @@ if parent_dir not in sys.path:
 import pytest
 
 from luca_core.context.store import ContextStore
-from luca_core.schemas.context import (
-    Message,
-    MessageRole,
-    MetricRecord,
-    Project,
-    Task,
-    TaskResult,
-    TaskStatus,
-    UserPreferences,
-)
+from luca_core.schemas.context import (Message, MessageRole, MetricRecord,
+                                       Project, Task, TaskResult, TaskStatus,
+                                       UserPreferences)
 
 
 @pytest.fixture
@@ -58,11 +51,11 @@ def test_store_and_retrieve_message(context_store):
         role=MessageRole.USER,
         content="Test message content",
     )
-    
+
     # Store the message
     stored_id = context_store.store_message(message)
     assert stored_id == message_id
-    
+
     # Retrieve the message
     retrieved_message = context_store.get_message(message_id)
     assert retrieved_message is not None
@@ -81,11 +74,11 @@ def test_store_and_retrieve_task(context_store):
         description="Test task",
         status=TaskStatus.PENDING,
     )
-    
+
     # Store the task
     stored_id = context_store.store_task(task)
     assert stored_id == task_id
-    
+
     # Retrieve the task
     retrieved_task = context_store.get_task(task_id)
     assert retrieved_task is not None
@@ -104,11 +97,11 @@ def test_store_and_retrieve_task_result(context_store):
         result="Operation completed successfully",
         execution_time_ms=150,
     )
-    
+
     # Store the task result
     stored_id = context_store.store_task_result(result)
     assert stored_id == task_id
-    
+
     # Retrieve the task result
     retrieved_result = context_store.get_task_result(task_id)
     assert retrieved_result is not None
@@ -127,11 +120,11 @@ def test_store_and_retrieve_project(context_store):
         description="A test project",
         domain="general",
     )
-    
+
     # Store the project
     stored_id = context_store.store_project(project)
     assert stored_id == project_id
-    
+
     # Retrieve the project
     retrieved_project = context_store.get_project(project_id)
     assert retrieved_project is not None
@@ -150,11 +143,11 @@ def test_store_and_retrieve_user_preferences(context_store):
         theme="dark",
         domain_preference="quantitative_finance",
     )
-    
+
     # Store the preferences
     stored_id = context_store.store_user_preferences(preferences, user_id)
     assert stored_id == user_id
-    
+
     # Retrieve the preferences
     retrieved_preferences = context_store.get_user_preferences(user_id)
     assert retrieved_preferences is not None
@@ -177,11 +170,11 @@ def test_store_and_retrieve_metric(context_store):
         domain="general",
         learning_mode="pro",
     )
-    
+
     # Store the metric
     metric_id = context_store.store_metric(metric)
     assert metric_id is not None
-    
+
     # Retrieve metrics for the task
     metrics = context_store.get_metrics_for_task(task_id)
     assert len(metrics) == 1
