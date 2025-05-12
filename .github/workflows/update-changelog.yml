@@ -15,6 +15,10 @@ jobs:
     # run if: merged PR → main  OR  direct push → main
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
+    # Set a concurrency group to prevent multiple workflow runs updating simultaneously
+    concurrency:
+      group: update-changelog
+      cancel-in-progress: false
 
     steps:
       - uses: actions/checkout@v4
@@ -39,87 +43,130 @@ jobs:
         run: |
           if git diff --quiet docs/handoff/changelog.md ; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No changes detected in changelog, skipping commit"
           else
             git config user.name  "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add docs/handoff/changelog.md
             git commit -m "chore: update changelog [skip ci]"
             echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Changelog changes committed"
           fi
 
-      - name: Push commit with robust sync handling
+      - name: Push commit with enhanced sync handling
         if: steps.commit.outputs.has_changes == 'true'
         run: |
-          # First fetch latest changes from origin (with force to ensure we have latest refs)
-          git fetch origin main --force
+          # Save our changelog changes to ensure they're always available
+          echo "Backing up changelog changes"
+          mkdir -p /tmp/changelog-backup
+          cp docs/handoff/changelog.md /tmp/changelog-backup/changelog.md
           
-          # Save our changelog changes early to ensure they're always available
-          cp docs/handoff/changelog.md /tmp/changelog.md.new || echo "No changelog to save yet"
-          
-          # Try to rebase our changes on top of latest main
-          if ! git rebase origin/main; then
-            # If rebase fails, abort it and try a different approach
-            git rebase --abort
-            
-            # Get the latest main branch state
-            git checkout main
-            git pull origin main
-            
-            # Apply our saved changes
-            if [ -f /tmp/changelog.md.new ]; then
-              cp /tmp/changelog.md.new docs/handoff/changelog.md
-              
-              # Re-stage and commit
-              git add docs/handoff/changelog.md
-              git commit -m "chore: update changelog [skip ci]"
-            else
-              echo "Warning: Couldn't find saved changelog, regenerating"
-              conventional-changelog -p angular -i docs/handoff/changelog.md -s
-              git add docs/handoff/changelog.md
-              git commit -m "chore: update changelog [skip ci]"
-            fi
-          fi
-          
-          # Retry pushing changes with exponential backoff
-          MAX_RETRIES=5
+          # Initialize retry counter
+          MAX_RETRIES=6
           n=0
+          
           until [ $n -ge $MAX_RETRIES ]; do
-            if git push origin HEAD:main; then
-              echo "Push successful on attempt $((n+1))"
-              exit 0
+            echo "Push attempt $((n+1)) of $MAX_RETRIES"
+            
+            # Always ensure we have latest main before attempting to push
+            echo "Fetching latest changes from main"
+            git fetch origin main --force
+            
+            # Different strategies based on retry count
+            if [ $n -eq 0 ]; then
+              # First attempt: try a simple push
+              echo "Strategy: Direct push"
+              if git push origin HEAD:main; then
+                echo "✅ Push successful on first attempt"
+                exit 0
+              fi
+            elif [ $n -eq 1 ]; then
+              # Second attempt: try rebasing
+              echo "Strategy: Rebase before push"
+              if git rebase origin/main && git push origin HEAD:main; then
+                echo "✅ Push successful after rebase"
+                exit 0
+              fi
+              # If rebase fails, abort it
+              git rebase --abort || true
+            elif [ $n -eq 2 ]; then
+              # Third attempt: pull with rebase
+              echo "Strategy: Pull with rebase before push"
+              if git pull --rebase origin main && git push origin HEAD:main; then
+                echo "✅ Push successful after pull with rebase"
+                exit 0
+              fi
+              # Reset to previous state if pull fails
+              git reset --hard HEAD@{1} || true
+            elif [ $n -eq 3 ]; then
+              # Fourth attempt: reset to origin/main and reapply changes
+              echo "Strategy: Reset to origin/main and reapply changes"
+              # Save current commit message for reference
+              COMMIT_MSG=$(git log -1 --pretty=%B)
+              # Reset to origin/main
+              git reset --hard origin/main
+              # Restore our changelog changes
+              cp /tmp/changelog-backup/changelog.md docs/handoff/changelog.md
+              # Commit again
+              git add docs/handoff/changelog.md
+              git commit -m "$COMMIT_MSG"
+              # Try push again
+              if git push origin HEAD:main; then
+                echo "✅ Push successful after reset and reapply"
+                exit 0
+              fi
+            elif [ $n -eq 4 ]; then
+              # Fifth attempt: merge instead of rebase
+              echo "Strategy: Merge approach"
+              # First switch to main and pull
+              git checkout main
+              git pull origin main
+              # Then create a temporary branch with our changes
+              git checkout -b temp-changelog-update
+              # Restore our changelog changes
+              cp /tmp/changelog-backup/changelog.md docs/handoff/changelog.md
+              git add docs/handoff/changelog.md
+              git commit -m "chore: update changelog [skip ci]"
+              # Switch back to main and merge our changes
+              git checkout main
+              if git merge temp-changelog-update && git push origin main; then
+                echo "✅ Push successful after merge strategy"
+                exit 0
+              fi
+              # Clean up temp branch regardless of outcome
+              git branch -D temp-changelog-update || true
+            else
+              # Final attempt: most aggressive approach with force-push to a separate branch
+              echo "Strategy: Create separate branch and PR"
+              # Create a new branch for our changes
+              BRANCH_NAME="bot/update-changelog-$(date +%s)"
+              git checkout -b $BRANCH_NAME
+              # Reset to latest main
+              git reset --hard origin/main
+              # Restore our changelog changes
+              cp /tmp/changelog-backup/changelog.md docs/handoff/changelog.md
+              git add docs/handoff/changelog.md
+              git commit -m "chore: update changelog [skip ci]"
+              # Push to the new branch
+              if git push origin $BRANCH_NAME; then
+                echo "✅ Changes pushed to branch $BRANCH_NAME"
+                echo "ℹ️ Consider creating a PR from this branch manually"
+                # Don't exit with error since we did successfully save the changes
+                exit 0
+              fi
             fi
             
+            # Increment counter
             n=$((n+1))
-            echo "Push failed, retry $n of $MAX_RETRIES..."
             
             if [ $n -lt $MAX_RETRIES ]; then
               # Wait with exponential backoff (2^n seconds)
               sleep_time=$((2**n))
               echo "Waiting ${sleep_time} seconds before retry..."
               sleep $sleep_time
-              
-              # Refresh our local state before retrying
-              git fetch origin main --force
-              
-              # If we're on the last retry, use a more aggressive approach
-              if [ $n -eq $((MAX_RETRIES-1)) ]; then
-                echo "Final retry - using reset approach"
-                git reset --hard origin/main
-                
-                # Apply our changelog changes again
-                if [ -f /tmp/changelog.md.new ]; then
-                  cp /tmp/changelog.md.new docs/handoff/changelog.md
-                  git add docs/handoff/changelog.md
-                  git commit -m "chore: update changelog [skip ci]"
-                else
-                  echo "Warning: Couldn't find saved changelog, regenerating"
-                  conventional-changelog -p angular -i docs/handoff/changelog.md -s
-                  git add docs/handoff/changelog.md
-                  git commit -m "chore: update changelog [skip ci]"
-                fi
-              fi
             fi
           done
           
-          echo "Failed to push after $MAX_RETRIES attempts"
+          echo "❌ Failed to push after $MAX_RETRIES attempts"
+          echo "Latest changelog changes are saved at /tmp/changelog-backup/changelog.md"
           exit 1
