@@ -200,3 +200,9 @@
   - Updated docs/pending-github-issues.md to mark all items as completed
   - Created PR #33 with the changes
   - Set up groundwork for future implementation of AutoGen agent orchestration (Issue #16)
+- **10:30 am — GitHub CLI documentation** – added comprehensive GitHub CLI usage documentation:
+  - Created branch `claude-2025-05-12-github-cli-docs` to add documentation separately
+  - Added new section to the developer guide on GitHub CLI usage
+  - Documented installation, authentication, issue management, label operations, and PR workflows
+  - Included examples for all common GitHub CLI operations
+  - Ensured future developers can effectively use GitHub CLI for project management tasks
