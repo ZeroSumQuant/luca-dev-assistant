@@ -14,17 +14,15 @@ from pathlib import Path
 
 from autogen_core.tools import FunctionTool
 
-# Project helpers
-from tools.file_io import read_text, write_text
-from tools.git_tools import get_git_diff, git_commit
-
 # Import luca_core components
 from luca_core.context import factory
 from luca_core.error import error_handler
-from luca_core.manager.manager import LucaManager
+from luca_core.manager.manager import LucaManager, ResponseOptions
 from luca_core.registry import registry
 from luca_core.schemas.agent import LearningMode
-from luca_core.schemas.base import ResponseOptions
+# Project helpers
+from tools.file_io import read_text, write_text
+from tools.git_tools import get_git_diff, git_commit
 
 # Configure logging
 logging.basicConfig(
@@ -46,29 +44,63 @@ def get_manager():
     global _manager
     if _manager is None:
         # Create context store
-        context_store = factory.create_context_store("sqlite", str(DB_PATH))
-        
-        # Initialize tool registry with our existing tools
-        registry.register(read_text, name="file_io.read_text", 
-                        description="Read a UTF-8 text file")
-        registry.register(write_text, name="file_io.write_text",
-                        description="Write text to a file")
-        registry.register(get_git_diff, name="git_tools.get_git_diff",
-                        description="Return combined Git diff")
-        registry.register(git_commit, name="git_tools.git_commit",
-                        description="Stage and commit all changes")
-        
-        # Create manager with context store and tool registry
-        _manager = LucaManager(context_store=context_store, 
-                             tool_registry=registry,
-                             error_handler=error_handler)
-    
+        try:
+            # Check if we're already in an event loop
+            loop = asyncio.get_event_loop()
+
+            # We're in an event loop, use a different method to create context store
+            async def create_manager():
+                context_store = await factory.create_async_context_store(
+                    "sqlite", str(DB_PATH)
+                )
+                manager = LucaManager(
+                    context_store=context_store,
+                    tool_registry=registry,
+                    error_handler=error_handler,
+                )
+                return manager
+
+            # Use run_coroutine_threadsafe or add_task depending on context
+            if loop.is_running():
+                # Add to task queue
+                future = asyncio.run_coroutine_threadsafe(create_manager(), loop)
+                _manager = future.result(timeout=10)  # Wait up to 10 seconds
+            else:
+                # Run directly
+                _manager = loop.run_until_complete(create_manager())
+        except RuntimeError:
+            # No event loop, use synchronous method
+            context_store = factory.create_context_store("sqlite", str(DB_PATH))
+            _manager = LucaManager(
+                context_store=context_store,
+                tool_registry=registry,
+                error_handler=error_handler,
+            )
+
+        # Register our existing tools
+        registry.register(
+            read_text, name="file_io.read_text", description="Read a UTF-8 text file"
+        )
+        registry.register(
+            write_text, name="file_io.write_text", description="Write text to a file"
+        )
+        registry.register(
+            get_git_diff,
+            name="git_tools.get_git_diff",
+            description="Return combined Git diff",
+        )
+        registry.register(
+            git_commit,
+            name="git_tools.git_commit",
+            description="Stage and commit all changes",
+        )
+
     return _manager
 
 
 def build_tools():
     """Return Luca's initial FunctionTool registry.
-    
+
     Used primarily for backward compatibility with existing code.
     New code should use the registry directly.
     """
@@ -101,17 +133,19 @@ def launch_ui():
 async def async_process_prompt(prompt: str):
     """Process a prompt asynchronously using the LucaManager."""
     manager = get_manager()
-    
+
     # Initialize the manager if this is first run
-    await manager.initialize()
-    
+    try:
+        await manager.initialize()
+    except Exception as e:
+        logger.error(f"Error initializing manager: {e}")
+        return f"Error initializing: {str(e)}"
+
     # Process the request through the manager
     response_options = ResponseOptions(
-        learning_mode=LearningMode.PRO,
-        verbose=False,
-        include_agent_info=True
+        learning_mode=LearningMode.PRO, verbose=False, include_agent_info=True
     )
-    
+
     try:
         response = await manager.process_request(prompt, response_options)
         return response
@@ -131,16 +165,27 @@ def process_prompt(prompt: str, launch_ui_after=True):
     tools = build_tools()  # noqa: F841
 
     print(f"📝 Processing prompt: {prompt}")
-    
+
     # Use the async manager to process the prompt
     try:
-        # Run the async function in an event loop
-        response = asyncio.run(async_process_prompt(prompt))
+        # Check if we're already in an event loop
+        try:
+            loop = asyncio.get_running_loop()
+            # We're in an event loop, so create a task
+            task = loop.create_task(async_process_prompt(prompt))
+            # For synchronous behavior, wait for the task to complete
+            response = loop.run_until_complete(task)
+        except RuntimeError:
+            # No event loop running, so create one with asyncio.run
+            response = asyncio.run(async_process_prompt(prompt))
+
         print(f"🤖 Agent response: {response}")
     except Exception as e:
         logger.error(f"Error in async processing: {e}")
         print(f"🤖 Error: {str(e)}")
-        print("I'm currently in fallback mode. Please try again or use the UI for full functionality.")
+        print(
+            "I'm currently in fallback mode. Please try again or use the UI for full functionality."
+        )
 
     # Launch UI as fallback, unless testing
     if launch_ui_after and not testing_mode:

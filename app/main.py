@@ -13,7 +13,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # Import Luca components
 from luca import get_manager
-from luca_core.schemas import LearningMode, ResponseOptions
+from luca_core.manager.manager import ResponseOptions
+from luca_core.schemas import LearningMode
 
 # Load environment variables
 load_dotenv()
@@ -104,12 +105,14 @@ def main():
             LearningMode.PRO: "Concise responses for experienced developers",
             LearningMode.GURU: "Deep technical insights and explanations",
         }
-        
+
         mode = st.selectbox(
             "Select Mode",
             options=[LearningMode.NOOB, LearningMode.PRO, LearningMode.GURU],
             format_func=lambda x: f"{x.title()} - {mode_descriptions[x]}",
-            index=[LearningMode.NOOB, LearningMode.PRO, LearningMode.GURU].index(current_mode),
+            index=[LearningMode.NOOB, LearningMode.PRO, LearningMode.GURU].index(
+                current_mode
+            ),
         )
         if mode != current_mode:
             set_learning_mode(mode)
@@ -164,15 +167,15 @@ def main():
                         verbose=False,
                         include_agent_info=True,
                     )
-                    
+
                     # Execute async manager in event loop
                     async def process():
                         manager = get_manager()
                         await manager.initialize()  # Ensure manager is initialized
                         return await manager.process_request(prompt, response_options)
-                    
+
                     full_response = asyncio.run(process())
-                    
+
                     message_placeholder.markdown(full_response)
 
                     # Add assistant response to chat history

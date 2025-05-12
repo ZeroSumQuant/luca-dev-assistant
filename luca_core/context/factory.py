@@ -13,9 +13,9 @@ from luca_core.context.sqlite_store import SQLiteContextStore
 
 
 async def create_async_context_store(
-    store_type: str = "sqlite", 
-    db_path: Optional[str] = None, 
-    config: Optional[Dict] = None
+    store_type: str = "sqlite",
+    db_path: Optional[str] = None,
+    config: Optional[Dict] = None,
 ) -> BaseContextStore:
     """Create a context store instance asynchronously.
 
@@ -28,7 +28,7 @@ async def create_async_context_store(
         An initialized context store instance
     """
     config = config or {}
-    
+
     if db_path is not None:
         config["path"] = db_path
 
@@ -49,9 +49,9 @@ async def create_async_context_store(
 
 
 def create_context_store(
-    store_type: str = "sqlite", 
-    db_path: Optional[str] = None, 
-    config: Optional[Dict] = None
+    store_type: str = "sqlite",
+    db_path: Optional[str] = None,
+    config: Optional[Dict] = None,
 ) -> BaseContextStore:
     """Create a context store instance synchronously.
 
@@ -66,4 +66,13 @@ def create_context_store(
     Returns:
         An initialized context store instance
     """
-    return asyncio.run(create_async_context_store(store_type, db_path, config))
+    # Check if we're in an event loop
+    try:
+        loop = asyncio.get_running_loop()
+        # We're in an event loop, so create a task and run it to completion
+        return loop.run_until_complete(
+            create_async_context_store(store_type, db_path, config)
+        )
+    except RuntimeError:
+        # No event loop running, so create one with asyncio.run
+        return asyncio.run(create_async_context_store(store_type, db_path, config))
