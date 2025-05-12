@@ -174,3 +174,12 @@
   - Updated developer guide with dependency management instructions
   - Documented recommended installation commands for different scenarios
   - Fixed multiple CI issues by ensuring all testing dependencies needed for CI are in requirements.txt
+- **11:59 pm — CI Python environment fix** – resolved CI pytest not found error:
+  - Diagnosed root cause of CI failure as Python interpreter path inconsistency
+  - Modified GitHub Actions workflow to use consistent `python -m pip` commands
+  - Added pytest verification step to confirm proper installation
+  - Set PYTHONPATH environment variable for test execution
+  - Ensured consistent Python interpreter usage throughout CI pipeline
+  - Updated developer guide with CI troubleshooting information
+  - Documented best practices for CI dependency management
+  - Fixed the issue while maintaining the project's dependency management philosophy

@@ -188,6 +188,13 @@ For a detailed and comprehensive view of the repository structure, please refer 
 2. **CI Workflow**:
    - Tests run automatically on PRs
    - Tests must pass before merging
+   - CI uses GitHub Actions configured in `.github/workflows/ci.yml`
+   - Critical CI workflow best practices:
+     - Always use `python -m pip` for consistency across environments
+     - Verify key dependencies like pytest are installed with import verification
+     - Set `PYTHONPATH: .` in environment for proper module resolution
+     - Use verbose test output (`-v` flag) for better debugging
+     - Set appropriate timeouts for all operations
 
 3. **Test Hanging Issues**:
    - Add timeouts to all tests to prevent hanging in CI:
@@ -198,6 +205,15 @@ For a detailed and comprehensive view of the repository structure, please refer 
    ```
    - Set explicit timeouts for all external API calls
    - Use process isolation with pytest-forked for problematic tests
+   - Set global job timeout in CI workflow (currently 15 minutes)
+   - Use the `--timeout_method=thread` flag with pytest-timeout for better tracebacks
+
+4. **CI Troubleshooting**:
+   - If pytest isn't found, check Python interpreter consistency in workflow
+   - If tests hang in CI but not locally, add `pytest-timeout` decorators
+   - If tests fail with import errors, check `PYTHONPATH` environment variable
+   - Monitor memory usage in CI to prevent silent OOM killers
+   - Use `pytest-forked` for particularly problematic tests to isolate failures
 
 ### Bandit Security Scanning
 
