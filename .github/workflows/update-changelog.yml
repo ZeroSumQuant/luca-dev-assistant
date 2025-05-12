@@ -50,38 +50,76 @@ jobs:
       - name: Push commit with robust sync handling
         if: steps.commit.outputs.has_changes == 'true'
         run: |
-          # First fetch latest changes from origin
-          git fetch origin main
+          # First fetch latest changes from origin (with force to ensure we have latest refs)
+          git fetch origin main --force
+          
+          # Save our changelog changes early to ensure they're always available
+          cp docs/handoff/changelog.md /tmp/changelog.md.new || echo "No changelog to save yet"
           
           # Try to rebase our changes on top of latest main
           if ! git rebase origin/main; then
             # If rebase fails, abort it and try a different approach
             git rebase --abort
             
-            # Save our current changelog changes
-            cp docs/handoff/changelog.md /tmp/changelog.md.new
-            
             # Get the latest main branch state
             git checkout main
             git pull origin main
             
             # Apply our saved changes
-            cp /tmp/changelog.md.new docs/handoff/changelog.md
-            
-            # Re-stage and commit
-            git add docs/handoff/changelog.md
-            git commit -m "chore: update changelog [skip ci]"
+            if [ -f /tmp/changelog.md.new ]; then
+              cp /tmp/changelog.md.new docs/handoff/changelog.md
+              
+              # Re-stage and commit
+              git add docs/handoff/changelog.md
+              git commit -m "chore: update changelog [skip ci]"
+            else
+              echo "Warning: Couldn't find saved changelog, regenerating"
+              conventional-changelog -p angular -i docs/handoff/changelog.md -s
+              git add docs/handoff/changelog.md
+              git commit -m "chore: update changelog [skip ci]"
+            fi
           fi
           
-          # Finally push changes to main branch with extra safeguards
-          git push origin HEAD:main || {
-            echo "Push failed, trying one more time with forced update of local state"
-            git fetch origin main --force
-            git reset --hard origin/main
+          # Retry pushing changes with exponential backoff
+          MAX_RETRIES=5
+          n=0
+          until [ $n -ge $MAX_RETRIES ]; do
+            if git push origin HEAD:main; then
+              echo "Push successful on attempt $((n+1))"
+              exit 0
+            fi
             
-            # Apply our changelog changes again
-            cp /tmp/changelog.md.new docs/handoff/changelog.md
-            git add docs/handoff/changelog.md
-            git commit -m "chore: update changelog [skip ci]"
-            git push origin HEAD:main
-          }
+            n=$((n+1))
+            echo "Push failed, retry $n of $MAX_RETRIES..."
+            
+            if [ $n -lt $MAX_RETRIES ]; then
+              # Wait with exponential backoff (2^n seconds)
+              sleep_time=$((2**n))
+              echo "Waiting ${sleep_time} seconds before retry..."
+              sleep $sleep_time
+              
+              # Refresh our local state before retrying
+              git fetch origin main --force
+              
+              # If we're on the last retry, use a more aggressive approach
+              if [ $n -eq $((MAX_RETRIES-1)) ]; then
+                echo "Final retry - using reset approach"
+                git reset --hard origin/main
+                
+                # Apply our changelog changes again
+                if [ -f /tmp/changelog.md.new ]; then
+                  cp /tmp/changelog.md.new docs/handoff/changelog.md
+                  git add docs/handoff/changelog.md
+                  git commit -m "chore: update changelog [skip ci]"
+                else
+                  echo "Warning: Couldn't find saved changelog, regenerating"
+                  conventional-changelog -p angular -i docs/handoff/changelog.md -s
+                  git add docs/handoff/changelog.md
+                  git commit -m "chore: update changelog [skip ci]"
+                fi
+              fi
+            fi
+          done
+          
+          echo "Failed to push after $MAX_RETRIES attempts"
+          exit 1
