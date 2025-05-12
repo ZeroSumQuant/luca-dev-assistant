@@ -251,9 +251,11 @@ For a detailed and comprehensive view of the repository structure, please refer 
 ## Changelog Management
 
 1. **Update Workflow**:
-   - Located in `.github/workflows/update-changelog.md`
-   - Triggered on PR merges to main
+   - Located in `.github/workflows/update-changelog.yml`
+   - Triggered on PR merges to main or direct pushes to main
    - Uses conventional-changelog-cli to generate entries
+   - Implements robust retry mechanism with exponential backoff to handle concurrent updates
+   - Automatically resolves merge conflicts and reference lock issues
 
 2. **Proper Commit Messages**:
    - Essential for good changelog entries
