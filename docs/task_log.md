@@ -141,3 +141,9 @@
   - Standardized on `python3` command usage throughout the documentation
   - Updated UI run command to use `python3 run_streamlit.py` for consistency
   - Enhanced documentation to improve developer workflow
+- **09:30 pm — Code review findings tracking** – created formal tracking document:
+  - Created `KeyFindings/Todo.md` to track code review findings and progress
+  - Marked completed items with dates and checked status
+  - Organized findings by category (structure, code quality, tests, etc.)
+  - Created clean separation between completed and pending tasks
+  - Set clear next steps for upcoming work on agent orchestration
