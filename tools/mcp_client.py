@@ -7,6 +7,7 @@ from typing import Any, Dict, List, Optional, TypeVar, Union
 
 from mcp import ClientSession, types
 from mcp.client.stdio import StdioServerParameters, stdio_client
+from mcp.client.streamable_http import streamablehttp_client
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,9 @@ class MCPServerConfig:
     script_path: Optional[str] = None  # For stdio servers
     url: Optional[str] = None  # For HTTP servers
     description: Optional[str] = None
+    timeout_seconds: int = 30  # Connection timeout
+    max_retries: int = 3  # Maximum number of connection retries
+    retry_delay_seconds: int = 1  # Initial delay between retries (will be exponential)
 
 
 @dataclass
@@ -96,10 +100,40 @@ class MCPClientManager:
                 session = await stdio_client(server_params)
 
             elif config.type == "http":
-                # TODO: Implement HTTP connection
-                raise NotImplementedError(
-                    "HTTP connections not yet implemented"
-                )
+                if not config.url:
+                    raise ValueError("url required for HTTP servers")
+
+                # Implement HTTP connection with retry logic
+                for attempt in range(config.max_retries):
+                    try:
+                        # Connect to the HTTP server with timeout
+                        logger.info(
+                            f"Connecting to HTTP MCP server at {config.url} "
+                            f"(attempt {attempt + 1}/{config.max_retries})"
+                        )
+                        session = await streamablehttp_client(
+                            config.url, timeout=config.timeout_seconds
+                        )
+                        logger.info(
+                            f"Successfully connected to HTTP server at {config.url}"
+                        )
+                        break
+                    except Exception as e:
+                        retry_delay = config.retry_delay_seconds * (2**attempt)
+                        if attempt < config.max_retries - 1:
+                            logger.warning(
+                                f"Failed to connect to HTTP server: {e}. "
+                                f"Retrying in {retry_delay} seconds..."
+                            )
+                            # Wait with exponential backoff before retry
+                            await asyncio.sleep(retry_delay)
+                        else:
+                            # Last attempt failed, re-raise the exception
+                            logger.error(
+                                f"Failed to connect to HTTP server after "
+                                f"{config.max_retries} attempts: {e}"
+                            )
+                            raise
             else:
                 raise ValueError(f"Unknown server type: {config.type}")
 
@@ -150,9 +184,7 @@ class MCPClientManager:
             return False
 
         except Exception as e:
-            logger.error(
-                f"Failed to disconnect from server {server_name}: {e}"
-            )
+            logger.error(f"Failed to disconnect from server {server_name}: {e}")
             return False
 
     async def _register_server_tools(self, server_name: str) -> None:
@@ -179,17 +211,11 @@ class MCPClientManager:
                     name=tool.name,
                     description=tool.description or "",
                     server_name=server_name,
-                    schema=(
-                        tool.inputSchema.model_dump()
-                        if tool.inputSchema
-                        else {}
-                    ),
+                    schema=(tool.inputSchema.model_dump() if tool.inputSchema else {}),
                 )
                 self.tools[f"{server_name}.{tool.name}"] = mcp_tool
 
-            logger.info(
-                f"Registered {len(response.tools)} tools from {server_name}"
-            )
+            logger.info(f"Registered {len(response.tools)} tools from {server_name}")
 
         except Exception as e:
             logger.error(f"Failed to register tools from {server_name}: {e}")
@@ -233,9 +259,7 @@ class MCPClientManager:
             actual_tool_name = tool.name
 
             # Create and send the tool call request
-            request = types.CallToolRequest(
-                name=actual_tool_name, arguments=arguments
-            )
+            request = types.CallToolRequest(name=actual_tool_name, arguments=arguments)
 
             response = await session.call(request)
 
@@ -268,24 +292,55 @@ class MCPClientManager:
         Returns:
             A list of MCPTool objects that belong to the specified server
         """
-        return [
-            tool
-            for tool in self.tools.values()
-            if tool.server_name == server_name
-        ]
+        return [tool for tool in self.tools.values() if tool.server_name == server_name]
 
 
 # Global MCP client manager instance
 mcp_client = MCPClientManager()
 
 
-async def initialize_default_servers() -> None:
+async def initialize_default_servers(config_path: Optional[str] = None) -> None:
     """
-    Initialize default MCP servers if they exist.
+    Initialize default MCP servers from configuration.
 
-    This function will eventually load server configurations from a config file.
+    This function loads server configurations from a config file if specified,
+    or from environment variables otherwise.
+
+    Args:
+        config_path: Optional path to a configuration file (JSON or YAML)
+                     If not provided, will look for environment variables
+
+    Example config file format:
+    ```json
+    {
+        "servers": [
+            {
+                "name": "filesystem",
+                "type": "stdio",
+                "script_path": "/path/to/filesystem_server.py",
+                "description": "Access local filesystem"
+            },
+            {
+                "name": "remote-tools",
+                "type": "http",
+                "url": "https://mcp-server.example.com/mcp",
+                "description": "Remote tool server",
+                "timeout_seconds": 10,
+                "max_retries": 3
+            }
+        ]
+    }
+    ```
     """
-    # TODO: Load from config file
+    # TODO: Implement configuration loading from file or environment variables
+    # For now, this is a placeholder for future implementation in Issue #18
+    if config_path:
+        logger.info(f"Configuration path provided: {config_path}")
+        logger.warning("Configuration loading not yet implemented")
+    else:
+        logger.info("No configuration path provided, checking environment")
+        logger.warning("Environment configuration not yet implemented")
+
     pass
 
 
@@ -300,17 +355,32 @@ async def example_usage() -> None:
     # Start the manager
     await mcp_client.start()
 
-    # Connect to a server
-    config = MCPServerConfig(
+    # Example 1: Connect to a stdio server
+    stdio_config = MCPServerConfig(
         name="filesystem",
         type="stdio",
         script_path="/path/to/filesystem_server.py",
         description="Access local filesystem",
     )
 
-    await mcp_client.connect_to_server(config)
+    await mcp_client.connect_to_server(stdio_config)
 
-    # List available tools
+    # Example 2: Connect to an HTTP server
+    http_config = MCPServerConfig(
+        name="remote-tools",
+        type="http",
+        url="https://mcp-server.example.com/mcp",
+        description="Remote tool server",
+        timeout_seconds=10,
+        max_retries=3,
+    )
+
+    try:
+        await mcp_client.connect_to_server(http_config)
+    except Exception as e:
+        print(f"Failed to connect to HTTP server: {e}")
+
+    # List available tools from all connected servers
     tools = await mcp_client.list_available_tools()
     for tool in tools:
         print(f"Tool: {tool.name} - {tool.description}")
@@ -324,7 +394,7 @@ async def example_usage() -> None:
     except Exception as e:
         print(f"Error: {e}")
 
-    # Stop the manager
+    # Stop the manager (closes all connections)
     await mcp_client.stop()
 
 
