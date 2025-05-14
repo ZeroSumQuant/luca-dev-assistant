@@ -260,3 +260,10 @@
   - Created detailed handoff document at `docs/handoff/2025-05-13-1.md`
   - Provided clear documentation of all changes made during the session
   - Ensured all project guidelines for documentation were followed
+- **11:00 pm — License addition** – added MIT license file to repository:
+  - Created branch `claude-2025-05-13-add-license` for license addition
+  - Added standard MIT license file with ZeroSumQuant as copyright holder
+  - Verified license matches project intent as documented in README.md
+  - Ran linting and tests to ensure code quality
+  - Created handoff document at `docs/handoff/2025-05-13-2.md`
+  - Prepared changes to address issue #38
