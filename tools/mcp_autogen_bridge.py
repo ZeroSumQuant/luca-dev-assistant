@@ -44,18 +44,14 @@ class MCPAutogenBridge:
                 async def executor(**kwargs: Any) -> str:
                     try:
                         # Execute the MCP tool
-                        result = await self.mcp_client.execute_tool(
-                            tool_key, kwargs
-                        )
+                        result = await self.mcp_client.execute_tool(tool_key, kwargs)
                         # Convert result to string if it's not already
                         if isinstance(result, str):
                             return result
                         else:
                             return json.dumps(result, indent=2)
                     except Exception as e:
-                        logger.error(
-                            f"Error executing MCP tool {tool_key}: {e}"
-                        )
+                        logger.error(f"Error executing MCP tool {tool_key}: {e}")
                         return f"Error: {str(e)}"
 
                 return executor
@@ -168,9 +164,7 @@ async def example_bridge_usage() -> None:
 
     # Test tool execution
     try:
-        result = await bridge.test_tool_execution(
-            "list_directory", {"path": "."}
-        )
+        result = await bridge.test_tool_execution("list_directory", {"path": "."})
         print(f"Directory listing:\n{result}")
     except Exception as e:
         print(f"Error: {e}")

@@ -276,4 +276,17 @@
   - Ensured proper return type annotations for all functions
   - Ran linting and tests to verify changes
   - Created handoff document at `docs/handoff/2025-05-13-3.md`
-  - Prepared changes to address issue #22
+  - Created PR #45 to close issue #22
+
+## 2025-05-14
+- **08:00 pm — HTTP connection support for MCP** – implemented support for remote MCP servers:
+  - Created branch `claude-2025-05-14-http-mcp-connection` for HTTP implementation
+  - Added HTTP client connection using the MCP library's streamablehttp_client
+  - Implemented robust retry mechanism with exponential backoff
+  - Added timeout configuration and error handling for network failures
+  - Enhanced MCPServerConfig with configurable connection parameters
+  - Updated example usage to demonstrate both stdio and HTTP connection types
+  - Documented configuration loading interface for future implementation
+  - Ran all tests to verify compatibility
+  - Created handoff document at `docs/handoff/2025-05-14-1.md`
+  - Prepared changes to address issue #17
