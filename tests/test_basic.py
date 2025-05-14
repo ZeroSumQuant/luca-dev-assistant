@@ -7,7 +7,7 @@ def test_bootstrap_runs():
     on CI runners—only that the banner appears and exit-code is 0.
     """
     result = run(
-        ["python", "scripts/start_assistant.py"],
+        ["python3", "scripts/start_assistant.py"],
         capture_output=True,
         text=True,
     )
