@@ -5,21 +5,28 @@ This simple module assists with formatting changelog entries properly
 according to the Conventional Commits specification.
 """
 
+from typing import Optional
 
-def format_commit_message(type_str, scope, description, body=None, footer=None):
+
+def format_commit_message(
+    type_str: str,
+    scope: Optional[str],
+    description: str,
+    body: Optional[str] = None,
+    footer: Optional[str] = None,
+) -> str:
     """
     Format a commit message according to Conventional Commits specification.
 
     Args:
-        type_str (str): The type of change (feat, fix, docs, etc.)
-        scope (str): The scope of the change (optional)
-        description (str): Short description of the change
-        body (str, optional): Longer explanation of the change
-        footer (str, optional): Information about breaking changes or
-            references
+        type_str: The type of change (feat, fix, docs, etc.)
+        scope: The scope of the change (optional, can be None)
+        description: Short description of the change
+        body: Longer explanation of the change (optional)
+        footer: Information about breaking changes or references (optional)
 
     Returns:
-        str: Properly formatted commit message
+        Properly formatted commit message as a string
     """
     if scope:
         header = f"{type_str}({scope}): {description}"
