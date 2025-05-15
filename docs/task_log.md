@@ -306,3 +306,7 @@
   - Improved overall tools module coverage from 73% to 95%
   - Fixed flake8 issues in new test files
   - Created handoff document at `docs/handoff/2025-05-14_coverage_bump.md`
+- **11:45 pm — bf647f5 — Fixed CI requirements** – added pytest-asyncio to requirements.txt:
+  - Added pytest-asyncio 0.23.5 to requirements.txt for CI support
+  - Ensured compatibility with GitHub Actions runners
+  - Fixed CI build failures related to async test execution
