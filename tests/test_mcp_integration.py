@@ -1,6 +1,5 @@
 """Tests for MCP integration"""
 
-import asyncio
 import os
 from unittest.mock import AsyncMock, MagicMock, patch
 
@@ -8,7 +7,6 @@ import pytest
 import pytest_asyncio
 from autogen_core.tools import FunctionTool
 from mcp import types
-from mcp.client.session import ClientSession
 
 from tools.mcp_autogen_bridge import MCPAutogenBridge
 from tools.mcp_client import MCPClientManager, MCPServerConfig, MCPTool
@@ -794,9 +792,8 @@ class TestMCPFullIntegration:
 
     async def test_filesystem_server_integration(self, tmp_path):
         """Test integration with the filesystem server"""
-        import json
-        import subprocess
-        import tempfile
+        # Import only needed in the test function
+        import asyncio  # noqa: needed for async context
 
         # Path to the filesystem server script
         server_script = str(
