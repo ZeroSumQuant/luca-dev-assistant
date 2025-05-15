@@ -2,16 +2,16 @@
 
 import asyncio
 import os
+from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
 import pytest_asyncio
-
-from unittest.mock import AsyncMock, MagicMock, patch
-from mcp.client.session import ClientSession
-from mcp import types
-
-from tools.mcp_client import MCPClientManager, MCPServerConfig, MCPTool
-from tools.mcp_autogen_bridge import MCPAutogenBridge
 from autogen_core.tools import FunctionTool
+from mcp import types
+from mcp.client.session import ClientSession
+
+from tools.mcp_autogen_bridge import MCPAutogenBridge
+from tools.mcp_client import MCPClientManager, MCPServerConfig, MCPTool
 
 
 # Helper functions for creating valid MCP protocol objects
@@ -51,15 +51,16 @@ def make_call_tool_response(content_text=None):
     """Create a valid response for call_tool with the given content."""
     mock = MagicMock()
     mock.id = 1
-    
+
     if content_text is not None:
         content_mock = MagicMock()
         content_mock.text = content_text
         mock.content = [content_mock]
     else:
         mock.content = []
-        
+
     return mock
+
 
 # Skip all MCP tests in CI environments where they might hang
 pytestmark = [
@@ -91,7 +92,7 @@ async def mock_stdio_client():
     """Fixture for a mocked stdio client function."""
     # Create a session mock that can be awaited
     session_mock = AsyncMock()
-    
+
     # Mock the response from listing tools
     tool1 = MagicMock()
     tool1.name = "read_file"
@@ -100,7 +101,7 @@ async def mock_stdio_client():
     tool1.inputSchema.model_dump.return_value = {
         "properties": {"path": {"type": "string"}}
     }
-    
+
     tool2 = MagicMock()
     tool2.name = "write_file"
     tool2.description = "Write to a file"
@@ -108,11 +109,11 @@ async def mock_stdio_client():
     tool2.inputSchema.model_dump.return_value = {
         "properties": {"path": {"type": "string"}, "content": {"type": "string"}}
     }
-    
+
     response_mock = MagicMock()
     response_mock.tools = [tool1, tool2]
     session_mock.call = AsyncMock(return_value=response_mock)
-    
+
     # Create a mock for stdio_client that is an awaitable function that returns the session
     async def mock_stdio_client_func(*args, **kwargs):
         return session_mock
@@ -126,18 +127,20 @@ async def mock_http_client():
     """Fixture for a mocked HTTP client function."""
     # Create a session mock that can be awaited
     session_mock = AsyncMock()
-    
+
     # Mock the response from listing tools
     tool1 = MagicMock()
     tool1.name = "http_tool1"
     tool1.description = "HTTP Tool 1"
     tool1.inputSchema = MagicMock()
-    tool1.inputSchema.model_dump.return_value = {"properties": {"param": {"type": "string"}}}
-    
+    tool1.inputSchema.model_dump.return_value = {
+        "properties": {"param": {"type": "string"}}
+    }
+
     response_mock = MagicMock()
     response_mock.tools = [tool1]
     session_mock.call = AsyncMock(return_value=response_mock)
-    
+
     # Create a mock for http_client that is an awaitable function that returns the session
     async def mock_http_client_func(*args, **kwargs):
         return session_mock
@@ -154,13 +157,13 @@ class TestMCPClientManager:
         # Start the client manager
         await mcp_client.start()
         assert mcp_client.running is True
-        
+
         # Stop the client manager
         await mcp_client.stop()
         assert mcp_client.running is False
         assert not mcp_client.connections
         assert not mcp_client.tools
-        
+
     # Convert non-async methods to async
     async def test_get_connected_servers(self, mcp_client):
         """Test getting connected servers"""
@@ -169,22 +172,22 @@ class TestMCPClientManager:
             name="server1",
             type="stdio",
             script_path="/path/to/script1.py",
-            description="Server 1"
+            description="Server 1",
         )
-        
+
         config2 = MCPServerConfig(
             name="server2",
             type="http",
             url="https://example.com/mcp",
-            description="Server 2"
+            description="Server 2",
         )
-        
+
         mcp_client.server_configs["server1"] = config1
         mcp_client.server_configs["server2"] = config2
-        
+
         # Get connected servers
         servers = mcp_client.get_connected_servers()
-        
+
         # Verify the servers
         assert len(servers) == 2
         server_names = [server.name for server in servers]
@@ -195,33 +198,24 @@ class TestMCPClientManager:
         """Test getting tools for a specific server"""
         # Add some tools
         tool1 = MCPTool(
-            name="tool1",
-            description="Tool 1",
-            server_name="server1",
-            schema={}
+            name="tool1", description="Tool 1", server_name="server1", schema={}
         )
-        
+
         tool2 = MCPTool(
-            name="tool2",
-            description="Tool 2",
-            server_name="server1",
-            schema={}
+            name="tool2", description="Tool 2", server_name="server1", schema={}
         )
-        
+
         tool3 = MCPTool(
-            name="tool3",
-            description="Tool 3",
-            server_name="server2",
-            schema={}
+            name="tool3", description="Tool 3", server_name="server2", schema={}
         )
-        
+
         mcp_client.tools["server1.tool1"] = tool1
         mcp_client.tools["server1.tool2"] = tool2
         mcp_client.tools["server2.tool3"] = tool3
-        
+
         # Get tools for server1
         tools = mcp_client.get_server_tools("server1")
-        
+
         # Verify the tools
         assert len(tools) == 2
         tool_names = [tool.name for tool in tools]
@@ -233,7 +227,7 @@ class TestMCPClientManager:
         """Test connecting to a stdio server"""
         # Create a session mock
         session_mock = AsyncMock()
-        
+
         # Create two tools for the response
         tool1 = MagicMock()
         tool1.name = "read_file"
@@ -242,7 +236,7 @@ class TestMCPClientManager:
         tool1.inputSchema.model_dump.return_value = {
             "properties": {"path": {"type": "string"}}
         }
-        
+
         tool2 = MagicMock()
         tool2.name = "write_file"
         tool2.description = "Write to a file"
@@ -250,34 +244,36 @@ class TestMCPClientManager:
         tool2.inputSchema.model_dump.return_value = {
             "properties": {"path": {"type": "string"}, "content": {"type": "string"}}
         }
-        
+
         # Create a valid list_tools response
         tools_response = make_list_tools_response([tool1, tool2])
-        
+
         # Configure the session to return the tools response for call
         async def mock_call(*args, **kwargs):
             return tools_response
-        
+
         session_mock.call = mock_call
-        
+
         # Create an awaitable stdio_client mock
         async def mock_stdio_client(*args, **kwargs):
             return session_mock
-            
+
         # Create a config for stdio server
         config = MCPServerConfig(
             name="test_stdio",
             type="stdio",
             script_path="/path/to/script.py",
-            description="Test stdio server"
+            description="Test stdio server",
         )
-        
+
         # Patch the stdio_client and connect to the server
         with patch("tools.mcp_client.stdio_client", mock_stdio_client):
             # Also patch the ListToolsRequest to return a valid request object
-            with patch.object(types, "ListToolsRequest", return_value=make_list_tools_request()):
+            with patch.object(
+                types, "ListToolsRequest", return_value=make_list_tools_request()
+            ):
                 result = await mcp_client.connect_to_server(config)
-        
+
         # Verify the result
         assert result is True
         assert "test_stdio" in mcp_client.connections
@@ -285,7 +281,7 @@ class TestMCPClientManager:
         assert len(mcp_client.tools) == 2
         assert "test_stdio.read_file" in mcp_client.tools
         assert "test_stdio.write_file" in mcp_client.tools
-        
+
         # Verify the tools were registered correctly
         read_tool = mcp_client.tools["test_stdio.read_file"]
         assert read_tool.name == "read_file"
@@ -296,19 +292,20 @@ class TestMCPClientManager:
         """Test that connecting to a stdio server fails when script_path is missing"""
         # Create a config for stdio server without script_path
         config = MCPServerConfig(
-            name="test_stdio",
-            type="stdio",
-            description="Test stdio server"
+            name="test_stdio", type="stdio", description="Test stdio server"
         )
-        
+
         # The connect_to_server method catches exceptions and returns False
         # So we should test for the return value, not the exception
-        with patch("tools.mcp_client.stdio_client", side_effect=ValueError("script_path required for stdio servers")):
+        with patch(
+            "tools.mcp_client.stdio_client",
+            side_effect=ValueError("script_path required for stdio servers"),
+        ):
             result = await mcp_client.connect_to_server(config)
-            
+
         # Verify the result is False (connection failed)
         assert result is False
-        
+
         # Verify the connection was not added
         assert "test_stdio" not in mcp_client.connections
         assert len(mcp_client.connections) == 0
@@ -317,27 +314,29 @@ class TestMCPClientManager:
         """Test connecting to an HTTP server"""
         # Create a session mock
         session_mock = AsyncMock()
-        
+
         # Create a tool for the response
         tool1 = MagicMock()
         tool1.name = "http_tool1"
         tool1.description = "HTTP Tool 1"
         tool1.inputSchema = MagicMock()
-        tool1.inputSchema.model_dump.return_value = {"properties": {"param": {"type": "string"}}}
-        
+        tool1.inputSchema.model_dump.return_value = {
+            "properties": {"param": {"type": "string"}}
+        }
+
         # Create a valid list_tools response
         tools_response = make_list_tools_response([tool1])
-        
+
         # Configure the session to return the tools response
         async def mock_call(*args, **kwargs):
             return tools_response
-        
+
         session_mock.call = mock_call
-        
+
         # Create an awaitable http_client mock
         async def mock_http_client(*args, **kwargs):
             return session_mock
-            
+
         # Create a config for HTTP server
         config = MCPServerConfig(
             name="test_http",
@@ -345,22 +344,24 @@ class TestMCPClientManager:
             url="https://example.com/mcp",
             description="Test HTTP server",
             timeout_seconds=5,
-            max_retries=2
+            max_retries=2,
         )
-        
+
         # Patch the http_client and connect to the server
         with patch("tools.mcp_client.streamablehttp_client", mock_http_client):
             # Also patch the ListToolsRequest to return a valid request object
-            with patch.object(types, "ListToolsRequest", return_value=make_list_tools_request()):
+            with patch.object(
+                types, "ListToolsRequest", return_value=make_list_tools_request()
+            ):
                 result = await mcp_client.connect_to_server(config)
-        
+
         # Verify the result
         assert result is True
         assert "test_http" in mcp_client.connections
         assert "test_http" in mcp_client.server_configs
         assert len(mcp_client.tools) == 1
         assert "test_http.http_tool1" in mcp_client.tools
-        
+
         # Verify the tool was registered correctly
         http_tool = mcp_client.tools["test_http.http_tool1"]
         assert http_tool.name == "http_tool1"
@@ -371,19 +372,20 @@ class TestMCPClientManager:
         """Test that connecting to an HTTP server fails when URL is missing"""
         # Create a config for HTTP server without URL
         config = MCPServerConfig(
-            name="test_http",
-            type="http",
-            description="Test HTTP server"
+            name="test_http", type="http", description="Test HTTP server"
         )
-        
+
         # The connect_to_server method catches exceptions and returns False
         # So we should test for the return value, not the exception
-        with patch("tools.mcp_client.streamablehttp_client", side_effect=ValueError("url required for HTTP servers")):
+        with patch(
+            "tools.mcp_client.streamablehttp_client",
+            side_effect=ValueError("url required for HTTP servers"),
+        ):
             result = await mcp_client.connect_to_server(config)
-            
+
         # Verify the result is False (connection failed)
         assert result is False
-        
+
         # Verify the connection was not added
         assert "test_http" not in mcp_client.connections
         assert len(mcp_client.connections) == 0
@@ -395,10 +397,10 @@ class TestMCPClientManager:
         response_mock = MagicMock()
         response_mock.tools = []
         success_session_mock.call = AsyncMock(return_value=response_mock)
-        
+
         # Create a mock for http client with retry behavior
         retry_count = 0
-        
+
         async def mock_http_retry(*args, **kwargs):
             nonlocal retry_count
             if retry_count == 0:
@@ -415,14 +417,14 @@ class TestMCPClientManager:
             description="Test HTTP server with retry",
             timeout_seconds=1,
             max_retries=2,
-            retry_delay_seconds=0.1  # Short delay for tests
+            retry_delay_seconds=0.1,  # Short delay for tests
         )
-        
+
         # Connect to the server
         with patch("tools.mcp_client.streamablehttp_client", mock_http_retry):
             with patch("asyncio.sleep", AsyncMock()) as mock_sleep:
                 result = await mcp_client.connect_to_server(config)
-        
+
         # Verify the result
         assert result is True
         assert "test_http_retry" in mcp_client.connections
@@ -432,18 +434,16 @@ class TestMCPClientManager:
         """Test that connecting to an unknown server type fails"""
         # Create a config with unknown server type
         config = MCPServerConfig(
-            name="test_unknown",
-            type="unknown",
-            description="Test unknown server type"
+            name="test_unknown", type="unknown", description="Test unknown server type"
         )
-        
+
         # For simplicity, directly test the return value
         # The connect_to_server method catches exceptions and returns False
         result = await mcp_client.connect_to_server(config)
-        
+
         # Verify the result is False (connection failed)
         assert result is False
-        
+
         # Verify the connection was not added
         assert "test_unknown" not in mcp_client.connections
         assert len(mcp_client.connections) == 0
@@ -452,36 +452,36 @@ class TestMCPClientManager:
         """Test disconnecting from a server"""
         # Manually add a connection and tools
         session_mock = AsyncMock()
-        
+
         # Add a connection directly
         mcp_client.connections["test_disconnect"] = session_mock
         mcp_client.server_configs["test_disconnect"] = MCPServerConfig(
             name="test_disconnect",
             type="stdio",
             script_path="/path/to/script.py",
-            description="Test disconnect server"
+            description="Test disconnect server",
         )
-        
+
         # Add a tool
         tool = MCPTool(
             name="read_file",
             description="Read a file",
             server_name="test_disconnect",
-            schema={}
+            schema={},
         )
         mcp_client.tools["test_disconnect.read_file"] = tool
-        
+
         # Verify connection exists
         assert "test_disconnect" in mcp_client.connections
-        
+
         # Now disconnect
         result = await mcp_client.disconnect_from_server("test_disconnect")
-        
+
         # Verify the result
         assert result is True
         assert "test_disconnect" not in mcp_client.connections
         assert "test_disconnect" not in mcp_client.server_configs
-        
+
         # Verify that tools were removed
         for tool_name in mcp_client.tools:
             assert not tool_name.startswith("test_disconnect.")
@@ -498,22 +498,27 @@ class TestMCPClientManager:
             name="read_file",
             description="Read a file",
             server_name="test_tools",
-            schema={"properties": {"path": {"type": "string"}}}
+            schema={"properties": {"path": {"type": "string"}}},
         )
-        
+
         tool2 = MCPTool(
             name="write_file",
             description="Write to a file",
             server_name="test_tools",
-            schema={"properties": {"path": {"type": "string"}, "content": {"type": "string"}}}
+            schema={
+                "properties": {
+                    "path": {"type": "string"},
+                    "content": {"type": "string"},
+                }
+            },
         )
-        
+
         mcp_client.tools["test_tools.read_file"] = tool1
         mcp_client.tools["test_tools.write_file"] = tool2
-        
+
         # List tools
         tools = await mcp_client.list_available_tools()
-        
+
         # Verify the tools
         assert len(tools) == 2
         tool_names = [tool.name for tool in tools]
@@ -524,40 +529,46 @@ class TestMCPClientManager:
         """Test executing a tool"""
         # Create a session mock
         session_mock = AsyncMock()
-        
+
         # Create a response with content
         tool_response = make_call_tool_response("File content goes here")
-        
+
         # Configure the session to return the tool response - use AsyncMock
         mock_call = AsyncMock(return_value=tool_response)
         session_mock.call = mock_call
-        
+
         # Manually add tool and connection to the client manager
         tool = MCPTool(
             name="read_file",
             description="Read a file",
             server_name="test_execute",
-            schema={"properties": {"path": {"type": "string"}}}
+            schema={"properties": {"path": {"type": "string"}}},
         )
-        
+
         mcp_client.tools["test_execute.read_file"] = tool
         mcp_client.connections["test_execute"] = session_mock
         mcp_client.server_configs["test_execute"] = MCPServerConfig(
             name="test_execute",
             type="stdio",
             script_path="/path/to/script.py",
-            description="Test execute server"
+            description="Test execute server",
         )
-        
+
         # Execute a tool with patched CallToolRequest
-        with patch.object(types, "CallToolRequest", return_value=make_call_tool_request("read_file", {"path": "/path/to/file.txt"})):
+        with patch.object(
+            types,
+            "CallToolRequest",
+            return_value=make_call_tool_request(
+                "read_file", {"path": "/path/to/file.txt"}
+            ),
+        ):
             result = await mcp_client.execute_tool(
                 "test_execute.read_file", {"path": "/path/to/file.txt"}
             )
-        
+
         # Verify the result
         assert result == "File content goes here"
-        
+
         # Verify the call was made correctly
         assert mock_call.call_count == 1
 
@@ -573,15 +584,17 @@ class TestMCPClientManager:
             name="read_file",
             description="Read a file",
             server_name="test_disconnect_exec",
-            schema={}
+            schema={},
         )
-        
+
         # Add directly to tools collection
         mcp_client.tools["test_disconnect_exec.read_file"] = tool
-        
+
         # Try to execute the tool without the corresponding connection
         with pytest.raises(ValueError, match="Server not connected"):
-            await mcp_client.execute_tool("test_disconnect_exec.read_file", {"path": "/path/to/file.txt"})
+            await mcp_client.execute_tool(
+                "test_disconnect_exec.read_file", {"path": "/path/to/file.txt"}
+            )
 
     async def test_get_connected_servers(self, mcp_client):
         """Test getting connected servers"""
@@ -590,22 +603,22 @@ class TestMCPClientManager:
             name="server1",
             type="stdio",
             script_path="/path/to/script1.py",
-            description="Server 1"
+            description="Server 1",
         )
-        
+
         config2 = MCPServerConfig(
             name="server2",
             type="http",
             url="https://example.com/mcp",
-            description="Server 2"
+            description="Server 2",
         )
-        
+
         mcp_client.server_configs["server1"] = config1
         mcp_client.server_configs["server2"] = config2
-        
+
         # Get connected servers
         servers = mcp_client.get_connected_servers()
-        
+
         # Verify the servers
         assert len(servers) == 2
         server_names = [server.name for server in servers]
@@ -616,33 +629,24 @@ class TestMCPClientManager:
         """Test getting tools for a specific server"""
         # Add some tools
         tool1 = MCPTool(
-            name="tool1",
-            description="Tool 1",
-            server_name="server1",
-            schema={}
+            name="tool1", description="Tool 1", server_name="server1", schema={}
         )
-        
+
         tool2 = MCPTool(
-            name="tool2",
-            description="Tool 2",
-            server_name="server1",
-            schema={}
+            name="tool2", description="Tool 2", server_name="server1", schema={}
         )
-        
+
         tool3 = MCPTool(
-            name="tool3",
-            description="Tool 3",
-            server_name="server2",
-            schema={}
+            name="tool3", description="Tool 3", server_name="server2", schema={}
         )
-        
+
         mcp_client.tools["server1.tool1"] = tool1
         mcp_client.tools["server1.tool2"] = tool2
         mcp_client.tools["server2.tool3"] = tool3
-        
+
         # Get tools for server1
         tools = mcp_client.get_server_tools("server1")
-        
+
         # Verify the tools
         assert len(tools) == 2
         tool_names = [tool.name for tool in tools]
@@ -666,30 +670,30 @@ class TestMCPAutogenBridge:
             name="tool1",
             description="Tool 1",
             server_name="server1",
-            schema={"properties": {"param1": {"type": "string"}}}
+            schema={"properties": {"param1": {"type": "string"}}},
         )
-        
+
         tool2 = MCPTool(
             name="tool2",
             description="Tool 2",
             server_name="server1",
-            schema={"properties": {"param2": {"type": "number"}}}
+            schema={"properties": {"param2": {"type": "number"}}},
         )
-        
+
         mcp_client.tools["server1.tool1"] = tool1
         mcp_client.tools["server1.tool2"] = tool2
-        
+
         # Create the bridge and get AutoGen tools
         bridge = MCPAutogenBridge(mcp_client)
         tools = bridge.get_autogen_tools()
-        
+
         # Verify the tools
         assert len(tools) == 2
-        
+
         # Verify tools are FunctionTool instances
         for tool in tools:
             assert isinstance(tool, FunctionTool)
-        
+
         # Verify tool names
         tool_names = [tool.name for tool in tools]
         assert "tool1" in tool_names
@@ -699,50 +703,41 @@ class TestMCPAutogenBridge:
         """Test getting AutoGen tools for a specific server"""
         # Add tools for different servers
         tool1 = MCPTool(
-            name="tool1",
-            description="Tool 1",
-            server_name="server1",
-            schema={}
+            name="tool1", description="Tool 1", server_name="server1", schema={}
         )
-        
+
         tool2 = MCPTool(
-            name="tool2",
-            description="Tool 2",
-            server_name="server1",
-            schema={}
+            name="tool2", description="Tool 2", server_name="server1", schema={}
         )
-        
+
         tool3 = MCPTool(
-            name="tool3",
-            description="Tool 3",
-            server_name="server2",
-            schema={}
+            name="tool3", description="Tool 3", server_name="server2", schema={}
         )
-        
+
         mcp_client.tools["server1.tool1"] = tool1
         mcp_client.tools["server1.tool2"] = tool2
         mcp_client.tools["server2.tool3"] = tool3
-        
+
         # Create the bridge
         bridge = MCPAutogenBridge(mcp_client)
-        
+
         # Get tools for server1
         with patch.object(bridge, "get_autogen_tools") as mock_get_tools:
             # Create mock AutoGen tools
             mock_tool1 = MagicMock(spec=FunctionTool)
             mock_tool1.name = "tool1"
-            
+
             mock_tool2 = MagicMock(spec=FunctionTool)
             mock_tool2.name = "tool2"
-            
+
             mock_tool3 = MagicMock(spec=FunctionTool)
             mock_tool3.name = "tool3"
-            
+
             mock_get_tools.return_value = [mock_tool1, mock_tool2, mock_tool3]
-            
+
             # Get tools for server1
             server1_tools = bridge.get_tools_for_server("server1")
-            
+
             # Verify the tools
             assert len(server1_tools) == 2
             tool_names = [tool.name for tool in server1_tools]
@@ -757,24 +752,24 @@ class TestMCPAutogenBridge:
             name="test_tool",
             description="Test Tool",
             server_name="test_server",
-            schema={}
+            schema={},
         )
-        
+
         mcp_client.tools["test_server.test_tool"] = tool
-        
+
         # Mock the execute_tool method
         mock_execute = AsyncMock(return_value="Tool execution result")
         mcp_client.execute_tool = mock_execute
-            
+
         # Create the bridge
         bridge = MCPAutogenBridge(mcp_client)
-            
+
         # Test tool execution
         result = await bridge.test_tool_execution("test_tool", {"param": "value"})
-            
+
         # Verify the result
         assert result == "Tool execution result"
-            
+
         # Verify the execute_tool was called correctly
         mock_execute.assert_awaited_once_with(
             "test_server.test_tool", {"param": "value"}
@@ -783,7 +778,7 @@ class TestMCPAutogenBridge:
     async def test_test_tool_execution_not_found(self, mcp_client):
         """Test test_tool_execution with a nonexistent tool"""
         bridge = MCPAutogenBridge(mcp_client)
-        
+
         # Try to test a nonexistent tool
         with pytest.raises(ValueError, match="Tool not found"):
             await bridge.test_tool_execution("nonexistent", {})
@@ -799,55 +794,55 @@ class TestMCPFullIntegration:
 
     async def test_filesystem_server_integration(self, tmp_path):
         """Test integration with the filesystem server"""
-        import subprocess
         import json
+        import subprocess
         import tempfile
-        
+
         # Path to the filesystem server script
-        server_script = str(os.path.join(
-            os.path.dirname(__file__), "..", "mcp_servers", "filesystem_server.py"
-        ))
-        
+        server_script = str(
+            os.path.join(
+                os.path.dirname(__file__), "..", "mcp_servers", "filesystem_server.py"
+            )
+        )
+
         # Create a temporary file for testing
         test_file = tmp_path / "test_file.txt"
         test_file.write_text("Test content")
-        
+
         # Initialize the client manager
         client = MCPClientManager()
         await client.start()
-        
+
         try:
             # Connect to filesystem server
             config = MCPServerConfig(
                 name="filesystem",
                 type="stdio",
                 script_path=server_script,
-                description="Filesystem server"
+                description="Filesystem server",
             )
-            
+
             result = await client.connect_to_server(config)
             assert result is True
-            
+
             # List tools
             tools = await client.list_available_tools()
             assert len(tools) > 0
-            
+
             # Find read_file tool
             read_tool_name = None
             for tool_name in client.tools:
                 if client.tools[tool_name].name == "read_file":
                     read_tool_name = tool_name
                     break
-            
+
             assert read_tool_name is not None
-            
+
             # Execute read_file tool
-            result = await client.execute_tool(
-                read_tool_name, {"path": str(test_file)}
-            )
-            
+            result = await client.execute_tool(read_tool_name, {"path": str(test_file)})
+
             assert result == "Test content"
-            
+
         finally:
             # Stop the client manager
             await client.stop()
