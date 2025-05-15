@@ -83,3 +83,35 @@ black . && isort . && flake8 && pytest -q && bandit -c pyproject.toml -r src/ -l
 * MCP bridge in `tools/mcp_autogen_bridge.py`.
 
 "Let all things be done decently and in order." — 1 Cor 14:40
+
+## 8 Docker Guidelines
+
+* Build locally with DOCKER_BUILDKIT=1 and --platform linux/amd64; skip Desktop-Cloud.
+* Tag every image twice: one immutable tag that matches git describe --tags (e.g. v0.5.2) and the rolling tag latest.
+* Push the version tag first, then latest. Allow several minutes; never wrap the push in a timeout.
+* After pushing, refresh Docker Hub and confirm both tags show today's timestamp.
+* Nightly: if git describe --tags differs from the value stored in .last_docker_tag, rebuild and push both tags, then update .last_docker_tag.
+
+## 9 Testing Guidelines
+
+* pytest-asyncio must remain in requirements.txt; CI fails without it.
+* CI runs on Python 3.13—pin plugin versions that are known-good for that runtime.
+* Integration tests needing a live MCP server stay skipped in CI; guard them with RUN_MCP_INTEGRATION=1.
+* Maintain overall coverage ≥ 90 %. Add happy-path and targeted error-branch tests—avoid bloat.
+
+## 10 Pre-commit and Linting
+
+* Ensure flake8 runs in the pre-commit hook; fix or ignore violations before every push.
+* Black is the authoritative formatter; let it run automatically on commit.
+
+## 11 Nightly Backup Routine
+
+* Run the full test suite, build and push Docker images as per section 8.
+* Create a tar-gz archive of the repo.
+* docker image prune -f to clear dangling layers.
+* Append one journal line to ~/worklogs/YYYY-MM.txt.
+
+## 12 Future Refactors
+
+* Expose a public executor property on FunctionTool; migrate tests off the private _func.
+* After any coverage-raising PR, bump the coverage gate in pyproject.toml so the bar never drops.
