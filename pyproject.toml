@@ -4,3 +4,7 @@ skips = ["B101", "B103", "B303", "B608"]
 
 [tool.bandit.medium_severity]
 confidence_level = "medium"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
