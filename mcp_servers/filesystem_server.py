@@ -5,9 +5,8 @@ import asyncio
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict
 
-from mcp.server import Server, types
+from mcp.server import Server
 from mcp.server.stdio import stdio_server
 
 
