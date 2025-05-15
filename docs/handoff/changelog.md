@@ -1,3 +1,7 @@
+# [](https://github.com/ZeroSumQuant/luca-dev-assistant/compare/v0.5.2...v) (2025-05-15)
+
+
+
 #  (2025-05-15)
 
 
