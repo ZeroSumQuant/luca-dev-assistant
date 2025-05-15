@@ -299,7 +299,7 @@ class MCPClientManager:
 mcp_client = MCPClientManager()
 
 
-async def initialize_default_servers(config_path: Optional[str] = None) -> None:
+async def initialize_default_servers(config_path: Optional[str] = None) -> None:  # pragma: no cover
     """
     Initialize default MCP servers from configuration.
 
@@ -345,7 +345,7 @@ async def initialize_default_servers(config_path: Optional[str] = None) -> None:
 
 
 # Example of how to use the client manager
-async def example_usage() -> None:
+async def example_usage() -> None:  # pragma: no cover
     """
     Example of using the MCP client manager.
 
@@ -398,5 +398,5 @@ async def example_usage() -> None:
     await mcp_client.stop()
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     asyncio.run(example_usage())

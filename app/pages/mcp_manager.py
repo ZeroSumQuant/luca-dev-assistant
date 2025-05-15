@@ -4,15 +4,13 @@ import asyncio
 import json
 import os
 import sys
-from typing import Any, Dict, List
-
-import streamlit as st
 
 # Add the parent directory to the path to import our tools
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from tools.mcp_autogen_bridge import MCPAutogenBridge
-from tools.mcp_client import MCPClientManager, MCPServerConfig, MCPTool
+import streamlit as st  # noqa: E402
+from tools.mcp_autogen_bridge import MCPAutogenBridge  # noqa: E402
+from tools.mcp_client import MCPClientManager, MCPServerConfig  # noqa: E402
 
 st.set_page_config(page_title="MCP Manager", page_icon="🔌", layout="wide")
 

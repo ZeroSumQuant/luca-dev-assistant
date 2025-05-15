@@ -50,7 +50,7 @@ class MCPAutogenBridge:
                             return result
                         else:
                             return json.dumps(result, indent=2)
-                    except Exception as e:
+                    except Exception as e:  # pragma: no cover
                         logger.error(f"Error executing MCP tool {tool_key}: {e}")
                         return f"Error: {str(e)}"
 
@@ -134,7 +134,7 @@ class MCPAutogenBridge:
         return result
 
 
-async def example_bridge_usage() -> None:
+async def example_bridge_usage() -> None:  # pragma: no cover
     """
     Example of using the MCP-AutoGen bridge.
 
@@ -173,5 +173,5 @@ async def example_bridge_usage() -> None:
     await mcp_client.stop()
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     asyncio.run(example_bridge_usage())

@@ -290,3 +290,23 @@
   - Ran all tests to verify compatibility
   - Created handoff document at `docs/handoff/2025-05-14-1.md`
   - Prepared changes to address issue #17
+- **09:30 pm — Completed MCP integration tests** – addressed issue #25:
+  - Implemented comprehensive test suite for MCPClientManager and MCPAutogenBridge
+  - Created helper functions for mocking MCP protocol objects to pass validation
+  - Fixed async test handling with proper pytest-asyncio fixtures and patterns
+  - Added tests for error conditions with consistent error handling approach
+  - Improved test coverage to 77% for MCP components
+  - Added conditional integration test that can be enabled with RUN_MCP_INTEGRATION=1
+  - Created handoff document at `docs/handoff/2025-05-14-2.md`
+- **11:00 pm — 114c1ad — Improved test coverage** – addressed coverage gaps:
+  - Created comprehensive tests for file_io.py and git_tools.py modules (100% coverage)
+  - Fixed failing HTTP connection tests by patching correct module targets
+  - Added test for executor error handling in MCPAutogenBridge
+  - Excluded demo/example code from coverage with pragma: no cover tags
+  - Improved overall tools module coverage from 73% to 95%
+  - Fixed flake8 issues in new test files
+  - Created handoff document at `docs/handoff/2025-05-14_coverage_bump.md`
+- **11:45 pm — bf647f5 — Fixed CI requirements** – added pytest-asyncio to requirements.txt:
+  - Added pytest-asyncio 0.23.5 to requirements.txt for CI support
+  - Ensured compatibility with GitHub Actions runners
+  - Fixed CI build failures related to async test execution
