@@ -9,6 +9,7 @@ psutil==5.9.8  # For CI memory monitoring
 pytest==8.3.5
 pytest-timeout==2.2.0
 pytest-forked==1.6.0  # May be needed for thread method in CI
+pytest-asyncio==0.23.5  # For async test support in MCP tests
 
 # AutoGen Stack - current versions
 pyautogen==0.9.0
