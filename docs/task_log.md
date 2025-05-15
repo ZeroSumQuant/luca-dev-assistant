@@ -298,7 +298,7 @@
   - Improved test coverage to 77% for MCP components
   - Added conditional integration test that can be enabled with RUN_MCP_INTEGRATION=1
   - Created handoff document at `docs/handoff/2025-05-14-2.md`
-- **11:00 pm — Improved test coverage** – addressed coverage gaps:
+- **11:00 pm — 114c1ad — Improved test coverage** – addressed coverage gaps:
   - Created comprehensive tests for file_io.py and git_tools.py modules (100% coverage)
   - Fixed failing HTTP connection tests by patching correct module targets
   - Added test for executor error handling in MCPAutogenBridge
