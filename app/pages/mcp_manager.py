@@ -9,6 +9,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 import streamlit as st  # noqa: E402
+
 from tools.mcp_autogen_bridge import MCPAutogenBridge  # noqa: E402
 from tools.mcp_client import MCPClientManager, MCPServerConfig  # noqa: E402
 
