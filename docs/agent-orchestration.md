@@ -11,24 +11,28 @@ LUCA's agent orchestration is built on four essential primitives that form the f
 **Purpose**: Persistent shared memory across conversations and sessions.
 
 **Key Components**:
+
 - Conversation history storage
 - Project state tracking
 - Agent execution history
 - User preferences and settings
 
 **Implementation**:
+
 - Initially SQLite-based for zero-config, ACID compliance
 - Interface abstraction to allow future backend swapping (Chroma, Postgres)
 - Session restoration capability for crash recovery
 - Audit trail for compliance and debugging
 
 **Schema Ownership**:
+
 - All Pydantic models are defined in the `luca_core/schemas/` package
 - These schemas are imported by all components (including MCP servers)
 - This ensures consistency and prevents duplicate definitions
 - Core models include: `Message`, `Task`, `TaskResult`, `ClarificationRequest`, `MetricRecord`, `Project`, `UserPreferences`
 
 **Why Indispensable**:
+
 - Enables intelligent routing by maintaining conversation context
 - Provides crash survivability to restore work exactly where it left off
 - Creates an audit trail for compliance and future "Ticket" feature
@@ -39,18 +43,21 @@ LUCA's agent orchestration is built on four essential primitives that form the f
 **Purpose**: Central source of truth for all agent capabilities.
 
 **Key Components**:
+
 - Tool metadata and versioning
 - Sandboxing and permission boundaries
 - Capability categorization and tagging
 - Version pinning for reproducibility
 
 **Implementation**:
+
 - Registry pattern with registration/discovery mechanisms
 - Tool capability documentation and schema
 - Sandboxing scope definitions
 - Domain and task tagging system
 
 **Why Indispensable**:
+
 - Establishes sandbox boundaries for security
 - Enables deterministic planning by agents
 - Provides versioning for reproducible execution
@@ -61,6 +68,7 @@ LUCA's agent orchestration is built on four essential primitives that form the f
 **Purpose**: Standardized approach to error handling across all components.
 
 **Key Components**:
+
 - Schema versioning for forward compatibility
 - Timestamp for error tracking and debugging
 - Machine-readable error codes
@@ -70,6 +78,7 @@ LUCA's agent orchestration is built on four essential primitives that form the f
 - Session/context ID for tracing
 
 **Implementation**:
+
 - Comprehensive schema covering 95% of failure scenarios
 - Standardized error codes and categories
 - Recovery/remediation mechanism
@@ -90,6 +99,7 @@ class ErrorPayload(BaseModel):
 ```
 
 **Canonical JSON Example**:
+
 ```json
 {
     "schema_version": "1.0.0",
@@ -108,13 +118,15 @@ class ErrorPayload(BaseModel):
 }
 ```
 
-**Schema Versioning Policy**: 
+**Schema Versioning Policy**:
+
 - Follows semantic versioning (major.minor.patch)
 - Breaking changes increment major version
 - Backward-compatible additions increment minor version
 - Bug fixes increment patch version
 
 **Why Indispensable**:
+
 - Enables predictable recovery patterns
 - Provides transparency for users
 - Creates uniform telemetry for monitoring
@@ -126,18 +138,21 @@ class ErrorPayload(BaseModel):
 **Purpose**: Thin coordination layer that connects all components.
 
 **Key Components**:
+
 - Request parsing and understanding
 - Task planning and delegation
 - Specialist agent coordination
 - Result aggregation and response generation
 
 **Implementation**:
+
 - Core loop: parse → plan → delegate → aggregate
 - Minimal dependencies beyond the other three primitives
 - Clean interfaces for extensibility
 - Basic retry and error handling logic
 
 **Why Indispensable**:
+
 - Connects all primitives into a working system
 - Provides end-to-end validation of architecture
 - Keeps core functionality lean to find design flaws early
@@ -152,12 +167,14 @@ The implementation follows a phased approach, focusing on establishing a solid f
 ### 2.1 Phase 0 - Core Skeleton
 
 Focus on implementing the four primitive components with comprehensive unit tests:
+
 - ContextStore MVP with basic persistence
 - ToolRegistry MVP with sandbox boundaries
 - Error-Payload Schema v1.0.0 with comprehensive tests
 - LucaManager skeleton with minimal viable orchestration
 
-**Done-when Criteria**: 
+**Done-when Criteria**:
+
 - CI passes green
 - All unit tests pass
 - `luca.py --status` prints {"status":"ready"}
@@ -166,6 +183,7 @@ Focus on implementing the four primitive components with comprehensive unit test
 ### 2.2 Phase 1 - Core Polish
 
 Add essential developer ergonomics without changing core architecture:
+
 - YAML configuration loader
 - Streamlit status panels
 - Basic authentication and session management
@@ -176,6 +194,7 @@ Success criteria: Developers can effectively dog-food the system and track agent
 ### 2.3 Phase 2 - Domain Adapters
 
 Introduce domain-specific functionality, with focus on QuantConnect:
+
 - QuantConnect API integration
 - Lean Cloud back-test integration with Tester agent
 - Domain-specific tool registration
@@ -186,6 +205,7 @@ Success criteria: System can handle domain-specific tasks with appropriate speci
 ### 2.4 Phase 3 - UX Enhancements
 
 Add user experience improvements leveraging the stable foundation:
+
 - Learning mode implementation (Noob, Pro, Guru)
 - Dynamic response formatting
 - Agent visualization enhancements
@@ -196,6 +216,7 @@ Success criteria: System adapts its communication style based on user preference
 ### 2.5 Phase 4 - MCP Integration
 
 Expand functionality through external Model Context Protocol servers:
+
 - HTTP connection support
 - Authentication for external servers
 - Failure recovery for network issues

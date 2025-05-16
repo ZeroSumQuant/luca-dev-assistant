@@ -1,9 +1,11 @@
 # MCP Implementation Plan for LUCA Dev Assistant
 
 ## Overview
+
 The Model Context Protocol (MCP) will enable LUCA to connect with external tools and data sources through a standardized protocol. This will make LUCA more extensible and allow it to interact with various systems.
 
 ## Goals
+
 1. Implement an MCP client within LUCA to connect to MCP servers
 2. Create example MCP servers for common tasks (Git, filesystem, etc.)
 3. Integrate MCP with the Streamlit UI
@@ -12,21 +14,25 @@ The Model Context Protocol (MCP) will enable LUCA to connect with external tools
 ## Implementation Steps
 
 ### Phase 1: Basic MCP Client Setup
+
 1. Add MCP dependencies to requirements.txt
 2. Create MCP client infrastructure
 3. Implement connection management for MCP servers
 
 ### Phase 2: Tool Integration
+
 1. Create wrapper to expose MCP tools to AutoGen agents
 2. Implement tool discovery and registration
 3. Add UI for managing MCP server connections
 
 ### Phase 3: Streamlit Integration
+
 1. Add MCP server management page
 2. Show connected servers and available tools
 3. Allow users to add/remove MCP servers
 
 ### Phase 4: AutoGen-MCP Bridge
+
 1. Create adapter to use MCP tools in AutoGen
 2. Register MCP tools with agents
 3. Implement tool execution flow
@@ -34,6 +40,7 @@ The Model Context Protocol (MCP) will enable LUCA to connect with external tools
 ## Key Components to Build
 
 ### 1. MCP Client Manager (`tools/mcp_client.py`)
+
 ```python
 class MCPClientManager:
     def __init__(self):
@@ -54,6 +61,7 @@ class MCPClientManager:
 ```
 
 ### 2. MCP-AutoGen Bridge (`tools/mcp_autogen_bridge.py`)
+
 ```python
 class MCPAutogenBridge:
     def __init__(self, mcp_client: MCPClientManager):
@@ -69,11 +77,13 @@ class MCPAutogenBridge:
 ```
 
 ### 3. Streamlit MCP Manager (`app/pages/mcp_manager.py`)
+
 - UI for connecting to MCP servers
 - Display available tools
 - Test tool execution
 
 ## Dependencies to Add
+
 ```
 mcp>=1.0.0
 aiohttp>=3.8.0
@@ -81,7 +91,9 @@ python-socketio>=5.8.0
 ```
 
 ## Configuration
+
 Add MCP server configurations to `config/assistant_config.yaml`:
+
 ```yaml
 mcp_servers:
   filesystem:
@@ -93,18 +105,21 @@ mcp_servers:
 ```
 
 ## Security Considerations
+
 1. Validate all tool inputs
 2. Implement permission system for tool access
 3. Sandbox tool execution when possible
 4. Secure credential management for server connections
 
 ## Next Steps
+
 1. Start with Phase 1: Basic MCP client setup
 2. Create simple filesystem MCP server for testing
 3. Test integration with one agent before full rollout
 4. Gradually expand to all agents and tools
 
 ## Success Criteria
+
 - LUCA can connect to multiple MCP servers
 - Tools from MCP servers are available to AutoGen agents
 - Users can manage MCP connections through Streamlit UI

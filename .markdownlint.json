@@ -1,0 +1,23 @@
+{
+  "default": true,
+  "MD001": false,
+  "MD003": false,
+  "MD004": false,
+  "MD009": false,
+  "MD013": false,
+  "MD022": false,
+  "MD024": false,
+  "MD025": false,
+  "MD031": false,
+  "MD032": false,
+  "MD033": false,
+  "MD036": false,
+  "MD040": false,
+  "MD041": false,
+  "MD047": false,
+  "MD058": false,
+  "line-length": false,
+  "no-trailing-punctuation": false,
+  "no-inline-html": false,
+  "first-line-heading": false
+}

@@ -27,6 +27,7 @@ For a detailed and comprehensive view of the repository structure, please refer 
 
 2. **Commit Messages**:
    Follow the Conventional Commits format:
+
    ```
    <type>(<scope>): <short description>
    
@@ -45,6 +46,7 @@ For a detailed and comprehensive view of the repository structure, please refer 
    - `chore`: Changes to build process or auxiliary tools
 
    Example:
+
    ```
    feat(changelog): add conventional commits helper
    
@@ -74,46 +76,63 @@ The GitHub CLI (`gh`) is used to interact with GitHub from the command line, pro
 
 2. **Managing Issues**:
    - Create a new issue:
+
      ```bash
      gh issue create --title "Issue title" --body "Description" --label "label1,label2" --assignee "username"
      ```
+
    - List issues:
+
      ```bash
      gh issue list
      ```
+
    - View issue details:
+
      ```bash
      gh issue view ISSUE_NUMBER
      ```
+
    - Close an issue:
+
      ```bash
      gh issue close ISSUE_NUMBER
      ```
 
 3. **Working with Labels**:
    - List all labels:
+
      ```bash
      gh label list
      ```
+
    - Create a new label:
+
      ```bash
      gh label create "label-name" --description "Description" --color "HEX_COLOR"
      ```
 
 4. **Pull Request Operations**:
    - Create a PR:
+
      ```bash
      gh pr create --title "PR title" --body "Description"
      ```
+
    - Update a PR:
+
      ```bash
      gh pr edit PR_NUMBER --title "New title" --body "New description"
      ```
+
    - Add a comment to a PR:
+
      ```bash
      gh pr comment PR_NUMBER --body "Comment text"
      ```
+
    - Review PRs:
+
      ```bash
      gh pr list
      gh pr view PR_NUMBER
@@ -121,10 +140,13 @@ The GitHub CLI (`gh`) is used to interact with GitHub from the command line, pro
 
 5. **Repository Operations**:
    - Clone a repository:
+
      ```bash
      gh repo clone OWNER/REPO
      ```
+
    - View repository details:
+
      ```bash
      gh repo view
      ```
@@ -134,6 +156,7 @@ For more details about GitHub CLI, see the [official documentation](https://cli.
 ### Development Process
 
 1. **Starting a Session**:
+
    ```bash
    cd /Users/dustinkirby/dev/luca-dev-assistant
    git pull --ff-only origin main
@@ -155,14 +178,19 @@ For more details about GitHub CLI, see the [official documentation](https://cli.
    - CI-required packages (pytest, pytest-timeout, pytest-forked, psutil) are kept in requirements.txt
    - Pure development tools (linting, formatting) are in requirements-dev.txt
    - Install runtime and CI dependencies:
+
      ```bash
      python3 -m pip install -r requirements.txt
      ```
+
    - Install additional development dependencies:
+
      ```bash
      python3 -m pip install -r requirements-dev.txt
      ```
+
    - For a complete development environment, install both:
+
      ```bash
      python3 -m pip install -r requirements.txt -r requirements-dev.txt
      ```
@@ -177,8 +205,9 @@ For more details about GitHub CLI, see the [official documentation](https://cli.
 
 ### AutoGen Integration
 
-1. **Proper Imports**: 
+1. **Proper Imports**:
    AutoGen 0.5.6+ has a modular structure with different packages:
+
    ```python
    # Correct import for FunctionTool
    from autogen_core.tools import FunctionTool
@@ -187,6 +216,7 @@ For more details about GitHub CLI, see the [official documentation](https://cli.
    ```
 
 2. **Tool Registration**:
+
    ```python
    def build_tools():
        """Return Luca's initial FunctionTool registry."""
@@ -207,6 +237,7 @@ For more details about GitHub CLI, see the [official documentation](https://cli.
    - The `tools/mcp_autogen_bridge.py` bridges between MCP and AutoGen
 
 2. **Client Usage**:
+
    ```python
    from tools.mcp_client import MCPClientManager
    
@@ -245,6 +276,7 @@ For more details about GitHub CLI, see the [official documentation](https://cli.
 ### Testing
 
 1. **Run Tests Before Commits**:
+
    ```bash
    # Run all tests
    pytest -q
@@ -266,11 +298,13 @@ For more details about GitHub CLI, see the [official documentation](https://cli.
 
 3. **Test Hanging Issues**:
    - Add timeouts to all tests to prevent hanging in CI:
+
    ```python
    @pytest.mark.timeout(30)  # 30 second timeout
    def test_something():
       # Test code here
    ```
+
    - Set explicit timeouts for all external API calls
    - Use process isolation with pytest-forked for problematic tests
    - Set global job timeout in CI workflow (currently 15 minutes)
@@ -287,6 +321,7 @@ For more details about GitHub CLI, see the [official documentation](https://cli.
 
 1. **Configuration**:
    - Bandit is configured in `pyproject.toml` with optimized settings:
+
    ```toml
    [tool.bandit]
    exclude_dirs = ["tests", "docs", "venv", ".venv", ".git", "__pycache__", "build", "dist"]
@@ -298,6 +333,7 @@ For more details about GitHub CLI, see the [official documentation](https://cli.
 
 2. **Pre-commit Hook**:
    - Bandit is configured in `.pre-commit-config.yaml` with:
+
    ```yaml
    - repo: https://github.com/PyCQA/bandit
      rev: 1.8.3
@@ -360,6 +396,7 @@ message = format_commit_message(
    - `app/pages/mcp_manager.py` - MCP server management
 
 2. **Running the UI**:
+
    ```bash
    python3 run_streamlit.py
    ```

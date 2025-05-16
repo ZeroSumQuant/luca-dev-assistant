@@ -1,6 +1,7 @@
 # Luca Dev Assistant · Task Log
 
 ## 2025-05-03
+
 - **07:00 pm — Project bootstrap** – created `README.md`, `.gitignore`, `requirements.txt`; activated `.venv`.
 - **08:30 pm — Bootstrap script & tests** – added `config/assistant_config.yaml`, `scripts/start_assistant.py`, `tests/test_basic.py`; initial tests green.
 - **09:15 pm — Containerisation** – wrote slim `Dockerfile`; local build & run successful.
@@ -9,6 +10,7 @@
 - **10:40 pm — Handoff logs** – committed first hand-off to `docs/handoff/2025-05-03.md`.
 
 ## 2025-05-04
+
 - **10:00 am — Changelog automation** – created `update-changelog.yml`; auto-generated `docs/handoff/changelog.md`; installed Node 20 via **nvm**; verified changelog bot push.
 - **11:30 am — Autogen stack installed** – added `pyautogen` 0.9, `autogen-agentchat` 0.5.6, `autogen-ext[docker]`; confirmed import paths.
 - **12:15 pm — Luca core scaffold** – created `luca.py` with `DockerCommandLineCodeExecutor`; added `tests/test_luca.py`; smoke tests green.
@@ -24,6 +26,7 @@
 - **08:00 pm — README overhaul** – clarified project purpose, added MCP capability, renamed Lean section, added optional lint hooks note.
 
 ## 2025-05-05
+
 - **09:00 am — Changelog fix** – identified and fixed issue with empty date headers in changelog; reset to clean template.
 - **10:30 am — Conventional Commits helper** – created `tools/changelog_helper.py` with `format_commit_message` function to ensure proper commit message format.
 - **11:15 am — Changelog test coverage** – added tests for simple, scoped, body, and footer variants of commit messages; all passing.
@@ -31,8 +34,8 @@
 - **01:30 pm — Handoff report** – created detailed handoff document at `docs/handoff/2025-05-05-1.md` summarizing changelog fixes and next steps.
 - **02:15 pm — Task log overhaul** – audited all previous handoffs and updated task log with previously missing entries to ensure complete project history.
 
-
 ## 2025-05-06
+
 - **07:45 pm — MVP Sprint Planning** – created git snapshot `pre-mvp-experiment-2025-05-06` tag and file backup for safety; Docker image built and pushed as `zerosumquant/luca-dev:2025-05-06`.
 - **08:00 pm — Streamlit UI Implementation** – created multi-page Streamlit application with:
   - Main chat interface for interacting with Luca
@@ -56,10 +59,11 @@
 - **11:00 pm — CI dependency conflict fix** – resolved pillow dependency conflict causing CI failures:
   - Identified conflict between streamlit 1.38.0 (requires pillow<11) and autogen-core 0.5.6 (requires pillow>=11)
   - Pinned streamlit to version 1.43.0 which accepts pillow<12, resolving the conflict
-  - Used flexible version ranges for MCP dependencies for better compatibility 
+  - Used flexible version ranges for MCP dependencies for better compatibility
   - All local tests pass; expecting CI to now build successfully
 
 ## 2025-05-07
+
 - **09:30 am — Fixed hanging test and import issues** – resolved issues in the May 6th branch:
   - Fixed import order in `luca.py` by moving `FunctionTool` import after module docstring
   - Implemented robust testing mode in `luca.py` via `LUCA_TESTING` environment variable
@@ -76,6 +80,7 @@
   - Created ready-up checklist for next development session
 
 ## 2025-05-08
+
 - **10:00 am — CI reliability enhancements** – implemented recommended fixes for test hanging issues:
   - Added `pytest-timeout` and `psutil` dependencies for robust test execution
   - Created comprehensive `tests/conftest.py` with multiprocessing configuration and environment setup
@@ -97,6 +102,7 @@
   - Prepared plan for separate PR to address this infrastructure issue
 
 ## 2025-05-11
+
 - **11:00 pm — Changelog workflow race condition fix** – resolved git reference lock issues in changelog automation:
   - Created branch `claude-2025-05-11-fix-changelog-race` to fix critical workflow issue
   - Implemented exponential backoff retry mechanism for push failures
@@ -108,7 +114,7 @@
   - Repositioned LUCA as a general-purpose development assistant first, with specialized QuantConnect capabilities
   - Created new branch `claude-2025-05-11-readme-improvements` for documentation updates
   - Completely rewrote README.md with a clearer value proposition and broader appeal
-  - Added new sections highlighting LUCA's key differentiators: 
+  - Added new sections highlighting LUCA's key differentiators:
     - Adaptive Agent Architecture
     - Extensible MCP system  
     - Personalized learning modes (Noob/Pro/Guru)
@@ -192,6 +198,7 @@
   - Fixed the issue while maintaining the project's dependency management philosophy
 
 ## 2025-05-12
+
 - **08:00 am — GitHub issues creation** – converted all TODOs and code review findings into GitHub issues:
   - Created branch `claude-2025-05-12-github-issues` for issue management
   - Created 17 new GitHub issues from TODOs and code review findings
@@ -334,11 +341,12 @@
   - Created mypy.ini to exclude problematic legacy modules from type checking
   - Created pytest.ini to configure asyncio and test execution modes
   - Updated pyproject.toml with isort configuration for black compatibility  
-  - Added necessary __init__.py files to resolve mypy module import errors
+  - Added necessary **init**.py files to resolve mypy module import errors
   - All CI checks now pass: pre-commit, black, isort, flake8, bandit, mypy
   - Committed and pushed changes as PR #48: "core: ErrorPayload v1.0.0 — lint/type clean (Phase-0)"
 
 ## 2025-05-13
+
 - **08:30 pm — Repository refresh and setup** – updated local repository with the latest code:
   - Pulled latest changes from the main branch
   - Created full backup of existing repository to prevent data loss
@@ -378,6 +386,7 @@
   - Created PR #45 to close issue #22
 
 ## 2025-05-14
+
 - **08:00 pm — HTTP connection support for MCP** – implemented support for remote MCP servers:
   - Created branch `claude-2025-05-14-http-mcp-connection` for HTTP implementation
   - Added HTTP client connection using the MCP library's streamablehttp_client
