@@ -120,9 +120,9 @@ black . && isort . && flake8 && pytest -q && bandit -c pyproject.toml -r src/ -l
 ## 13 Documentation Structure
 
 **Task Logs:**
-- Primary log: `docs/task_log.md` (400+ lines, has ordering issues)
-- Consider creating monthly logs: `docs/task_log_2025_05.md`, etc.
-- Note: Current task_log.md has merge conflict at line 412
+- Primary log: `docs/task_log.md` (400+ lines, historical entries)
+- Monthly logs: `docs/task_log_YYYY_MM.md` (started May 2025)
+- May 2025 onward: `docs/task_log_2025_05.md`
 
 **Handoff Documents:**
 - Location: `docs/handoff/YYYY-MM-DD-N.md`

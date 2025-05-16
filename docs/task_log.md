@@ -409,4 +409,8 @@
   - Added pytest-asyncio 0.23.5 to requirements.txt for CI support
   - Ensured compatibility with GitHub Actions runners
   - Fixed CI build failures related to async test execution
->>>>>>> origin/main
+
+---
+
+**Monthly logs now live in `docs/task_log_YYYY_MM.md`.**  
+See [`task_log_2025_05.md`](task_log_2025_05.md) for May 2025 onward.
