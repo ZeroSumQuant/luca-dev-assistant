@@ -299,7 +299,9 @@ class MCPClientManager:
 mcp_client = MCPClientManager()
 
 
-async def initialize_default_servers(config_path: Optional[str] = None) -> None:  # pragma: no cover
+async def initialize_default_servers(
+    config_path: Optional[str] = None,
+) -> None:  # pragma: no cover
     """
     Initialize default MCP servers from configuration.
 

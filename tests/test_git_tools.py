@@ -14,7 +14,7 @@ def test_run_success():
     mock_result.returncode = 0
     mock_result.stdout = "command output\n"
 
-    with patch('subprocess.run', return_value=mock_result) as mock_run:
+    with patch("subprocess.run", return_value=mock_result) as mock_run:
         result = _run("git status")
 
         # Verify subprocess.run was called with the right arguments
@@ -33,7 +33,7 @@ def test_run_failure():
     mock_result.returncode = 1
     mock_result.stderr = "error message\n"
 
-    with patch('subprocess.run', return_value=mock_result):
+    with patch("subprocess.run", return_value=mock_result):
         with pytest.raises(RuntimeError, match="failed: error message"):
             _run("git invalid-command")
 
@@ -41,7 +41,7 @@ def test_run_failure():
 def test_get_git_diff():
     """Test get_git_diff combines unstaged and staged changes"""
     # Setup mocks
-    with patch('tools.git_tools._run') as mock_run:
+    with patch("tools.git_tools._run") as mock_run:
         mock_run.side_effect = ["unstaged changes", "staged changes"]
 
         result = get_git_diff()
@@ -60,7 +60,7 @@ def test_get_git_diff():
 
 def test_git_commit():
     """Test git_commit stages and commits changes"""
-    with patch('tools.git_tools._run') as mock_run:
+    with patch("tools.git_tools._run") as mock_run:
         mock_run.side_effect = ["", "commit abc123def456"]
 
         commit_message = "feat: add new functionality"

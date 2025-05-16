@@ -1,14 +1,14 @@
 """Unit tests for the ErrorPayload schema v1.0.0."""
 
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 
 from luca_core.schemas.error import (
     ErrorCategory,
     ErrorPayload,
     ErrorSeverity,
-    create_user_error,
     create_system_error,
     create_timeout_error,
+    create_user_error,
 )
 
 
