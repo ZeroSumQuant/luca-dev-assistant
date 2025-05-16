@@ -61,32 +61,65 @@ LUCA's agent orchestration is built on four essential primitives that form the f
 **Purpose**: Standardized approach to error handling across all components.
 
 **Key Components**:
-- Uniform error structure with severity levels
+- Schema versioning for forward compatibility
+- Timestamp for error tracking and debugging
+- Machine-readable error codes
 - Error categorization (user error, system error, authentication, etc.)
 - Recovery suggestion mechanism
 - Context tracking for error origin
+- Session/context ID for tracing
 
 **Implementation**:
-- Four-field schema covering 95% of failure scenarios
+- Comprehensive schema covering 95% of failure scenarios
 - Standardized error codes and categories
-- Recovery hint mechanism
+- Recovery/remediation mechanism
 - Error tracing for deeper diagnostics
 
 ```python
 class ErrorPayload(BaseModel):
+    schema_version: str = "1.0.0"
+    timestamp: datetime
+    error_code: str
     category: Literal["user_error", "system_error", "auth_error", 
                      "resource_error", "timeout_error"]
     severity: Literal["info", "warning", "error", "critical"]
     message: str
+    remediation: Optional[str] = None
+    context_id: Optional[str] = None
     context: Dict[str, Any] = {}
-    recovery_hint: Optional[str] = None
 ```
+
+**Canonical JSON Example**:
+```json
+{
+    "schema_version": "1.0.0",
+    "timestamp": "2025-05-15T20:30:45.123456Z",
+    "error_code": "TOOL_TIMEOUT",
+    "category": "timeout_error",
+    "severity": "error",
+    "message": "Operation 'file_upload' timed out after 30 seconds",
+    "remediation": "Try again with a longer timeout or simplify the request",
+    "context_id": "session-abc123",
+    "context": {
+        "operation": "file_upload",
+        "file_size_mb": 150,
+        "timeout_seconds": 30
+    }
+}
+```
+
+**Schema Versioning Policy**: 
+- Follows semantic versioning (major.minor.patch)
+- Breaking changes increment major version
+- Backward-compatible additions increment minor version
+- Bug fixes increment patch version
 
 **Why Indispensable**:
 - Enables predictable recovery patterns
 - Provides transparency for users
 - Creates uniform telemetry for monitoring
 - Simplifies manager logic for error handling
+- Ensures forward compatibility across system evolution
 
 ### 1.4 LucaManager
 
@@ -117,12 +150,16 @@ The implementation follows a phased approach, focusing on establishing a solid f
 ### 2.1 Phase 0 - Core Skeleton
 
 Focus on implementing the four primitive components with comprehensive unit tests:
-- ContextStore with basic persistence
-- ToolRegistry with sandbox boundaries
-- Error-Payload Schema implementation
-- LucaManager v0 with minimal viable orchestration
+- ContextStore MVP with basic persistence
+- ToolRegistry MVP with sandbox boundaries
+- Error-Payload Schema v1.0.0 with comprehensive tests
+- LucaManager skeleton with minimal viable orchestration
 
-Success criteria: Basic "parse → plan → delegate → aggregate" loop works reliably for simple tasks.
+**Done-when Criteria**: 
+- CI passes green
+- All unit tests pass
+- `luca.py --status` prints {"status":"ready"}
+- Basic "parse → plan → delegate → aggregate" loop works reliably for simple tasks
 
 ### 2.2 Phase 1 - Core Polish
 

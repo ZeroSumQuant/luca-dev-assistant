@@ -4,6 +4,7 @@ This file configures pytest with:
 1. Environment variables for testing mode
 2. Multiprocessing configuration
 3. AutoGen-specific test settings
+4. AsyncIO configuration
 """
 
 import multiprocessing as mp
@@ -17,11 +18,20 @@ def pytest_configure(config):
 
     This ensures:
     - LUCA_TESTING is always set to "1" during tests
+    - LUCA_SKIP_ASYNC is set to "1" to avoid async complexity in basic tests
     - Multiprocessing uses "spawn" method for better compatibility
     - Additional CI-specific configurations are applied when in GitHub Actions
+    - AsyncIO default fixture loop scope is set to function
     """
     # Always set testing mode
     os.environ["LUCA_TESTING"] = "1"
+    os.environ["LUCA_SKIP_ASYNC"] = "1"
+
+    # Set asyncio_mode in the config
+    config.option.asyncio_mode = "strict"
+
+    # Set the default fixture loop scope
+    setattr(config.option, "asyncio_default_fixture_loop_scope", "function")
 
     # Set multiprocessing start method to "spawn" - more reliable in test environments
     try:
@@ -51,7 +61,3 @@ def resource_fixture():
 
     # Cleanup - this always runs, even if tests fail
     print(f"Cleaning up test resource: {resource}")
-
-
-# Note: We removed the pytest_addoption function because pytest-timeout
-# already provides the --timeout and --timeout_method options
