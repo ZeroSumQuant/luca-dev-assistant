@@ -571,3 +571,5 @@ Every component serves a specific purpose, with clear rationales for its inclusi
 ---
 
 *Created by Claude on 2025-05-12 for LUCA Dev Assistant project*
+
+**Audit Note:** `allowed_domains` and `quantitative_finance` are enum keys referenced in this document, not modules—no implementation required.
