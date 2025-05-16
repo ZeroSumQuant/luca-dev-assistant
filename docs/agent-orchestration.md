@@ -147,6 +147,8 @@ class ErrorPayload(BaseModel):
 
 The implementation follows a phased approach, focusing on establishing a solid foundation before adding advanced features:
 
+**Note**: Milestone names in GitHub now exactly match the phase descriptions below.
+
 ### 2.1 Phase 0 - Core Skeleton
 
 Focus on implementing the four primitive components with comprehensive unit tests:
