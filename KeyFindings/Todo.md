@@ -26,11 +26,11 @@
 **Areas for Improvement:**
 - ✅ **GitHub Issue #16, #19** The TODO comments in `luca.py` and `app/main.py` have been formalized as GitHub issues for tracking
 - ✅ **GitHub Issue #23** Some files lack comprehensive error handling, particularly in network operations
-- ✅ **GitHub Issue #22** Missing type hints in many functions which could improve maintainability
+- ✅ **(Completed 2025-05-13 - PR #45)** Missing type hints in many functions which could improve maintainability
 - ✅ **(Completed 2025-05-11)** The separation between testing and production configuration could be more formalized - Implemented consistent CI environment configuration and documented CI best practices
 
 **Recommendations:**
-- ✅ **GitHub Issue #22** Add type hints to key functions, especially in the tools directory
+- ✅ **(Completed 2025-05-13 - PR #45)** Add type hints to key functions, especially in the tools directory
 - ✅ **GitHub Issue #23** Implement more comprehensive error handling, especially in external API calls
 - ✅ **(Completed 2025-05-11)** Convert TODOs into trackable GitHub issues with clear acceptance criteria
 
@@ -97,11 +97,13 @@
 - ✅ **GitHub Issue #16** The agent orchestration system is currently just stubbed out
 - ✅ **GitHub Issue #30** The relationship between app components and core functionality could be better defined
 - ✅ **GitHub Issue #29** No clear error recovery strategy in the UI for backend failures
+- ✅ **(Completed 2025-05-14)** Limited connection options for MCP servers
 
 **Recommendations:**
 - ✅ **GitHub Issue #28** Define a clear architecture document for the agent orchestration system
 - ✅ **GitHub Issue #29** Implement a more robust error handling strategy in the UI
 - ✅ **GitHub Issue #30** Consider adding a service layer between the UI and core functionality
+- ✅ **(Completed 2025-05-14)** Implement more flexible MCP server connection options
 
 ### 7. PR Documentation Quality
 
@@ -142,7 +144,7 @@
    - ✅ **(Completed 2025-05-12)** Create CONTRIBUTING.md file
 
 2. **Short-term Improvements:**
-   - ✅ **GitHub Issue #22** Add type hints to key functions
+   - ✅ **(Completed 2025-05-13 - PR #45)** Add type hints to key functions
    - ✅ **GitHub Issue #23** Improve error handling, especially in external interactions
    - ✅ **(Completed 2025-05-11)** Update documentation to match actual repository structure
    - ✅ **GitHub Issue #38** Add LICENSE file

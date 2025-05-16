@@ -7,3 +7,11 @@ confidence_level = "medium"
 
 [tool.isort]
 profile = "black"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.flake8]
+max-line-length = 100
+exclude = [".venv", ".git", "__pycache__", "build", "dist"]
