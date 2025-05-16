@@ -31,6 +31,17 @@
 
 
 
+# [](https://github.com/ZeroSumQuant/luca-dev-assistant/compare/v0.5.2...v) (2025-05-16)
+
+
+### Features
+
+* **core:** enhance LucaManager integration with improved error handling and debug support ([7801ab4](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/7801ab40c334bf2abca4a449e795437e6e5fd01e))
+* **core:** integrate luca_core with main application ([1d6cd3b](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/1d6cd3b549823ef87a17cdfedcf3bce0e0199794))
+* **core:** integrate luca_core with main application ([7a06dde](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/7a06dde35008ccd5dae4fadcf45f88763b4618ff))
+
+
+
 #  (2025-05-16)
 
 
