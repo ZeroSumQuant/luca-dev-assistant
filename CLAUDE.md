@@ -44,7 +44,8 @@ pytest -q
 4 | **Provide status summaries** after discovery phases (≤ 5 lines: *What I learned → Next step*).
 5 | **Ask when uncertain.** Never guess at repo state or feature intent.
 6 | **Never leak secrets.** Use `os.getenv("TOKEN")` placeholders.
-7 | **Document work** at session end → update `docs/task_log.md` & create `docs/handoff/YYYY‑MM‑DD‑N.md`.
+7 | **Document work** at session end → update `docs/task_log.md` & create `docs/handoff/YYYY‑MM‑DD‑N.md`. 
+   NOTE: task_log.md is large (400+ lines) with ordering issues. Consider creating `docs/task_log_2025_05.md` for May entries.
 
 ## 5 Quality Gates (CI)
 * `black`, `isort`, `flake8` must pass.
@@ -115,3 +116,20 @@ black . && isort . && flake8 && pytest -q && bandit -c pyproject.toml -r src/ -l
 
 * Expose a public executor property on FunctionTool; migrate tests off the private _func.
 * After any coverage-raising PR, bump the coverage gate in pyproject.toml so the bar never drops.
+
+## 13 Documentation Structure
+
+**Task Logs:**
+- Primary log: `docs/task_log.md` (400+ lines, has ordering issues)
+- Consider creating monthly logs: `docs/task_log_2025_05.md`, etc.
+- Note: Current task_log.md has merge conflict at line 412
+
+**Handoff Documents:**
+- Location: `docs/handoff/YYYY-MM-DD-N.md`
+- Create at end of each session
+- Include: what was done, decisions made, next steps
+
+**Other Documentation:**
+- `/docs/repository-structure.md` - Project structure reference
+- `/docs/agent-orchestration.md` - Agent system architecture
+- `/docs/luca_dev_guide.md` - Development guidelines

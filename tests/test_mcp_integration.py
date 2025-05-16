@@ -732,130 +732,129 @@ class TestMCPAutogenBridge:
         """Test the executor function created by create_executor"""
         # Mock a tool in the client
         tool1 = MCPTool(
-            name="test_tool", 
-            description="Test Tool", 
-            server_name="test_server", 
-            schema={}
+            name="test_tool",
+            description="Test Tool",
+            server_name="test_server",
+            schema={},
         )
         mcp_client.tools["test_server.test_tool"] = tool1
-        
+
         # Mock the execute_tool method to return a test result
         mcp_client.execute_tool = AsyncMock(return_value="Test result")
-        
+
         # Create bridge
         bridge = MCPAutogenBridge(mcp_client)
-        
+
         # Get the tools
         tools = bridge.get_autogen_tools()
-        
+
         # Find our test tool
         test_tool = None
         for tool in tools:
             if tool.name == "test_tool":
                 test_tool = tool
                 break
-        
+
         assert test_tool is not None
-        
+
         # Get the executor function from the private _func attribute
         executor_func = getattr(test_tool, "_func")
-        
+
         # Call the executor function
         result = await executor_func(param1="value1", param2="value2")
-        
+
         # Verify execute_tool was called correctly
         mcp_client.execute_tool.assert_awaited_once_with(
-            "test_server.test_tool", 
-            {"param1": "value1", "param2": "value2"}
+            "test_server.test_tool", {"param1": "value1", "param2": "value2"}
         )
         assert result == "Test result"
-        
+
     async def test_executor_error_handling(self, mcp_client):
         """Test error handling in the executor function"""
         # Mock a tool in the client
         tool1 = MCPTool(
-            name="error_tool", 
-            description="Tool that raises an error", 
-            server_name="test_server", 
-            schema={}
+            name="error_tool",
+            description="Tool that raises an error",
+            server_name="test_server",
+            schema={},
         )
         mcp_client.tools["test_server.error_tool"] = tool1
-        
+
         # Mock execute_tool to raise an exception
         error_message = "Boom! Test error"
         mcp_client.execute_tool = AsyncMock(side_effect=ValueError(error_message))
-        
+
         # Create bridge
         bridge = MCPAutogenBridge(mcp_client)
-        
+
         # Get the tools
         tools = bridge.get_autogen_tools()
-        
+
         # Find our error tool
         error_tool = None
         for tool in tools:
             if tool.name == "error_tool":
                 error_tool = tool
                 break
-        
+
         assert error_tool is not None
-        
+
         # Get the executor function
         executor_func = getattr(error_tool, "_func")
-        
+
         # Call the executor - it should handle the error
         result = await executor_func(param="value")
-        
+
         # Verify the error was handled properly
         assert f"Error: {error_message}" in result
 
 
 class TestMCPClientAdvanced:
     """Additional tests for MCPClientManager to improve coverage"""
-    
+
     async def test_client_empty_tools_list(self):
         """Test listing tools when no tools are available"""
         client = MCPClientManager()
         tools = await client.list_available_tools()
         assert tools == []
         assert isinstance(tools, list)
-        
+
     async def test_connect_invalid_config(self):
         """Test connecting with invalid config returns False"""
         client = MCPClientManager()
-        
+
         # Invalid config (missing required fields)
         config = MCPServerConfig(
             name="invalid_server",
             type="unknown_type",
         )
-        
+
         result = await client.connect_to_server(config)
         assert result is False
-        
+
     async def test_execute_tool_no_connection(self):
         """Test executing tool without connected server raises ValueError"""
         client = MCPClientManager()
-        
+
         # Directly add a tool without connection
         tool = MCPTool(
             name="test_tool",
             description="Test tool",
             server_name="no_server",
-            schema={}
+            schema={},
         )
         client.tools["no_server.test_tool"] = tool
-        
+
         with pytest.raises(ValueError, match="Server not connected"):
             await client.execute_tool("no_server.test_tool", {"param": "value"})
-            
+
     async def test_http_connect_success(self):
         """Test successful HTTP connection path"""
         client = MCPClientManager()
-        
+
         # Create a mock session
         mock_session = AsyncMock()
-        
+
         # Create a tool for the response
         tool = MagicMock()
         tool.name = "http_tool"
@@ -864,15 +863,15 @@ class TestMCPClientAdvanced:
         tool.inputSchema.model_dump.return_value = {
             "properties": {"param": {"type": "string"}}
         }
-        
+
         # Mock response from list_tools
         mock_response = MagicMock()
         mock_response.tools = [tool]
         mock_session.call = AsyncMock(return_value=mock_response)
-        
+
         # Create mock for streamablehttp_client
         mock_http_client = AsyncMock(return_value=mock_session)
-        
+
         # Create a valid HTTP config
         config = MCPServerConfig(
             name="test_http",
@@ -880,50 +879,55 @@ class TestMCPClientAdvanced:
             url="https://example.com/mcp",
             description="Test HTTP server",
         )
-        
+
         # Patch streamablehttp_client and ListToolsRequest
         with patch("tools.mcp_client.streamablehttp_client", mock_http_client):
-            with patch.object(types, "ListToolsRequest", return_value=make_list_tools_request()):
+            with patch.object(
+                types, "ListToolsRequest", return_value=make_list_tools_request()
+            ):
                 result = await client.connect_to_server(config)
-                
+
         # Verify the connection was successful
         assert result is True
         assert "test_http" in client.connections
         assert "test_http" in client.server_configs
         assert "test_http.http_tool" in client.tools
-        
+
         # Now test execute_tool with this connection
         tool_request = make_call_tool_request("http_tool", {"param": "value"})
         tool_response = make_call_tool_response("Tool executed successfully")
-        
+
         # Configure mock session to return tool response
         mock_session.call = AsyncMock(return_value=tool_response)
-        
+
         # Test executing the tool
         with patch.object(types, "CallToolRequest", return_value=tool_request):
-            result = await client.execute_tool("test_http.http_tool", {"param": "value"})
-            
+            result = await client.execute_tool(
+                "test_http.http_tool", {"param": "value"}
+            )
+
         # Verify the result
         assert result == "Tool executed successfully"
         assert mock_session.call.call_count == 1
-        
+
     async def test_http_connect_with_retry(self):
         """Test HTTP connection with retry logic"""
         client = MCPClientManager()
-        
+
         # Create a mock session for success
         mock_session = AsyncMock()
         mock_session.call = AsyncMock(return_value=make_list_tools_response([]))
-        
+
         # Create a retry function that fails twice then succeeds
         connect_count = 0
+
         async def mock_connect_with_retry(*args, **kwargs):
             nonlocal connect_count
             connect_count += 1
             if connect_count <= 2:
                 raise ConnectionRefusedError("Connection refused")
             return mock_session
-            
+
         # Create config with retries
         config = MCPServerConfig(
             name="test_http_retry",
@@ -933,17 +937,21 @@ class TestMCPClientAdvanced:
             max_retries=3,
             retry_delay_seconds=0.1,
         )
-        
+
         # Patch streamablehttp_client, asyncio.sleep, and ListToolsRequest
         with patch("tools.mcp_client.streamablehttp_client", mock_connect_with_retry):
             with patch("asyncio.sleep", AsyncMock()) as mock_sleep:
-                with patch.object(types, "ListToolsRequest", return_value=make_list_tools_request()):
+                with patch.object(
+                    types, "ListToolsRequest", return_value=make_list_tools_request()
+                ):
                     result = await client.connect_to_server(config)
-                    
+
         # Verify the connection was successful after retries
         assert result is True
         assert connect_count == 3  # Initial failure + 2 retries before success
-        assert mock_sleep.call_count == 2  # Should sleep twice (after first and second failures)
+        assert (
+            mock_sleep.call_count == 2
+        )  # Should sleep twice (after first and second failures)
         assert "test_http_retry" in client.connections
 
 
