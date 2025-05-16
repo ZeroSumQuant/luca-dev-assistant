@@ -13,8 +13,15 @@ from typing import Any, Dict, List, Optional, Type, TypeVar, Union, cast
 
 from pydantic import BaseModel
 
-from ..schemas import (Conversation, Message, MetricRecord, Project, Task,
-                       TaskResult, UserPreferences)
+from ..schemas import (
+    Conversation,
+    Message,
+    MetricRecord,
+    Project,
+    Task,
+    TaskResult,
+    UserPreferences,
+)
 
 # Type variable for generic context store methods
 T = TypeVar("T", bound=BaseModel)

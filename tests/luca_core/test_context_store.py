@@ -14,9 +14,16 @@ if parent_dir not in sys.path:
 import pytest
 
 from luca_core.context.store import ContextStore
-from luca_core.schemas.context import (Message, MessageRole, MetricRecord,
-                                       Project, Task, TaskResult, TaskStatus,
-                                       UserPreferences)
+from luca_core.schemas.context import (
+    Message,
+    MessageRole,
+    MetricRecord,
+    Project,
+    Task,
+    TaskResult,
+    TaskStatus,
+    UserPreferences,
+)
 
 
 @pytest.fixture

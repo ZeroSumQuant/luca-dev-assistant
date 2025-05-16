@@ -4,3 +4,6 @@ skips = ["B101", "B103", "B303", "B608"]
 
 [tool.bandit.medium_severity]
 confidence_level = "medium"
+
+[tool.isort]
+profile = "black"

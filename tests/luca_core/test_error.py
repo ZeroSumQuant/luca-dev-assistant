@@ -11,9 +11,15 @@ if parent_dir not in sys.path:
 import pytest
 from pydantic import ValidationError
 
-from luca_core.schemas.error import (ErrorCategory, ErrorCode, ErrorPayload,
-                                     ErrorSeverity, create_system_error,
-                                     create_timeout_error, create_user_error)
+from luca_core.schemas.error import (
+    ErrorCategory,
+    ErrorCode,
+    ErrorPayload,
+    ErrorSeverity,
+    create_system_error,
+    create_timeout_error,
+    create_user_error,
+)
 
 
 def test_error_payload_creation():
@@ -73,7 +79,8 @@ def test_create_user_error():
     assert error.category == ErrorCategory.USER_ERROR
     assert error.severity == ErrorSeverity.ERROR
     assert error.message == "Invalid input"
-    assert error.recovery_hint == "Please check your input and try again"
+    # Check that the recovery_hint was converted to remediation for backward compatibility
+    assert error.remediation == "Please check your input and try again"
 
 
 def test_create_system_error():
@@ -93,4 +100,5 @@ def test_create_timeout_error():
     assert error.category == ErrorCategory.TIMEOUT_ERROR
     assert error.severity == ErrorSeverity.ERROR
     assert error.message == "Operation 'API call' timed out after 30 seconds"
-    assert "Try again with a longer timeout" in error.recovery_hint
+    # Using remediation instead of recovery_hint as per new schema
+    assert "Try again with a longer timeout" in error.remediation

@@ -5,22 +5,52 @@ ensuring type consistency and validation across components.
 """
 
 # Agent models
-from luca_core.schemas.agent import (Agent, AgentCapability, AgentConfig,
-                                     AgentRole, AgentStatus, AgentTeam,
-                                     LearningMode, LLMModelConfig)
+from luca_core.schemas.agent import (
+    Agent,
+    AgentCapability,
+    AgentConfig,
+    AgentRole,
+    AgentStatus,
+    AgentTeam,
+    LearningMode,
+    LLMModelConfig,
+)
+
 # Context models
-from luca_core.schemas.context import (ClarificationRequest, Conversation,
-                                       Message, MessageRole, MetricRecord,
-                                       Project, Task, TaskResult, TaskStatus,
-                                       UserPreferences)
+from luca_core.schemas.context import (
+    ClarificationRequest,
+    Conversation,
+    Message,
+    MessageRole,
+    MetricRecord,
+    Project,
+    Task,
+    TaskResult,
+    TaskStatus,
+    UserPreferences,
+)
+
 # Error models
-from luca_core.schemas.error import (ErrorCategory, ErrorCode, ErrorPayload,
-                                     ErrorSeverity, create_system_error,
-                                     create_timeout_error, create_user_error)
+from luca_core.schemas.error import (
+    ErrorCategory,
+    ErrorCode,
+    ErrorPayload,
+    ErrorSeverity,
+    create_system_error,
+    create_timeout_error,
+    create_user_error,
+)
+
 # Tool models
-from luca_core.schemas.tools import (ToolCategory, ToolMetadata, ToolParameter,
-                                     ToolRegistration, ToolScope,
-                                     ToolSpecification, ToolUsageMetrics)
+from luca_core.schemas.tools import (
+    ToolCategory,
+    ToolMetadata,
+    ToolParameter,
+    ToolRegistration,
+    ToolScope,
+    ToolSpecification,
+    ToolUsageMetrics,
+)
 
 __all__ = [
     # Context models

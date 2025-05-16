@@ -312,3 +312,18 @@
   - Added flexibility for different database configurations
   - Created synchronous wrapper for easier integration with existing code
   - Set up data directory for SQLite database storage
+
+## 2025-05-15
+
+- **Morning — ErrorPayload Schema v1.0.0** – enhanced error schema per CTO requirements:
+  - Added schema_version field with default "1.0.0"
+  - Added timestamp field with UTC datetime
+  - Added error_code field for machine-readable error identification
+  - Renamed recovery_hint to remediation for consistency
+  - Added context_id field for session/context tracing
+  - Created comprehensive unit tests in tests/core/test_error_schema.py
+  - Updated agent-orchestration.md with canonical JSON example
+  - Updated Phase 0 implementation with explicit done-when criteria
+  - Fixed MyPy type errors for ErrorPayload schema
+  - Cleaned up unused imports in error handler  
+  - All tests passing for ErrorPayload v1.0.0

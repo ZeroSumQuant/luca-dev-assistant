@@ -10,8 +10,15 @@ from typing import Any, Dict, Generic, List, Optional, Type, TypeVar
 
 from pydantic import BaseModel
 
-from luca_core.schemas import (ClarificationRequest, Message, MetricRecord,
-                               Project, Task, TaskResult, UserPreferences)
+from luca_core.schemas import (
+    ClarificationRequest,
+    Message,
+    MetricRecord,
+    Project,
+    Task,
+    TaskResult,
+    UserPreferences,
+)
 
 T = TypeVar("T", bound=BaseModel)
 

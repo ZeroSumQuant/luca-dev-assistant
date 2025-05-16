@@ -9,13 +9,20 @@ import inspect
 import logging
 import sys
 from datetime import datetime
-from typing import (Any, Callable, Dict, List, Optional, Set, Type, Union,
-                    get_type_hints)
+from typing import Any, Callable, Dict, List, Optional, Set, Type, Union, get_type_hints
 
-from luca_core.schemas import (ErrorPayload, ToolCategory, ToolMetadata,
-                               ToolParameter, ToolRegistration, ToolScope,
-                               ToolSpecification, ToolUsageMetrics,
-                               create_system_error, create_user_error)
+from luca_core.schemas import (
+    ErrorPayload,
+    ToolCategory,
+    ToolMetadata,
+    ToolParameter,
+    ToolRegistration,
+    ToolScope,
+    ToolSpecification,
+    ToolUsageMetrics,
+    create_system_error,
+    create_user_error,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +30,7 @@ logger = logging.getLogger(__name__)
 class ToolRegistry:
     """Registry for tools that can be used by agents."""
 
-    def __init__(self, default_scope: ToolScope = None):
+    def __init__(self, default_scope: Optional[ToolScope] = None):
         """Initialize the tool registry.
 
         Args:
@@ -47,9 +54,9 @@ class ToolRegistry:
         description: Optional[str] = None,
         version: str = "0.1.0",
         category: Union[ToolCategory, str] = ToolCategory.UTILITY,
-        domain_tags: List[str] = None,
+        domain_tags: Optional[List[str]] = None,
         scope: Optional[ToolScope] = None,
-        required_permissions: List[str] = None,
+        required_permissions: Optional[List[str]] = None,
         author: Optional[str] = None,
         homepage: Optional[str] = None,
     ) -> Callable:
@@ -114,17 +121,18 @@ class ToolRegistry:
                 )
 
             # Create tool metadata
-            if isinstance(category, str):
+            tool_category = category
+            if isinstance(tool_category, str):
                 try:
-                    category = ToolCategory(category)
+                    tool_category = ToolCategory(tool_category)
                 except ValueError:
-                    category = ToolCategory.UTILITY
+                    tool_category = ToolCategory.UTILITY
 
             tool_metadata = ToolMetadata(
                 name=func_name,
                 description=func_desc,
                 version=version,
-                category=category,
+                category=tool_category,
                 domain_tags=domain_tags or [],
                 scope=scope or self.default_scope,
                 created_at=datetime.utcnow(),

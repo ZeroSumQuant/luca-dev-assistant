@@ -4,8 +4,7 @@ This package provides utilities for standardized error handling
 across the system using the ErrorPayload schema.
 """
 
-from luca_core.error.handler import (ErrorHandler, error_handler,
-                                     handle_exceptions)
+from luca_core.error.handler import ErrorHandler, error_handler, handle_exceptions
 
 __all__ = [
     "ErrorHandler",

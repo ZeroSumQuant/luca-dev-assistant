@@ -1,17 +1,15 @@
 """Error handler implementation.
 
-This module provides utility functions and classes for standardized error handling
-across the system using the ErrorPayload schema.
+This module provides utility functions and classes for standardized error
+handling across the system using the ErrorPayload schema.
 """
 
 import functools
 import logging
 import traceback
-from typing import Any, Callable, Dict, Optional, Type, TypeVar, cast
+from typing import Any, Callable, Dict, Optional, TypeVar
 
-from luca_core.schemas import (ErrorCategory, ErrorCode, ErrorPayload,
-                               ErrorSeverity, create_system_error,
-                               create_user_error)
+from luca_core.schemas import ErrorCategory, ErrorPayload, ErrorSeverity
 
 logger = logging.getLogger(__name__)
 
@@ -146,6 +144,7 @@ def handle_exceptions(
 
                 # Create error payload
                 error = ErrorPayload(
+                    error_code="UNKNOWN_ERROR",
                     category=error_category,
                     severity=error_severity,
                     message=str(e),

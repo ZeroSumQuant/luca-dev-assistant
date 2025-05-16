@@ -1,0 +1,19 @@
+allow:
+  - read_file
+  - explain_code
+require_approval:
+  - apply_patch
+  - create_file
+  - delete_file
+  - bash_command
+deny:
+  - create_tool
+
+on_file_change:
+  patterns:
+    - "README.md"
+    - "PLANNING.md"
+    - "docs/**/*.md"
+  action: ask
+  message: |
+    Core doc changed → refresh project_map.md?

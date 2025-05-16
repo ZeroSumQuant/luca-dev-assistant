@@ -4,6 +4,7 @@ This module defines the standardized error payload used across the system
 to ensure consistent error handling and reporting.
 """
 
+from datetime import UTC, datetime
 from enum import Enum
 from typing import Any, Dict, Optional
 
@@ -32,17 +33,24 @@ class ErrorSeverity(str, Enum):
 class ErrorPayload(BaseModel):
     """Standardized error payload format used throughout the system."""
 
+    schema_version: str = "1.0.0"
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    error_code: str = "GENERIC_ERROR"
     category: ErrorCategory
     severity: ErrorSeverity
     message: str
+    remediation: Optional[str] = None
+    context_id: Optional[str] = None
     context: Dict[str, Any] = Field(default_factory=dict)
-    recovery_hint: Optional[str] = None
+    recovery_hint: Optional[str] = None  # Deprecated, use remediation instead
 
     def get_user_message(self) -> str:
         """Return a user-friendly version of the error message."""
         base_message = self.message
 
-        if self.recovery_hint:
+        if self.remediation:
+            return f"{base_message} - {self.remediation}"
+        elif self.recovery_hint:  # Fallback for deprecated field
             return f"{base_message} - {self.recovery_hint}"
         return base_message
 
@@ -52,9 +60,11 @@ class ErrorPayload(BaseModel):
         exception: Exception,
         category: ErrorCategory = ErrorCategory.SYSTEM_ERROR,
         severity: ErrorSeverity = ErrorSeverity.ERROR,
+        error_code: str = "UNKNOWN_ERROR",
     ) -> "ErrorPayload":
         """Create an ErrorPayload from an exception."""
         return cls(
+            error_code=error_code,
             category=category,
             severity=severity,
             message=str(exception),
@@ -88,20 +98,31 @@ class ErrorCode(str, Enum):
 
 # Error handling utilities
 def create_user_error(
-    message: str, recovery_hint: Optional[str] = None
+    message: str,
+    recovery_hint: Optional[str] = None,
+    error_code: str = "VALIDATION_ERROR",
+    remediation: Optional[str] = None,
 ) -> ErrorPayload:
     """Create a user error payload."""
+    # Use recovery_hint as remediation for backward compatibility
+    final_remediation = remediation or recovery_hint
     return ErrorPayload(
+        error_code=error_code,
         category=ErrorCategory.USER_ERROR,
         severity=ErrorSeverity.ERROR,
         message=message,
-        recovery_hint=recovery_hint,
+        remediation=final_remediation,
     )
 
 
-def create_system_error(message: str, context: Dict[str, Any] = None) -> ErrorPayload:
+def create_system_error(
+    message: str,
+    context: Optional[Dict[str, Any]] = None,
+    error_code: str = "UNKNOWN_ERROR",
+) -> ErrorPayload:
     """Create a system error payload."""
     return ErrorPayload(
+        error_code=error_code,
         category=ErrorCategory.SYSTEM_ERROR,
         severity=ErrorSeverity.ERROR,
         message=message,
@@ -112,8 +133,9 @@ def create_system_error(message: str, context: Dict[str, Any] = None) -> ErrorPa
 def create_timeout_error(operation: str, timeout_seconds: int) -> ErrorPayload:
     """Create a timeout error payload."""
     return ErrorPayload(
+        error_code="OPERATION_TIMEOUT",
         category=ErrorCategory.TIMEOUT_ERROR,
         severity=ErrorSeverity.ERROR,
-        message=f"Operation '{operation}' timed out after {timeout_seconds} seconds",
-        recovery_hint="Try again with a longer timeout or simplify the request",
+        message=f"Operation '{operation}' timed out after {timeout_seconds} seconds",  # noqa: E501
+        remediation="Try again with a longer timeout or simplify the request",
     )
