@@ -1,28 +1,23 @@
 import os
-import shutil
-import signal
 import subprocess
-import tempfile
-import textwrap
-import time
+from pathlib import Path
+from typing import List, Union
 
 
 class SandboxTimeoutError(RuntimeError):
+    """Raised when the sandboxed subprocess exceeds the wall-clock limit."""
+
     pass
 
 
 class SandboxRunner:
-    def __init__(self, image: str = "luca-sandbox"):
+    def __init__(self, image: str, workdir: Union[str, Path], timeout: int = 300):
         self.image = image
-        self.workdir = tempfile.mkdtemp(prefix="luca-sandbox-")
+        self.workdir = str(workdir)
+        self.timeout = timeout
 
-    def cleanup(self):
-        """Clean up the temporary workspace."""
-        if self.workdir and os.path.exists(self.workdir):
-            shutil.rmtree(self.workdir)
-
-    def run(self, cmd: list[str]) -> subprocess.CompletedProcess:
-        """Execute *cmd* inside the sandbox image with a hard 300-s wall clock."""
+    def run(self, cmd: List[str]) -> subprocess.CompletedProcess:
+        """Execute *cmd* inside the sandbox image under resource caps."""
         try:
             return subprocess.run(
                 [
@@ -38,9 +33,9 @@ class SandboxRunner:
                 ],
                 capture_output=True,
                 text=True,
-                timeout=300,
+                timeout=self.timeout,
             )
         except subprocess.TimeoutExpired as exc:
             raise SandboxTimeoutError(
-                f"Sandbox execution exceeded 300 s: {cmd}"
+                f"Sandbox execution exceeded {self.timeout}s: {cmd}"
             ) from exc
