@@ -1,0 +1,15 @@
+FROM python:3.11-slim
+
+# Prevent interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive
+WORKDIR /app
+
+# Copy dependency list and install
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy source code into the image
+COPY . .
+
+# Run the test suite
+CMD ["pytest", "-q"]
