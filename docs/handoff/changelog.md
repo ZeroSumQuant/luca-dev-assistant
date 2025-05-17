@@ -1,3 +1,22 @@
+# [](https://github.com/ZeroSumQuant/luca-dev-assistant/compare/v0.5.2...v) (2025-05-17)
+
+
+### Bug Fixes
+
+* add system dependencies for psutil compilation ([f901a72](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/f901a721800bfd505fd39e756118ea58fa80e444))
+* de-duplicate skipif decorator in sandbox timeout test ([2596885](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/259688569402d76ce4693eea5473210c07b277b1))
+
+
+### Features
+
+* add 300-s timeout guard to SandboxRunner ([8b4a031](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/8b4a031f9a829895faeef9e08e8ef10b1fc24f39))
+* add Makefile with capped test-docker target ([e9a54c8](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/e9a54c863112b44f85272d98635580683aa9654e))
+* **core:** enhance LucaManager integration with improved error handling and debug support ([7801ab4](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/7801ab40c334bf2abca4a449e795437e6e5fd01e))
+* **core:** integrate luca_core with main application ([1d6cd3b](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/1d6cd3b549823ef87a17cdfedcf3bce0e0199794))
+* **core:** integrate luca_core with main application ([7a06dde](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/7a06dde35008ccd5dae4fadcf45f88763b4618ff))
+
+
+
 # [](https://github.com/ZeroSumQuant/luca-dev-assistant/compare/v0.5.2...v) (2025-05-16)
 
 
