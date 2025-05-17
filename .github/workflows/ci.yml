@@ -45,3 +45,6 @@ jobs:
           context: .
           push: false   # change to true + set secrets if you want auto-push
           tags: luca-dev:ci
+
+      - name: Docker-capped tests
+        run: make test-docker
