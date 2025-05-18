@@ -228,11 +228,11 @@ def test_update_task_status_nonexistent(context_store):
 
 
 def test_get_user_preferences_returns_default(context_store):
-    """Test that get_user_preferences returns None for nonexistent user."""
+    """Test that get_user_preferences returns default for nonexistent user."""
     # The current implementation returns a default UserPreferences object
-    # We need to test that it correctly handles the validation error
-    with pytest.raises(Exception):  # It will raise due to missing user_id
-        prefs = context_store.get_user_preferences("nonexistent")
+    prefs = context_store.get_user_preferences("nonexistent")
+    assert isinstance(prefs, UserPreferences)
+    assert prefs.user_id == "nonexistent"  # Should use the provided user_id
 
 
 def test_clear_all_data(context_store):
@@ -367,11 +367,11 @@ def test_store_user_preferences_and_retrieve(context_store):
 
 
 def test_get_user_preferences_handles_error(context_store):
-    """Test that get_user_preferences handles error when creating default."""
-    # This is actually a bug in the implementation - it tries to create
-    # a UserPreferences without a user_id which is required
-    with pytest.raises(Exception):
-        context_store.get_user_preferences("nonexistent")
+    """Test that get_user_preferences handles nonexistent user correctly."""
+    # The implementation returns a default UserPreferences with the given user_id
+    prefs = context_store.get_user_preferences("nonexistent")
+    assert isinstance(prefs, UserPreferences)
+    assert prefs.user_id == "nonexistent"
 
 
 def test_task_retrieval_none(context_store):

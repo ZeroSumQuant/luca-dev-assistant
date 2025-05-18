@@ -88,11 +88,8 @@ class TestSQLiteContextStore:
         """Test closing the store."""
         await store_with_backup.close()
         assert store_with_backup.conn is None
-        # The backup task should be cancelled or done
-        assert (
-            store_with_backup._backup_task.cancelled()
-            or store_with_backup._backup_task.done()
-        )
+        # The backup task should be None after close
+        assert store_with_backup._backup_task is None
 
     @pytest.mark.asyncio
     async def test_backup_loop(self, store_with_backup):
