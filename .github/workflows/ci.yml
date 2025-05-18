@@ -33,23 +33,21 @@ jobs:
           # Verify pytest installation
           python -c "import pytest; print(f'Pytest version: {pytest.__version__}')"
       
-      - name: Run real-execution tests (all except mocked)
-        run: |
-          python -m pytest -c pytest-real.ini -q --timeout=60 --timeout_method=thread
-        env:
-          LUCA_TESTING: 1
-          CI: true
-          PYTHONPATH: .
-          AUTOGEN_USE_MOCK_RESPONSE: "0"
-          
-      - name: Run mocked AutoGen tests
-        run: |
-          python -m pytest -c pytest-mock.ini -q tests/tools tests/test_mcp_integration.py
+      - name: 🔧 Mocked AutoGen tests
+        run: pytest -q tests/tools tests/test_mcp_integration.py
         env:
           LUCA_TESTING: 1
           CI: true
           PYTHONPATH: .
           AUTOGEN_USE_MOCK_RESPONSE: "1"
+          
+      - name: 🛠  Real-execution registry tests
+        run: pytest -q --timeout=60 --timeout_method=thread --ignore=tests/tools --ignore=tests/test_mcp_integration.py
+        env:
+          LUCA_TESTING: 1
+          CI: true
+          PYTHONPATH: .
+          AUTOGEN_USE_MOCK_RESPONSE: ""  # ensure it is empty
 
       - name: Docker build
         uses: docker/build-push-action@v5
