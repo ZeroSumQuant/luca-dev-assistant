@@ -25,6 +25,46 @@ jobs:
           python -m pip install -r requirements-dev.txt
           python -m pip install -e .
           
+      - name: Verify luca_core install (DIAGNOSTIC)
+        run: |
+          python - <<'PY'
+          import importlib.util, sys, os, pkg_resources, site, pprint
+          print("=== DIAGNOSTIC INFO FOR MODULE IMPORT ISSUE ===")
+          print("CWD:", os.getcwd())
+          print("sys.executable:", sys.executable)
+          print("sys.path[0:5]:", sys.path[:5])
+          print("site.getsitepackages():", site.getsitepackages())
+          print("\n=== Checking pkg_resources ===")
+          working_set_keys = [d.key for d in pkg_resources.working_set]
+          print("All packages:", working_set_keys[:10], "...")
+          print("luca packages:", [k for k in working_set_keys if 'luca' in k])
+          
+          print("\n=== Trying import luca_core ===")
+          spec = importlib.util.find_spec("luca_core")
+          print("spec:", spec)
+          if spec and spec.origin:
+              print("origin:", spec.origin)
+              print("submodule_search_locations:", spec.submodule_search_locations)
+          
+          try:
+              import luca_core
+              print("SUCCESS: luca_core imported from:", luca_core.__file__)
+              print("luca_core.__path__:", getattr(luca_core, '__path__', 'No __path__'))
+          except ImportError as e:
+              print("FAILED to import luca_core:", e)
+              
+          print("\n=== Checking directory structure ===")
+          for root, dirs, files in os.walk("luca_core"):
+              level = root.replace("luca_core", "").count(os.sep)
+              indent = " " * 2 * level
+              print(f"{indent}{os.path.basename(root)}/")
+              subindent = " " * 2 * (level + 1)
+              for file in files[:3]:  # Limit output
+                  print(f"{subindent}{file}")
+          PY
+          # Exit 1 to stop here and see output
+          exit 1
+          
       - name: Display environment info
         run: |
           python -c "import sys; print(f'Python version: {sys.version}')"
