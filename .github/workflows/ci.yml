@@ -33,9 +33,17 @@ jobs:
           # Verify pytest installation
           python -c "import pytest; print(f'Pytest version: {pytest.__version__}')"
       
-      - name: Run tests with timeout
+      - name: Run mocked tests (AutoGen fake responses)
         run: |
-          python -m pytest --timeout=60 --timeout_method=thread -v
+          python -m pytest -m autogen_mock -q
+        env:
+          LUCA_TESTING: 1
+          CI: true
+          PYTHONPATH: .
+          
+      - name: Run real-execution tests
+        run: |
+          python -m pytest -m "not autogen_mock" -q --timeout=60 --timeout_method=thread
         env:
           LUCA_TESTING: 1
           CI: true

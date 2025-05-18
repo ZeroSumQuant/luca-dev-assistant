@@ -17,11 +17,7 @@ from luca_core.schemas import (
     ToolUsageMetrics,
 )
 
-
-@pytest.fixture(autouse=True)
-def disable_autogen_mock(monkeypatch):
-    """Turn off AutoGen's global mock mode for these tests only."""
-    monkeypatch.setenv("AUTOGEN_USE_MOCK_RESPONSE", "0")
+# No longer need the disable_autogen_mock fixture since we're using markers
 
 
 def example_tool(message: str, count: int = 1) -> str:

@@ -167,13 +167,18 @@ pytest --timeout=60 --timeout_method=thread
 
 ### AutoGen Mocking Behavior
 
-Registry unit tests run with `AUTOGEN_USE_MOCK_RESPONSE` disabled so tool functions execute normally. Use the provided fixture in any new tests that need real execution:
+By default, tests run without AutoGen's global mock mode. Mark a test with `@pytest.mark.autogen_mock` if it depends on AutoGen's fake LLM/tool responses. CI runs the suite twice: once for mocked tests, once for real-execution tests.
 
 ```python
-@pytest.fixture(autouse=True)
-def disable_autogen_mock(monkeypatch):
-    """Turn off AutoGen's global mock mode for these tests only."""
-    monkeypatch.setenv("AUTOGEN_USE_MOCK_RESPONSE", "0")
+# For tests that need AutoGen mocking
+import pytest
+
+pytestmark = pytest.mark.autogen_mock  # Marks all tests in the module
+
+# Or mark individual tests
+@pytest.mark.autogen_mock
+def test_something_with_autogen():
+    pass
 ```
 
 ## Documentation
