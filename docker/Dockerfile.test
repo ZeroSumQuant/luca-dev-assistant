@@ -17,5 +17,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy source code into the image
 COPY . .
 
+# Set PYTHONPATH to include the app directory
+ENV PYTHONPATH=/app
+
 # Run the test suite
 CMD ["pytest", "-q"]
