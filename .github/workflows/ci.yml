@@ -62,8 +62,6 @@ jobs:
               for file in files[:3]:  # Limit output
                   print(f"{subindent}{file}")
           PY
-          # Exit 1 to stop here and see output
-          exit 1
           
       - name: Display environment info
         run: |
@@ -96,6 +94,12 @@ jobs:
           
       - name: 🧪 All other tests (no AutoGen imports)
         run: |
+          echo "=== DEBUG TEST ENVIRONMENT ==="
+          echo "CWD: $(pwd)"
+          echo "PYTHONPATH: $PYTHONPATH"
+          python -c "import sys; print('sys.path[0:5]:', sys.path[:5])"
+          python -c "import luca_core; print('luca_core location:', luca_core.__file__)"
+          echo "=== RUNNING TESTS ==="
           python -m pytest -q --timeout=60 --timeout_method=thread \
             --ignore=tests/tools \
             --ignore=tests/test_mcp_integration.py \
