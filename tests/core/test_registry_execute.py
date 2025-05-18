@@ -85,11 +85,8 @@ class TestToolExecute:
 
     def test_execute_tool_success(self):
         """Test executing a tool successfully."""
-        # Monkey patch to find our function
-        import sys
-
-        current_module = sys.modules[__name__]
-        setattr(current_module, "example_tool", example_tool)
+        # Register the function in globals so the registry can find it
+        globals()["example_tool"] = example_tool
 
         result = self.registry.execute_tool(
             "example_tool", {"message": "Hello", "count": 3}
@@ -146,11 +143,8 @@ class TestToolExecute:
 
         self.registry.tools["failing_tool"] = registration
 
-        # Make function findable
-        import sys
-
-        current_module = sys.modules[__name__]
-        setattr(current_module, "failing_tool", failing_tool)
+        # Register the function in globals so the registry can find it
+        globals()["failing_tool"] = failing_tool
 
         with pytest.raises(ValueError, match="This tool always fails"):
             self.registry.execute_tool("failing_tool", {})
@@ -169,22 +163,16 @@ class TestToolExecute:
 
     def test_execute_with_defaults(self):
         """Test executing a tool with default parameters."""
-        # Make function findable
-        import sys
-
-        current_module = sys.modules[__name__]
-        setattr(current_module, "example_tool", example_tool)
+        # Register the function in globals so the registry can find it
+        globals()["example_tool"] = example_tool
 
         result = self.registry.execute_tool("example_tool", {"message": "Test"})
         assert result == "Test x 1"
 
     def test_execute_unknown_params_ignored(self):
         """Test that unknown parameters are ignored."""
-        # Make function findable
-        import sys
-
-        current_module = sys.modules[__name__]
-        setattr(current_module, "example_tool", example_tool)
+        # Register the function in globals so the registry can find it
+        globals()["example_tool"] = example_tool
 
         result = self.registry.execute_tool(
             "example_tool", {"message": "Hello", "unknown": "ignored"}
@@ -193,11 +181,8 @@ class TestToolExecute:
 
     def test_multiple_executions_update_metrics(self):
         """Test that multiple executions update metrics correctly."""
-        # Make function findable
-        import sys
-
-        current_module = sys.modules[__name__]
-        setattr(current_module, "example_tool", example_tool)
+        # Register the function in globals so the registry can find it
+        globals()["example_tool"] = example_tool
 
         # First execution
         self.registry.execute_tool("example_tool", {"message": "First"})

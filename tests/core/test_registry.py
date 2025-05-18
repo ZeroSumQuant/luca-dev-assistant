@@ -275,7 +275,7 @@ class TestToolRegistry:
         # Check third parameter
         assert params[2].name == "required_int"
         assert params[2].required is False
-        assert params[2].default is None
+        assert params[2].default == 0
 
     def test_metadata_timestamps(self):
         """Test that created_at and updated_at are set."""

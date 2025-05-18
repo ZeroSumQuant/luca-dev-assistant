@@ -3,7 +3,7 @@
 import os
 import sys
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Type
+from typing import Any, Dict, List, Optional, Type, TypeVar
 
 # Add the parent directory to the Python path
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,6 +23,9 @@ from luca_core.schemas import (
     TaskResult,
     UserPreferences,
 )
+
+# Define TypeVar for generic type
+T = TypeVar("T", bound=BaseModel)
 
 
 # Concrete implementation for testing
@@ -57,8 +60,8 @@ class MockContextStore(BaseContextStore):
         self.store_data[namespace][key] = model.model_dump()
 
     async def fetch(
-        self, model_cls: Type[BaseModel], key: str, namespace: str = "default"
-    ) -> Optional[BaseModel]:
+        self, model_cls: Type[T], key: str, namespace: str = "default"
+    ) -> Optional[T]:
         """Fetch a model instance by key."""
         if namespace in self.store_data and key in self.store_data[namespace]:
             return model_cls.model_validate(self.store_data[namespace][key])
@@ -77,11 +80,11 @@ class MockContextStore(BaseContextStore):
 
     async def list(
         self,
-        model_cls: Type[BaseModel],
+        model_cls: Type[T],
         namespace: str = "default",
         limit: int = 100,
         offset: int = 0,
-    ) -> List[BaseModel]:
+    ) -> List[T]:
         """List model instances of a specific type."""
         if namespace not in self.store_data:
             return []
@@ -90,12 +93,12 @@ class MockContextStore(BaseContextStore):
 
     async def query(
         self,
-        model_cls: Type[BaseModel],
+        model_cls: Type[T],
         query: Dict[str, Any],
         namespace: str = "default",
         limit: int = 100,
         offset: int = 0,
-    ) -> List[BaseModel]:
+    ) -> List[T]:
         """Query model instances based on criteria."""
         if namespace not in self.store_data:
             return []
