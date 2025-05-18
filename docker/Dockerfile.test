@@ -20,5 +20,8 @@ COPY . .
 # Set PYTHONPATH to include the app directory
 ENV PYTHONPATH=/app
 
+# Install the package
+RUN pip install -e .
+
 # Run the test suite
 CMD ["pytest", "-q"]
