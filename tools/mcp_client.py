@@ -203,7 +203,7 @@ class MCPClientManager:
 
         try:
             # List tools from the server
-            response = await session.call(types.ListToolsRequest())
+            response = await session.call(types.ListToolsRequest(method="tools/list"))
 
             # Register each tool
             for tool in response.tools:
@@ -259,7 +259,12 @@ class MCPClientManager:
             actual_tool_name = tool.name
 
             # Create and send the tool call request
-            request = types.CallToolRequest(name=actual_tool_name, arguments=arguments)
+            request = types.CallToolRequest(
+                method="tools/call",
+                params=types.CallToolRequestParams(
+                    name=actual_tool_name, arguments=arguments
+                ),
+            )
 
             response = await session.call(request)
 

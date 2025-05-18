@@ -1,5 +1,15 @@
 # Luca Dev Assistant · Task Log
 
+## 2025-05-17
+- **Goal**: Update CLAUDE.md with stricter safety protocols and create automation issues
+- **Changes Made**:
+  - CLAUDE.md: Updated with 95% coverage requirement and safety protocols
+  - Created 8 GitHub issues (#67-#74) for automation safeguards
+  - Fixed linting issues in convert_issues.py
+- **Tests Added/Modified**: None (exposed coverage gap)
+- **Issues Encountered**: Current coverage is only 61%, not meeting 95% target
+- **Next Steps**: Implement safety-check.sh and increase test coverage
+
 ## 2025-05-03
 
 - **07:00 pm — Project bootstrap** – created `README.md`, `.gitignore`, `requirements.txt`; activated `.venv`.
