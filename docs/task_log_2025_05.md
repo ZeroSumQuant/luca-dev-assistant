@@ -11,3 +11,16 @@
   - Created handoff document at `docs/handoff/2025_05_16_phase1.md`
   - All quality gates (black, isort, flake8, bandit, mypy, pytest) pass
   - Ready for Phase 2: SecurityAgent stub, QuantAnalyst rename, sandbox limits
+
+## 2025-05-18
+
+- **12:00 pm — Fixed AutoGen Mock Interference in CI** – resolved PR #76 test failures:
+  - Deep research discovered AutoGen's `AUTOGEN_USE_MOCK_RESPONSE=1` globally replaces functions with MagicMocks
+  - Added targeted `disable_autogen_mock` fixture to `tests/core/test_registry_execute.py` only
+  - Removed problematic `pyautogen==0.9.0` dependency (AG2 fork causing conflicts)
+  - Created RESEARCH folder structure for documenting investigations
+  - Documented full findings in `RESEARCH/autogen-mocking/2025-05-18-autogen-ci-mock-interference.md`
+  - Updated CONTRIBUTING.md with AutoGen mocking guidance
+  - Created test fixtures.py with reusable mock control utilities
+  - All tests passing locally; fix ready for CI validation
+  - Note: pyautogen removal from requirements.txt complete, but pip uninstall had issues locally
