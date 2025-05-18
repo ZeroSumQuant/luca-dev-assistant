@@ -88,6 +88,15 @@ class TestToolExecute:
 
     def test_execute_tool_success(self):
         """Test executing a tool successfully."""
+        # Debug: check environment
+        import os
+
+        print("\n=== DEBUGGING AUTOGEN_USE_MOCK_RESPONSE ===")
+        print(
+            f"AUTOGEN_USE_MOCK_RESPONSE = {os.environ.get('AUTOGEN_USE_MOCK_RESPONSE', 'NOT SET')}"
+        )
+        print(f"CI = {os.environ.get('CI', 'NOT SET')}")
+
         # Register the function in globals so the registry can find it
         globals()["example_tool"] = example_tool
 

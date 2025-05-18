@@ -33,6 +33,16 @@ jobs:
           # Verify pytest installation
           python -c "import pytest; print(f'Pytest version: {pytest.__version__}')"
       
+      - name: 🛠  Real-execution tests (no AutoGen)
+        run: |
+          echo "AUTOGEN_USE_MOCK_RESPONSE=${AUTOGEN_USE_MOCK_RESPONSE}"
+          python -m pytest -v -s tests/core/test_registry_execute.py --timeout=60 --timeout_method=thread
+        env:
+          LUCA_TESTING: 1
+          CI: true
+          PYTHONPATH: .
+          AUTOGEN_USE_MOCK_RESPONSE: "0"
+          
       - name: 🔧 Mocked AutoGen tests
         run: pytest -q tests/tools tests/test_mcp_integration.py
         env:
@@ -41,13 +51,17 @@ jobs:
           PYTHONPATH: .
           AUTOGEN_USE_MOCK_RESPONSE: "1"
           
-      - name: 🛠  Real-execution registry tests
-        run: pytest -q --timeout=60 --timeout_method=thread --ignore=tests/tools --ignore=tests/test_mcp_integration.py
+      - name: 🧪 All other tests (no AutoGen imports)
+        run: |
+          python -m pytest -q --timeout=60 --timeout_method=thread \
+            --ignore=tests/tools \
+            --ignore=tests/test_mcp_integration.py \
+            --ignore=tests/core/test_registry_execute.py
         env:
           LUCA_TESTING: 1
           CI: true
           PYTHONPATH: .
-          AUTOGEN_USE_MOCK_RESPONSE: ""  # ensure it is empty
+          AUTOGEN_USE_MOCK_RESPONSE: "0"
 
       - name: Docker build
         uses: docker/build-push-action@v5
