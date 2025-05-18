@@ -33,17 +33,17 @@ jobs:
           # Verify pytest installation
           python -c "import pytest; print(f'Pytest version: {pytest.__version__}')"
       
-      - name: Run mocked tests (AutoGen fake responses)
+      - name: Run mocked AutoGen tests
         run: |
-          python -m pytest -m autogen_mock -q
+          AUTOGEN_USE_MOCK_RESPONSE=1 python -m pytest -q tests/tools tests/test_mcp_integration.py
         env:
           LUCA_TESTING: 1
           CI: true
           PYTHONPATH: .
           
-      - name: Run real-execution tests
+      - name: Run real-execution tests (all except mocked)
         run: |
-          python -m pytest -m "not autogen_mock" -q --timeout=60 --timeout_method=thread
+          python -m pytest -q --timeout=60 --timeout_method=thread --ignore=tests/tools --ignore=tests/test_mcp_integration.py
         env:
           LUCA_TESTING: 1
           CI: true

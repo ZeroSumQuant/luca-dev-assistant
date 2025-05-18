@@ -6,7 +6,7 @@ based on configuration.
 
 import asyncio
 import os
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from luca_core.context.base_store import BaseContextStore
 from luca_core.context.sqlite_store import SQLiteContextStore
@@ -15,7 +15,7 @@ from luca_core.context.sqlite_store import SQLiteContextStore
 async def create_async_context_store(
     store_type: str = "sqlite",
     db_path: Optional[str] = None,
-    config: Optional[Dict] = None,
+    config: Optional[Dict[str, Any]] = None,
 ) -> BaseContextStore:
     """Create a context store instance asynchronously.
 
@@ -51,7 +51,7 @@ async def create_async_context_store(
 def create_context_store(
     store_type: str = "sqlite",
     db_path: Optional[str] = None,
-    config: Optional[Dict] = None,
+    config: Optional[Dict[str, Any]] = None,
 ) -> BaseContextStore:
     """Create a context store instance synchronously.
 

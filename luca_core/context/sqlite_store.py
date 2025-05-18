@@ -35,9 +35,9 @@ class SQLiteContextStore(BaseContextStore):
         """
         self.db_path = db_path
         self.backup_interval = backup_interval
-        self.conn = None
+        self.conn: Optional[sqlite3.Connection] = None
         self._lock = asyncio.Lock()
-        self._backup_task = None
+        self._backup_task: Optional[asyncio.Task[None]] = None
 
     async def initialize(self) -> None:
         """Initialize the SQLite database.
@@ -52,6 +52,7 @@ class SQLiteContextStore(BaseContextStore):
         self.conn.row_factory = sqlite3.Row
 
         # Create the metadata table
+        assert self.conn is not None  # For mypy
         self.conn.execute(
             """
             CREATE TABLE IF NOT EXISTS metadata (
@@ -100,6 +101,8 @@ class SQLiteContextStore(BaseContextStore):
                 await self._backup_task
             except asyncio.CancelledError:
                 pass
+            finally:
+                self._backup_task = None
 
         if self.conn:
             self.conn.close()
@@ -152,6 +155,7 @@ class SQLiteContextStore(BaseContextStore):
 
         async with self._lock:
             # Store metadata
+            assert self.conn is not None, "Database not initialized"
             self.conn.execute(
                 """
                 INSERT OR REPLACE INTO metadata
@@ -181,6 +185,7 @@ class SQLiteContextStore(BaseContextStore):
         model_type = model_cls.__name__
 
         async with self._lock:
+            assert self.conn is not None, "Database not initialized"
             cursor = self.conn.execute(
                 """
                 SELECT data
@@ -208,6 +213,7 @@ class SQLiteContextStore(BaseContextStore):
 
         async with self._lock:
             # Update metadata (only updated_at)
+            assert self.conn is not None, "Database not initialized"
             self.conn.execute(
                 """
                 UPDATE metadata
@@ -238,6 +244,7 @@ class SQLiteContextStore(BaseContextStore):
 
         async with self._lock:
             # Delete metadata
+            assert self.conn is not None, "Database not initialized"
             self.conn.execute(
                 """
                 DELETE FROM metadata
@@ -268,6 +275,7 @@ class SQLiteContextStore(BaseContextStore):
         model_type = model_cls.__name__
 
         async with self._lock:
+            assert self.conn is not None, "Database not initialized"
             cursor = self.conn.execute(
                 """
                 SELECT d.data

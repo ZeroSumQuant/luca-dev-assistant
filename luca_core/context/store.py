@@ -397,7 +397,9 @@ class ContextStore:
             row = cursor.fetchone()
             if row:
                 return UserPreferences.model_validate_json(row[0])
-            return UserPreferences()  # Return default preferences if not found
+            return UserPreferences(
+                user_id=user_id
+            )  # Return default preferences if not found
 
     def store_metric(self, metric: MetricRecord) -> str:
         """

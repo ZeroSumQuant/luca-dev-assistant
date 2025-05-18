@@ -7,9 +7,6 @@ from autogen_core.tools import FunctionTool
 
 from tools.mcp_autogen_bridge import MCPAutogenBridge
 
-# Mark all tests in this module for AutoGen mocking
-pytestmark = pytest.mark.autogen_mock
-
 
 class TestMCPAutogenBridge:
     """Test the MCPAutogenBridge class."""

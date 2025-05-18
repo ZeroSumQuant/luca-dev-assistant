@@ -167,19 +167,13 @@ pytest --timeout=60 --timeout_method=thread
 
 ### AutoGen Mocking Behavior
 
-By default, tests run without AutoGen's global mock mode. Mark a test with `@pytest.mark.autogen_mock` if it depends on AutoGen's fake LLM/tool responses. CI runs the suite twice: once for mocked tests, once for real-execution tests.
+AUTOGEN_USE_MOCK_RESPONSE is process-wide. Mock-dependent tests run in a dedicated pytest invocation. Do not rely on per-test markers.
 
-```python
-# For tests that need AutoGen mocking
-import pytest
+In CI, tests are split into two separate pytest runs:
+1. Tests that need AutoGen mocking (`tests/tools/` and `tests/test_mcp_integration.py`) - run with `AUTOGEN_USE_MOCK_RESPONSE=1`
+2. All other tests - run without the mock environment variable
 
-pytestmark = pytest.mark.autogen_mock  # Marks all tests in the module
-
-# Or mark individual tests
-@pytest.mark.autogen_mock
-def test_something_with_autogen():
-    pass
-```
+If you add new tests that depend on AutoGen mocking, they must be placed in the appropriate directory or explicitly listed in the CI workflow.
 
 ## Documentation
 

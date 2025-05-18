@@ -11,9 +11,6 @@ from mcp import types
 from tools.mcp_autogen_bridge import MCPAutogenBridge
 from tools.mcp_client import MCPClientManager, MCPServerConfig, MCPTool
 
-# Mark all tests in this module for AutoGen mocking
-pytestmark = pytest.mark.autogen_mock
-
 
 # Helper functions for creating valid MCP protocol objects
 def make_list_tools_request():
