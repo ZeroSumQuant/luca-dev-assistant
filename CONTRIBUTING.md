@@ -165,6 +165,17 @@ pytest --timeout=60 --timeout_method=thread
 - Use pytest fixtures for setup and teardown
 - Add appropriate timeouts to prevent hanging in CI
 
+### AutoGen Mocking Behavior
+
+Registry unit tests run with `AUTOGEN_USE_MOCK_RESPONSE` disabled so tool functions execute normally. Use the provided fixture in any new tests that need real execution:
+
+```python
+@pytest.fixture(autouse=True)
+def disable_autogen_mock(monkeypatch):
+    """Turn off AutoGen's global mock mode for these tests only."""
+    monkeypatch.setenv("AUTOGEN_USE_MOCK_RESPONSE", "0")
+```
+
 ## Documentation
 
 ### Types of Documentation

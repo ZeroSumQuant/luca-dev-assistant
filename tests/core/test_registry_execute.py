@@ -1,5 +1,6 @@
 """Tests for tool registry execute_tool functionality."""
 
+import unittest.mock
 from datetime import datetime
 from typing import Any, Dict
 
@@ -15,6 +16,12 @@ from luca_core.schemas import (
     ToolSpecification,
     ToolUsageMetrics,
 )
+
+
+@pytest.fixture(autouse=True)
+def disable_autogen_mock(monkeypatch):
+    """Turn off AutoGen's global mock mode for these tests only."""
+    monkeypatch.setenv("AUTOGEN_USE_MOCK_RESPONSE", "0")
 
 
 def example_tool(message: str, count: int = 1) -> str:
@@ -87,6 +94,11 @@ class TestToolExecute:
         """Test executing a tool successfully."""
         # Register the function in globals so the registry can find it
         globals()["example_tool"] = example_tool
+
+        # Guard against unexpected mocking
+        assert not isinstance(
+            globals()["example_tool"], unittest.mock.MagicMock
+        ), "Tool unexpectedly mocked—check AUTOGEN_USE_MOCK_RESPONSE"
 
         result = self.registry.execute_tool(
             "example_tool", {"message": "Hello", "count": 3}
