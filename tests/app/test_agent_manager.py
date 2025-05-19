@@ -167,10 +167,13 @@ class TestAgentManager:
         # Make create_agent_tree raise an exception
         mock_create_tree.side_effect = Exception("Test error")
 
-        # This would trigger the error path in the actual code
-        # The test verifies our mocking is correct
-        with pytest.raises(Exception):
-            mock_create_tree()
+        # Call main which should catch the exception and call st.error
+        main()
+
+        # Verify error was displayed
+        mock_error.assert_called_once_with(
+            "Error creating tree visualization: Test error"
+        )
 
     def test_agent_config_completeness(self):
         """Test that all agents have complete configuration."""

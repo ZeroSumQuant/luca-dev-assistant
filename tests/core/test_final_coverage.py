@@ -59,16 +59,19 @@ class TestFinalCoverage:
         def placeholder():
             pass
 
-        # Update the function reference to something that truly doesn't exist
-        registry.tools["missing_func_tool"].function_reference = (
-            "really_unique_non_existent_function_12345"
-        )
+        # Mock sys.modules to ensure the function is not found anywhere
+        original_modules = sys.modules.copy()
+        with mock.patch("sys.modules", new={}):
+            # Update the function reference to something that doesn't exist
+            registry.tools["missing_func_tool"].function_reference = (
+                "non_existent_function"
+            )
 
-        # This should raise ValueError on line 290
-        with pytest.raises(
-            ValueError, match="Function not found for tool: missing_func_tool"
-        ):
-            registry.execute_tool("missing_func_tool", {})
+            # This should raise ValueError on line 290
+            with pytest.raises(
+                ValueError, match="Function not found for tool: missing_func_tool"
+            ):
+                registry.execute_tool("missing_func_tool", {})
 
     def test_registry_error_metrics_coverage(self):
         """Test registry error metrics to cover lines 325-337."""
@@ -79,8 +82,10 @@ class TestFinalCoverage:
         def error_func():
             raise RuntimeError("Test error")
 
-        # Store the function in the test module so it can be found
-        sys.modules[__name__].error_func_unique_test = error_func
+        # Attach the function directly to the test module for discovery
+        setattr(sys.modules[__name__], "error_func_unique_test", error_func)
+
+        # Update the function reference
         registry.tools["error_tool"].function_reference = "error_func_unique_test"
 
         # Execute and catch exception
