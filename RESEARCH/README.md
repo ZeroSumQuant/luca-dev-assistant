@@ -48,4 +48,13 @@ Each research document should include:
 ## Current Research Topics
 
 1. AutoGen Mocking Interference (2025-05-18) - How AutoGen's test mocking affects isolated components
-2. [Add future topics as they're researched]
+2. Module Import Shadows (2025-05-18) - Critical discovery: pytest test discovery can create shadow packages when test directories match package names
+3. [Add future topics as they're researched]
+
+## Notable Findings
+
+### Module Import Shadow Issue
+**Critical**: Never name test directories the same as package names. For example, `tests/luca_core/` will shadow the real `luca_core` package and prevent submodule imports. This is documented in detail at:
+- Research doc: `/module-import-ci-failures/2025-05-18-module-import-shadows.md`
+- Contributing guide: `CONTRIBUTING.md` section on test directory naming
+- Handoff docs: `/docs/handoff/2025-05-18-2.md`

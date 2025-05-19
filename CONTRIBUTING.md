@@ -165,13 +165,42 @@ pytest --timeout=60 --timeout_method=thread
 - Use pytest fixtures for setup and teardown
 - Add appropriate timeouts to prevent hanging in CI
 
+### Test Directory Naming - Critical Import Issue
+
+**IMPORTANT**: Never create test directories that match package names. For example, do not create `tests/luca_core/` if you have a `luca_core` package. This creates a "shadow package" that prevents importing real submodules.
+
+**Problem**: When pytest discovers tests, it adds test directories to `sys.path`. A directory like `tests/luca_core/` becomes a shadow package that blocks imports from the real `luca_core` package.
+
+**Solution**: Use a different naming convention for test directories:
+- ❌ BAD: `tests/luca_core/` (shadows the real package)
+- ✅ GOOD: `tests/luca_core_pkgtests/` (no collision)
+- ✅ GOOD: `tests/core/` (different name)
+
+For detailed analysis, see: `RESEARCH/module-import-ci-failures/2025-05-18-module-import-shadows.md`
+
+### Real Execution Tests
+
+Some tests require real function execution instead of mocked responses. These tests should be marked with `pytest.mark.real_exec`:
+
+```python
+import pytest
+
+@pytest.mark.real_exec
+def test_registry_execute():
+    """Test that requires real execution, not mocked."""
+    pass
+```
+
+In CI and Docker environments, these tests are handled separately to avoid conflicts with mocked test environments.
+
 ### AutoGen Mocking Behavior
 
 AUTOGEN_USE_MOCK_RESPONSE is process-wide. Mock-dependent tests run in a dedicated pytest invocation. Do not rely on per-test markers.
 
-In CI, tests are split into two separate pytest runs:
+In CI, tests are split into three separate pytest runs:
 1. Tests that need AutoGen mocking (`tests/tools/` and `tests/test_mcp_integration.py`) - run with `AUTOGEN_USE_MOCK_RESPONSE=1`
-2. All other tests - run without the mock environment variable
+2. Tests requiring real execution (`pytest -m real_exec`) - run with real AutoGen
+3. All other tests - run without the mock environment variable
 
 If you add new tests that depend on AutoGen mocking, they must be placed in the appropriate directory or explicitly listed in the CI workflow.
 
