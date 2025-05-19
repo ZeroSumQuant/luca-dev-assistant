@@ -3,22 +3,8 @@
 
 ### Bug Fixes
 
-* add package installation to CI and Docker test ([06b6401](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/06b64015cc77387fc627023c4c548721d28cc2dc))
-* add PYTHONPATH to Docker test environment ([5191d6a](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/5191d6ac07ccf534917e1c4b20d96b11edec8155))
 * add system dependencies for psutil compilation ([f901a72](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/f901a721800bfd505fd39e756118ea58fa80e444))
-* apply targeted fix for AutoGen mocking interference in CI tests ([fd25a48](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/fd25a48405f662c4c54a714f1b11b5936f0d5972)), closes [#76](https://github.com/ZeroSumQuant/luca-dev-assistant/issues/76)
 * de-duplicate skipif decorator in sandbox timeout test ([2596885](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/259688569402d76ce4693eea5473210c07b277b1))
-* improve module installation and test configuration ([995703b](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/995703b019a3cf0f45b31b6671f2f982d0e3f88d))
-* install package and dev requirements in CI ([0a4195e](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/0a4195e26ddca83698fbc1b34b47b255cbc92eb6))
-* mark registry tests as real_exec and skip them in Docker ([4ccd130](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/4ccd1300365551573d7f62f8a9c57f5face53f77))
-* properly isolate test steps to prevent env var bleed ([01dad8f](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/01dad8f9feb35ba4b3b3cdb78ced06ad97ae4902))
-* remove pythonpath configuration causing site-packages isolation ([39e0337](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/39e0337794fa3da2e18053a2a6c6be3791e4cdc0))
-* run registry tests first and set env var to "0" not empty ([0c5dc01](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/0c5dc014c847bc0db8d9863022bbef5c95edb674))
-* **tests:** rename tests/luca_core to tests/luca_core_pkgtests to avoid import collision ([6af27e9](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/6af27e9f9661cf620ac701fb9e3f2b33a9e17ffd)), closes [#76](https://github.com/ZeroSumQuant/luca-dev-assistant/issues/76)
-* update failing tests and fix mypy errors\n\n- Fix async execution in test_process_coroutine_execution\n- Fix module execution test to handle mocking properly\n- Fix registry parameter extraction test (expected default value)\n- Fix registry execute tests to use globals() for function lookup\n- Fix whitespace issue in test_main.py\n- Fix mypy type errors in test_base_store.py by adding TypeVar\n- Update method signatures to match base class properly ([3b4f37c](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/3b4f37c150e75ad078559051ac89e3cb4c0d3c8b))
-* update tests to match actual ContextStore behavior ([2e0bf97](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/2e0bf97e42c8da4ecb369444dcba44c689b6749e))
-* use separate pytest configs for better test isolation ([be38405](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/be38405a6ec3de3ec8926a47df1d6cc0eab7626c))
-* use separate pytest runs for mocked vs real tests + fix mypy errors ([d8c82a1](https://github.com/ZeroSumQuant/luca-dev-assistant/commit/d8c82a1c9528da6fed8020977ec709b4702f5d27))
 
 
 ### Features
