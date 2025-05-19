@@ -48,6 +48,18 @@
   - Created comprehensive research document: `RESEARCH/module-import-ci-failures/2025-05-18-module-import-shadows.md`
   - Created detailed handoff: `docs/handoff/2025-05-18-2.md`
   - Key commits:
+    - f8e09a0: Fix module import errors by renaming test directory
+    - 6b79f1f: Mark registry tests with real_exec for proper test isolation
+    - 23a69e3: Update CI workflow to properly separate mocked vs real tests
+    - 0e2a53c: Configure Docker tests to skip real_exec marked tests
+    
+- **Night — Knowledge preservation confirmed** – documented insights for future use:
+  - All debugging insights preserved in searchable documentation
+  - Research folder contains deep technical analyses
+  - Handoff documents provide implementation details
+  - Task logs updated with complete resolution history
+  - PR description contains full context and solution explanation
+  - Knowledge is available for future sessions via CLAUDE.md and searchable codebase
     - 6af27e9: Renamed test directory to avoid import collision
     - 4ccd130: Marked registry tests and updated Docker config
     - 6c7d755: Fixed CI workflow test separation
