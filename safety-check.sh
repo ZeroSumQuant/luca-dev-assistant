@@ -75,16 +75,9 @@ echo -e "${GREEN}✓ Tests passed with ≥95% coverage${NC}"
 
 # 8. Documentation check
 echo -e "${YELLOW}Checking documentation...${NC}"
-TODAY=$(date +%Y-%m-%d)
-if ! grep -q "$TODAY" docs/task_log.md; then
-    echo -e "${RED}❌ Task log not updated for today!${NC}"
-    echo "Update: docs/task_log.md"
+if ! ./verify-docs.sh; then
+    echo -e "${RED}❌ Documentation check failed!${NC}"
     exit 1
-fi
-
-if ! ls docs/handoff/${TODAY}*.md >/dev/null 2>&1; then
-    echo -e "${YELLOW}⚠️  Warning: No handoff document for today${NC}"
-    echo "Create: docs/handoff/${TODAY}-1.md"
 fi
 echo -e "${GREEN}✓ Documentation check passed${NC}"
 

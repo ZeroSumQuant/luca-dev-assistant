@@ -168,7 +168,18 @@ LUCA excels at a wide range of development tasks:
 
 ## Contributing
 
-Pull requests welcome—run `make test && make lint` first. 🤝🔧📤
+Pull requests welcome! Please run `make all` before submitting to ensure all checks pass. 🤝🔧📤
+
+### Available Make Commands
+
+- `make all` - Run full safety check (lint, test, docs)
+- `make test` - Run all tests with LUCA_TESTING environment
+- `make lint` - Run black, isort, flake8, and bandit
+- `make safety` - Run safety-check.sh script
+- `make clean` - Remove generated files and caches
+- `make docs` - Check documentation is current
+- `make test-docker` - Run tests in Docker container
+- `make help` - Display available commands
 
 ---
 
