@@ -29,7 +29,19 @@ if [[ -z "${VIRTUAL_ENV:-}" ]]; then
 fi
 echo -e "${GREEN}✓ Virtual environment active${NC}"
 
-# 3. Code formatting check
+# 3. Python version check
+echo -e "${YELLOW}Checking Python version...${NC}"
+PYTHON_VERSION=$(python3 --version | cut -d' ' -f2)
+REQUIRED_VERSION="3.13"
+if [[ ! "$PYTHON_VERSION" =~ ^$REQUIRED_VERSION ]]; then
+    echo -e "${RED}❌ FATAL: Wrong Python version!${NC}"
+    echo "Required: Python $REQUIRED_VERSION"
+    echo "Current: Python $PYTHON_VERSION"
+    exit 1
+fi
+echo -e "${GREEN}✓ Python $PYTHON_VERSION${NC}"
+
+# 4. Code formatting check
 echo -e "${YELLOW}Running black formatter...${NC}"
 if ! python3 -m black --check .; then
     echo -e "${RED}❌ Code formatting issues detected!${NC}"
@@ -38,7 +50,7 @@ if ! python3 -m black --check .; then
 fi
 echo -e "${GREEN}✓ Black formatting passed${NC}"
 
-# 4. Import sorting check
+# 5. Import sorting check
 echo -e "${YELLOW}Running isort...${NC}"
 if ! python3 -m isort --check-only .; then
     echo -e "${RED}❌ Import ordering issues detected!${NC}"
@@ -47,7 +59,7 @@ if ! python3 -m isort --check-only .; then
 fi
 echo -e "${GREEN}✓ Import sorting passed${NC}"
 
-# 5. Linting check
+# 6. Linting check
 echo -e "${YELLOW}Running flake8...${NC}"
 if ! flake8; then
     echo -e "${RED}❌ Linting errors detected!${NC}"
@@ -55,7 +67,7 @@ if ! flake8; then
 fi
 echo -e "${GREEN}✓ Linting passed${NC}"
 
-# 6. Security check
+# 7. Security check
 echo -e "${YELLOW}Running security scan...${NC}"
 if ! bandit -c pyproject.toml -r luca_core/ -ll; then
     echo -e "${RED}❌ Security issues detected!${NC}"
@@ -63,7 +75,7 @@ if ! bandit -c pyproject.toml -r luca_core/ -ll; then
 fi
 echo -e "${GREEN}✓ Security scan passed${NC}"
 
-# 7. Tests with coverage
+# 8. Tests with coverage
 echo -e "${YELLOW}Running tests with coverage...${NC}"
 if ! python3 -m pytest --cov=luca_core --cov=app --cov=tools --cov-fail-under=95 -q; then
     echo -e "${RED}❌ Tests failed or coverage below 95%!${NC}"
@@ -73,7 +85,7 @@ if ! python3 -m pytest --cov=luca_core --cov=app --cov=tools --cov-fail-under=95
 fi
 echo -e "${GREEN}✓ Tests passed with ≥95% coverage${NC}"
 
-# 8. Documentation check
+# 9. Documentation check
 echo -e "${YELLOW}Checking documentation...${NC}"
 if ! ./verify-docs.sh; then
     echo -e "${RED}❌ Documentation check failed!${NC}"
