@@ -105,6 +105,15 @@ class TestToolExecute:
             globals()["example_tool"], unittest.mock.MagicMock
         ), "Tool unexpectedly mocked—check AUTOGEN_USE_MOCK_RESPONSE"
 
+        # Debug what's in the registry
+        print(f"Registry tools: {list(self.registry.tools.keys())}")
+        if "example_tool" in self.registry.tools:
+            tool_reg = self.registry.tools["example_tool"]
+            print(f"Tool function_reference: {tool_reg.function_reference}")
+            print(
+                f"Tool parameters: {[p.name for p in tool_reg.specification.parameters]}"
+            )
+
         result = self.registry.execute_tool(
             "example_tool", {"message": "Hello", "count": 3}
         )
