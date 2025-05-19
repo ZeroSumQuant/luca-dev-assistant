@@ -96,7 +96,7 @@ jobs:
           AUTOGEN_USE_MOCK_RESPONSE: "0"
           
       - name: 🔧 Mocked AutoGen tests
-        run: pytest -q tests/tools tests/test_mcp_integration.py -m "not skip_ci" --cov=luca_core --cov=app --cov=tools --cov-config=.coveragerc
+        run: pytest -q tests/tools tests/test_mcp_integration.py -m "not skip_ci" --cov=luca_core --cov=app --cov=tools --cov-config=.coveragerc --cov-append
         env:
           LUCA_TESTING: 1
           CI: true
@@ -109,11 +109,17 @@ jobs:
             --ignore=tests/test_mcp_integration.py \
             --ignore=tests/core/test_registry_execute.py \
             -m "not skip_ci" \
-            --cov=luca_core --cov=app --cov=tools --cov-config=.coveragerc
+            --cov=luca_core --cov=app --cov=tools --cov-config=.coveragerc --cov-append
         env:
           LUCA_TESTING: 1
           CI: true
           AUTOGEN_USE_MOCK_RESPONSE: "0"
+
+      - name: 📊 Coverage report
+        run: |
+          python -m coverage report --fail-under=95
+          python -m coverage html
+        if: always()
 
       - name: Docker build
         uses: docker/build-push-action@v5
