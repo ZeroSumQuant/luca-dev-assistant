@@ -8,7 +8,12 @@ class TestContextCoverage:
 
     def test_project_export_ticket(self):
         """Test export_ticket method."""
-        project = Project(id="proj-123", name="Test Project", user_id="user-456")
+        project = Project(
+            id="proj-123",
+            name="Test Project",
+            description="Test project description",
+            domain="test-domain",
+        )
 
         ticket = project.export_ticket()
         assert ticket == "Ticket for project Test Project (ID: proj-123)"

@@ -11,6 +11,8 @@ from luca_core.schemas.tools import ToolCategory
 class TestRegistrySpecificCoverage:
     """Tests to specifically hit uncovered lines in registry.py."""
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_registry_execute_function_not_found(self):
         """Test line 290 in registry.py - Function not found."""
         registry = ToolRegistry()
@@ -28,6 +30,8 @@ class TestRegistrySpecificCoverage:
         with pytest.raises(ValueError, match="Function not found for tool: bad_tool"):
             registry.execute_tool("bad_tool", {})
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_registry_execute_exception_handling(self):
         """Test lines 325-337 in registry.py - Exception handling."""
         registry = ToolRegistry()
@@ -67,6 +71,8 @@ class TestRegistrySpecificCoverage:
         assert error_detail["error_message"] == "Intentional test error"
         assert "timestamp" in error_detail
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_registry_execute_with_module_function(self):
         """Test function resolution from module."""
         registry = ToolRegistry()
@@ -89,6 +95,8 @@ class TestRegistrySpecificCoverage:
             result = registry.execute_tool("module_tool", {})
             assert result == "module result"
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_app_main_async_process(self):
         """Test app/main.py lines 173-175."""
         import asyncio

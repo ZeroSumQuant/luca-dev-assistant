@@ -1,6 +1,12 @@
 """Tests to improve coverage for agent schemas."""
 
-from luca_core.schemas.agent import Agent, AgentConfig
+from luca_core.schemas.agent import (
+    Agent,
+    AgentCapability,
+    AgentConfig,
+    AgentRole,
+    LLMModelConfig,
+)
 
 
 class TestAgentCoverage:
@@ -8,16 +14,20 @@ class TestAgentCoverage:
 
     def test_agent_get_description(self):
         """Test get_agent_description method."""
+        llm_config = LLMModelConfig(model_name="test-model")
+
         config = AgentConfig(
+            id="test-agent-id",
             name="TestAgent",
-            role="Tester",
+            role=AgentRole.TESTER,
             description="A test agent",
-            capabilities=["testing"],
-            model="test-model",
-            max_tasks=5,
+            llm_config=llm_config,
+            system_prompt="You are a test agent",
+            capabilities=[AgentCapability.TESTING],
+            max_consecutive_auto_reply=5,
         )
 
-        agent = Agent(id="test-123", config=config)
+        agent = Agent(config=config)
 
         description = agent.get_agent_description()
-        assert description == "TestAgent (Tester): A test agent"
+        assert description == f"TestAgent ({AgentRole.TESTER}): A test agent"

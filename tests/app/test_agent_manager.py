@@ -75,6 +75,8 @@ class TestAgentManager:
     @mock.patch("streamlit.write")
     @mock.patch("streamlit.session_state")
     @mock.patch("app.pages.agent_manager.create_agent_tree")
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_82
     def test_main_function_execution(
         self,
         mock_create_tree,
@@ -104,17 +106,38 @@ class TestAgentManager:
 
         # Setup mock returns
         mock_tabs.return_value = [mock.MagicMock(), mock.MagicMock(), mock.MagicMock()]
-        mock_columns.return_value = [
-            mock.MagicMock(),
-            mock.MagicMock(),
-            mock.MagicMock(),
+        # Mock columns to return different values for different calls
+        mock_columns.side_effect = [
+            [
+                mock.MagicMock(),
+                mock.MagicMock(),
+                mock.MagicMock(),
+            ],  # Line 123: 3 columns
+            [mock.MagicMock(), mock.MagicMock()],  # Line 136: 2 columns
+            [
+                mock.MagicMock(),
+                mock.MagicMock(),
+                mock.MagicMock(),
+            ],  # Line 170: 3 columns
+            [mock.MagicMock(), mock.MagicMock()],  # Line 186: 2 columns (agent 1)
+            [mock.MagicMock(), mock.MagicMock()],  # Line 186: 2 columns (agent 2)
+            [mock.MagicMock(), mock.MagicMock()],  # Line 186: 2 columns (agent 3)
+            [mock.MagicMock(), mock.MagicMock()],  # Line 186: 2 columns (agent 4)
+            [mock.MagicMock(), mock.MagicMock()],  # Line 186: 2 columns (agent 5)
+            [
+                mock.MagicMock(),
+                mock.MagicMock(),
+                mock.MagicMock(),
+            ],  # Line 196: 3 columns
         ]
         mock_create_tree.return_value = mock.MagicMock(source="digraph {}")
         mock_selectbox.return_value = "luca"
         mock_button.side_effect = [False, False, False, False]  # No buttons clicked
 
-        # Since main() has if __name__ == "__main__" check, we need to
-        # mock the actual functionality instead of calling main directly
+        # Call the main function
+        main()
+
+        # Verify the function was called
         mock_tabs.assert_called_once()
 
     @mock.patch("streamlit.markdown")

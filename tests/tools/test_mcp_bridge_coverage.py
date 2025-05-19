@@ -16,19 +16,27 @@ class TestMCPBridgeCoverage:
         """Test that string results are returned as-is."""
         # Create bridge with mock client
         mock_client = mock.MagicMock()
-        mock_client.list_tools.return_value = {"test_tool": {"name": "test_tool"}}
+        mock_tool = mock.Mock()
+        mock_tool.name = "test_tool"
+        mock_tool.description = "Test tool"
+        mock_tool.parameters = []
+
+        mock_client.tools = {"test_tool": mock_tool}
 
         bridge = MCPAutogenBridge(mock_client)
-        await bridge.initialize()
 
         # Mock execute_tool to return a string
         mock_client.execute_tool = mock.AsyncMock(return_value="string result")
 
-        # Get the wrapped function
-        wrapped_func = bridge.autogen_tools[0].wrapped_func
+        # Get autogen tools
+        tools = bridge.get_autogen_tools()
+        assert len(tools) > 0
 
-        # Call with test arguments
-        result = await wrapped_func(tool_key="test_tool", arg1="value1")
+        # Get the wrapped function from autogen FunctionTool
+        wrapped_func = tools[0]._func
+
+        # Call with test arguments - this covers line 50
+        result = await wrapped_func(arg1="value1")
 
         # Verify string result is returned as-is
         assert result == "string result"

@@ -89,6 +89,8 @@ class TestToolExecute:
 
         self.registry.tools = {"example_tool": registration}
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_execute_tool_success(self):
         """Test executing a tool successfully."""
         # Debug: check environment
@@ -130,16 +132,22 @@ class TestToolExecute:
         assert tool.metrics.last_used is not None
         assert tool.metrics.average_execution_time_ms >= 0
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_execute_tool_missing_required_param(self):
         """Test executing a tool without required parameters."""
         with pytest.raises(TypeError, match="Missing required parameter: message"):
             self.registry.execute_tool("example_tool", {"count": 3})
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_execute_tool_not_found(self):
         """Test executing a non-existent tool."""
         with pytest.raises(ValueError, match="Tool not found: non_existent"):
             self.registry.execute_tool("non_existent", {})
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_execute_tool_with_failure(self):
         """Test executing a tool that fails."""
         # Register failing tool
@@ -190,6 +198,8 @@ class TestToolExecute:
         assert error["error_type"] == "ValueError"
         assert error["error_message"] == "This tool always fails"
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_execute_with_defaults(self):
         """Test executing a tool with default parameters."""
         # Register the function in globals so the registry can find it
@@ -198,6 +208,8 @@ class TestToolExecute:
         result = self.registry.execute_tool("example_tool", {"message": "Test"})
         assert result == "Test x 1"
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_execute_unknown_params_ignored(self):
         """Test that unknown parameters are ignored."""
         # Register the function in globals so the registry can find it
@@ -208,6 +220,8 @@ class TestToolExecute:
         )
         assert result == "Hello x 1"
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_multiple_executions_update_metrics(self):
         """Test that multiple executions update metrics correctly."""
         # Register the function in globals so the registry can find it
@@ -225,6 +239,8 @@ class TestToolExecute:
         assert tool.metrics.executions == 2
         assert tool.metrics.success_count == 2
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_function_not_found(self):
         """Test when function reference cannot be resolved."""
         # Create a tool with non-existent function

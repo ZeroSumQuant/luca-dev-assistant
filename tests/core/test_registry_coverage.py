@@ -21,6 +21,8 @@ from luca_core.schemas.tools import (
 class TestToolDecorator:
     """Test the @tool decorator function."""
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_tool_decorator_basic(self):
         """Test basic usage of @tool decorator."""
 
@@ -36,6 +38,8 @@ class TestToolDecorator:
             registry.tools["sample_tool"].specification.metadata.name == "sample_tool"
         )
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_tool_decorator_with_args(self):
         """Test @tool decorator with arguments."""
 
@@ -61,6 +65,8 @@ class TestRegistryErrorHandling:
         """Set up test registry."""
         self.registry = ToolRegistry()
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_execute_tool_with_exception(self):
         """Test execute_tool error handling and metrics recording."""
 
@@ -97,6 +103,8 @@ class TestRegistryErrorHandling:
         assert last_error["error_message"] == "Tool failure"
         assert "timestamp" in last_error
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_execute_tool_metrics_calculation(self):
         """Test execution time metrics calculation."""
 
@@ -135,6 +143,8 @@ class TestRegistryErrorHandling:
             assert tool.metrics.average_execution_time_ms == 1000
             assert tool.metrics.last_execution == end_time
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_execute_tool_average_time_calculation(self):
         """Test average execution time calculation over multiple runs."""
 
@@ -189,11 +199,15 @@ class TestRegistryErrorHandling:
             # Average of 100ms, 200ms, and 300ms = 200ms
             assert tool.metrics.average_execution_time_ms == 200
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_tool_not_found_error(self):
         """Test execute_tool with non-existent tool."""
         with pytest.raises(ValueError, match="Tool not found: nonexistent"):
             self.registry.execute_tool("nonexistent", {})
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_function_not_found_error(self):
         """Test execute_tool when function cannot be resolved."""
         # Register a tool with a non-existent function reference

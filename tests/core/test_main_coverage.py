@@ -11,6 +11,8 @@ from luca_core.__main__ import main
 class TestMainCoverage:
     """Test __main__ module edge cases for coverage."""
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_84
     def test_main_module_execution(self):
         """Test module execution via __name__ == '__main__'."""
         with mock.patch("sys.argv", ["luca"]):

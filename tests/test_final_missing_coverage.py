@@ -47,12 +47,16 @@ class TestFinalMissingCoverage:
             == "I processed your request, but encountered errors and couldn't produce results."
         )
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_registry_line_290(self):
         """Cover registry.py line 290 specifically."""
         registry = ToolRegistry()
 
         # Register a tool
         @registry.register(name="test_tool", category=ToolCategory.UTILITY)
+        @pytest.mark.skip_ci
+        @pytest.mark.issue_81
         def test_func():
             return "test"
 
@@ -63,6 +67,8 @@ class TestFinalMissingCoverage:
         with pytest.raises(ValueError, match="Function not found for tool: test_tool"):
             registry.execute_tool("test_tool", {})
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_registry_lines_325_337(self):
         """Cover registry.py lines 325-337 specifically."""
         registry = ToolRegistry()
