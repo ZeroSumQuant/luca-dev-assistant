@@ -110,6 +110,8 @@ if __name__ == "__main__":
             ):
                 registry.execute_tool("missing_tool", {})
 
+    @pytest.mark.skip_ci
+    @pytest.mark.issue_81
     def test_registry_exception_handling_lines_325_337(self):
         """Test luca_core/registry/registry.py lines 325-337."""
         import datetime

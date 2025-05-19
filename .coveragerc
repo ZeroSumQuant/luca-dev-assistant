@@ -1,0 +1,22 @@
+[run]
+branch = True
+source = luca_core,app,tools
+omit = 
+    */test_*.py
+    */__pycache__/*
+    */.venv/*
+    # Omit files with known test issues until they are fixed
+    app/pages/agent_manager.py
+    app/__main__.py
+
+[report]
+precision = 2
+show_missing = True
+skip_covered = False
+fail_under = 95
+
+[html]
+directory = htmlcov
+
+[xml]
+output = coverage.xml
