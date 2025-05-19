@@ -13,6 +13,7 @@ omit =
 precision = 2
 show_missing = True
 skip_covered = False
+fail_under = 95
 
 [html]
 directory = htmlcov
