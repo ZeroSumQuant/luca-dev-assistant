@@ -181,6 +181,22 @@ Pull requests welcome! Please run `make all` before submitting to ensure all che
 - `make test-docker` - Run tests in Docker container
 - `make help` - Display available commands
 
+### Git Hooks
+
+To install git hooks that enforce safety standards:
+
+```bash
+./hooks/install.sh
+```
+
+This installs a pre-push hook that runs `safety-check.sh` before allowing pushes, ensuring:
+- Tests pass with ≥95% coverage
+- Code is properly formatted and linted
+- Documentation is updated
+- Security scans pass
+
+See `hooks/README.md` for more details.
+
 ---
 
 ## License
