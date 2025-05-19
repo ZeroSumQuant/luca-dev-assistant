@@ -49,8 +49,6 @@ class TestFinalCoverage:
             == "I processed your request, but encountered errors and couldn't produce results."
         )
 
-    @pytest.mark.skip_ci
-    @pytest.mark.issue_84
     def test_registry_function_not_found_coverage(self):
         """Test registry function not found to cover line 290."""
         registry = ToolRegistry()
@@ -69,8 +67,6 @@ class TestFinalCoverage:
         ):
             registry.execute_tool("missing_func_tool", {})
 
-    @pytest.mark.skip_ci
-    @pytest.mark.issue_84
     def test_registry_error_metrics_coverage(self):
         """Test registry error metrics to cover lines 325-337."""
         registry = ToolRegistry()
