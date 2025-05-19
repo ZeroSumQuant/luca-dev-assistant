@@ -97,6 +97,17 @@ jobs:
           echo "=== DEBUG TEST ENVIRONMENT ==="
           echo "CWD: $(pwd)"
           echo "PYTHONPATH: $PYTHONPATH"
+          echo "PYTHONSAFEPATH=${PYTHONSAFEPATH:-<unset>}"
+          echo "PYTHONNOUSERSITE=${PYTHONNOUSERSITE:-<unset>}"
+          echo "VIRTUAL_ENV=${VIRTUAL_ENV:-<unset>}"
+          python - <<'PY'
+          import sys, site, os, pprint
+          print("ENABLE_USER_SITE:", site.ENABLE_USER_SITE)
+          print("site.getsitepackages():", site.getsitepackages())
+          print("sys.path[:8]:", sys.path[:8])
+          print("sys.flags:", sys.flags)
+          print("argv0:", sys.argv[0])
+          PY
           python -c "import sys; print('sys.path[0:5]:', sys.path[:5])"
           python -c "import luca_core; print('luca_core location:', luca_core.__file__)"
           echo "=== RUNNING TESTS ==="
