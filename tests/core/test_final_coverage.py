@@ -82,14 +82,14 @@ class TestFinalCoverage:
         def error_func():
             raise RuntimeError("Test error")
 
-        # Attach the function directly to the test module for discovery
-        setattr(sys.modules[__name__], "error_func_unique_test", error_func)
+        # Force the function into globals to ensure it's found
+        globals()["error_func_unique_test"] = error_func
 
         # Update the function reference
         registry.tools["error_tool"].function_reference = "error_func_unique_test"
 
         # Execute and catch exception
-        with pytest.raises(RuntimeError):
+        with pytest.raises(RuntimeError, match="Test error"):
             registry.execute_tool("error_tool", {})
 
         # Check metrics were updated (lines 327-335)

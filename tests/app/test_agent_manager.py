@@ -140,6 +140,15 @@ class TestAgentManager:
         # Verify the function was called
         mock_tabs.assert_called_once()
 
+    @mock.patch("streamlit.columns")
+    @mock.patch("streamlit.container")
+    @mock.patch("streamlit.multiselect")
+    @mock.patch("streamlit.radio")
+    @mock.patch("streamlit.form")
+    @mock.patch("streamlit.info")
+    @mock.patch("streamlit.form_submit_button")
+    @mock.patch("streamlit.button")
+    @mock.patch("streamlit.selectbox")
     @mock.patch("streamlit.markdown")
     @mock.patch("streamlit.write")
     @mock.patch("streamlit.error")
@@ -156,13 +165,43 @@ class TestAgentManager:
         mock_error,
         mock_write,
         mock_markdown,
+        mock_selectbox,
+        mock_button,
+        mock_form_submit_button,
+        mock_info,
+        mock_form,
+        mock_radio,
+        mock_multiselect,
+        mock_container,
+        mock_columns,
     ):
         """Test error handling in tree visualization."""
         from app.pages.agent_manager import main
 
         # Mock tabs
         mock_tab1 = mock.MagicMock()
-        mock_tabs.return_value = [mock_tab1, mock.MagicMock(), mock.MagicMock()]
+        mock_tab2 = mock.MagicMock()
+        mock_tab3 = mock.MagicMock()
+        mock_tabs.return_value = [mock_tab1, mock_tab2, mock_tab3]
+
+        # Mock columns
+        mock_columns.return_value = [
+            mock.MagicMock(),
+            mock.MagicMock(),
+            mock.MagicMock(),
+        ]
+
+        # Mock form context
+        mock_form_context = mock.MagicMock()
+        mock_form.return_value.__enter__ = mock.MagicMock(
+            return_value=mock_form_context
+        )
+        mock_form.return_value.__exit__ = mock.MagicMock(return_value=None)
+
+        # Mock button returns
+        mock_button.side_effect = [False, False, False, False]
+        mock_form_submit_button.return_value = False
+        mock_selectbox.return_value = "luca"
 
         # Make create_agent_tree raise an exception
         mock_create_tree.side_effect = Exception("Test error")
