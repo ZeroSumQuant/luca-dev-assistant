@@ -108,19 +108,34 @@ jobs:
           PY
           python -c "import sys; print('sys.path[0:5]:', sys.path[:5])"
           python -c "import luca_core; print('luca_core location:', luca_core.__file__)"
-          echo "=== DIAGNOSING PACKAGE SHADOWING ==="
+          echo "=== DIAGNOSING PACKAGE STRUCTURE ==="
           python - <<'PY'
           import importlib, pkg_resources, sys, os
           import luca_core
-          print("Imported object:", luca_core)
-          print("Module type   :", type(luca_core))
-          print("Location      :", luca_core.__file__)
-          print("Is package?   :", hasattr(luca_core, "__path__"))
-          print("sys.path rank :", next(i for i,p in enumerate(sys.path) if luca_core.__file__.startswith(p)))
-          print("Installed dists with 'luca' in name:")
-          for dist in pkg_resources.working_set:
-              if 'luca' in dist.key:
-                  print("  ", dist.key, dist.version, dist.location)
+          print("luca_core location:", luca_core.__file__)
+          print("luca_core __path__:", getattr(luca_core, '__path__', 'NO PATH'))
+          print("\nTrying to import submodules directly:")
+          try:
+              import luca_core.schemas
+              print("SUCCESS: luca_core.schemas imported")
+          except ImportError as e:
+              print("FAILED: luca_core.schemas -", e)
+          
+          print("\nChecking sys.path order:")
+          for i, p in enumerate(sys.path[:7]):
+              if os.path.exists(p):
+                  schemas_path = os.path.join(p, 'luca_core', 'schemas')
+                  print(f"[{i}] {p}")
+                  print(f"    Has luca_core/schemas?: {os.path.exists(schemas_path)}")
+          
+          print("\nDirectory structure from current dir:")
+          for root, dirs, files in os.walk('./luca_core'):
+              level = root.replace('./luca_core', '').count(os.sep)
+              indent = '  ' * level
+              print(f"{indent}{os.path.basename(root)}/")
+              for f in files[:2]:
+                  if f.endswith('.py'):
+                      print(f"{indent}  {f}")
           PY
           echo "=== RUNNING TESTS ==="
           python -m pytest -q --timeout=60 --timeout_method=thread \
