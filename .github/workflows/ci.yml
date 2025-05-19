@@ -28,7 +28,14 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
           python -m pip install -r requirements-dev.txt
+          python -m pip install pytest-cov  # Explicitly ensure pytest-cov is installed
           python -m pip install -e .
+          
+      - name: Verify pytest-cov installation
+        run: |
+          python -c "import pytest_cov; print('pytest-cov is installed')"
+          python -m pytest --version
+          python -m pip list | grep pytest
           
       - name: Verify luca_core install (DIAGNOSTIC)
         run: |
@@ -82,14 +89,14 @@ jobs:
       - name: 🛠  Real-execution tests (no AutoGen)
         run: |
           echo "AUTOGEN_USE_MOCK_RESPONSE=${AUTOGEN_USE_MOCK_RESPONSE}"
-          python -m pytest -v -s tests/core/test_registry_execute.py --timeout=60 --timeout_method=thread -m "not skip_ci" --cov-config=.coveragerc
+          python -m pytest -v -s tests/core/test_registry_execute.py --timeout=60 --timeout_method=thread -m "not skip_ci" --cov=luca_core --cov=app --cov=tools --cov-config=.coveragerc
         env:
           LUCA_TESTING: 1
           CI: true
           AUTOGEN_USE_MOCK_RESPONSE: "0"
           
       - name: 🔧 Mocked AutoGen tests
-        run: pytest -q tests/tools tests/test_mcp_integration.py -m "not skip_ci" --cov-config=.coveragerc
+        run: pytest -q tests/tools tests/test_mcp_integration.py -m "not skip_ci" --cov=luca_core --cov=app --cov=tools --cov-config=.coveragerc
         env:
           LUCA_TESTING: 1
           CI: true
@@ -102,7 +109,7 @@ jobs:
             --ignore=tests/test_mcp_integration.py \
             --ignore=tests/core/test_registry_execute.py \
             -m "not skip_ci" \
-            --cov-config=.coveragerc
+            --cov=luca_core --cov=app --cov=tools --cov-config=.coveragerc
         env:
           LUCA_TESTING: 1
           CI: true
