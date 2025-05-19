@@ -36,3 +36,19 @@
   - Commit 995703b: Improved module installation and test configuration
   - All changes pushed to fix/module-import-errors branch
   - PR #76 updated with latest fixes
+
+- **Evening — SOLVED module import shadow issue** – major breakthrough:
+  - Root cause: `tests/luca_core/` directory was shadowing the real `luca_core` package
+  - pytest adds test directories to sys.path, causing import precedence issues
+  - Solution: renamed `tests/luca_core/` to `tests/luca_core_pkgtests/`
+  - Fixed AutoGen mocking interference by marking registry tests with `pytest.mark.real_exec`
+  - Separated CI test runs by mocking requirements
+  - Updated Docker configuration to skip real_exec tests
+  - Final status: ALL 230 TESTS PASSING in CI!
+  - Created comprehensive research document: `RESEARCH/module-import-ci-failures/2025-05-18-module-import-shadows.md`
+  - Created detailed handoff: `docs/handoff/2025-05-18-2.md`
+  - Key commits:
+    - 6af27e9: Renamed test directory to avoid import collision
+    - 4ccd130: Marked registry tests and updated Docker config
+    - 6c7d755: Fixed CI workflow test separation
+  - PR #76 now ready for merge with all CI checks passing
