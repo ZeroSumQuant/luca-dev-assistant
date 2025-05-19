@@ -108,6 +108,20 @@ jobs:
           PY
           python -c "import sys; print('sys.path[0:5]:', sys.path[:5])"
           python -c "import luca_core; print('luca_core location:', luca_core.__file__)"
+          echo "=== DIAGNOSING PACKAGE SHADOWING ==="
+          python - <<'PY'
+          import importlib, pkg_resources, sys, os
+          import luca_core
+          print("Imported object:", luca_core)
+          print("Module type   :", type(luca_core))
+          print("Location      :", luca_core.__file__)
+          print("Is package?   :", hasattr(luca_core, "__path__"))
+          print("sys.path rank :", next(i for i,p in enumerate(sys.path) if luca_core.__file__.startswith(p)))
+          print("Installed dists with 'luca' in name:")
+          for dist in pkg_resources.working_set:
+              if 'luca' in dist.key:
+                  print("  ", dist.key, dist.version, dist.location)
+          PY
           echo "=== RUNNING TESTS ==="
           python -m pytest -q --timeout=60 --timeout_method=thread \
             --ignore=tests/tools \
