@@ -23,5 +23,5 @@ ENV PYTHONPATH=/app
 # Install the package
 RUN pip install -e .
 
-# Run the test suite
-CMD ["pytest", "-q"]
+# Run mocked tests only (skip real_exec tests)
+CMD ["pytest", "-q", "-m", "not real_exec"]

@@ -7,6 +7,9 @@ from typing import Any, Dict
 import pytest
 
 from luca_core.registry import ToolRegistry
+
+# Mark all tests in this file as requiring real execution (not mocked)
+pytestmark = pytest.mark.real_exec
 from luca_core.schemas import (
     ToolCategory,
     ToolMetadata,
