@@ -1,5 +1,6 @@
 """Final tests to reach 95% coverage target."""
 
+import sys
 import unittest.mock as mock
 
 import pytest
@@ -58,8 +59,10 @@ class TestFinalCoverage:
         def placeholder():
             pass
 
-        # Update the function reference to something that doesn't exist
-        registry.tools["missing_func_tool"].function_reference = "non_existent_function"
+        # Update the function reference to something that truly doesn't exist
+        registry.tools["missing_func_tool"].function_reference = (
+            "really_unique_non_existent_function_12345"
+        )
 
         # This should raise ValueError on line 290
         with pytest.raises(
@@ -76,9 +79,9 @@ class TestFinalCoverage:
         def error_func():
             raise RuntimeError("Test error")
 
-        # Add to globals
-        globals()["error_func"] = error_func
-        registry.tools["error_tool"].function_reference = "error_func"
+        # Store the function in the test module so it can be found
+        sys.modules[__name__].error_func_unique_test = error_func
+        registry.tools["error_tool"].function_reference = "error_func_unique_test"
 
         # Execute and catch exception
         with pytest.raises(RuntimeError):
