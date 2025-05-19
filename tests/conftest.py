@@ -42,10 +42,7 @@ def pytest_configure(config):
 
     # Add CI-specific configurations
     if os.environ.get("CI") == "true":
-        # Consider mocking external API calls in CI
-        os.environ["AUTOGEN_USE_MOCK_RESPONSE"] = "1"
-
-        # Additional CI-specific settings could be added here
+        # CI-specific settings could be added here
         print("CI environment detected - applying special test configurations")
 
 

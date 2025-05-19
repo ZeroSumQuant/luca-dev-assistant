@@ -22,6 +22,46 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
+          python -m pip install -r requirements-dev.txt
+          python -m pip install -e .
+          
+      - name: Verify luca_core install (DIAGNOSTIC)
+        run: |
+          python - <<'PY'
+          import importlib.util, sys, os, pkg_resources, site, pprint
+          print("=== DIAGNOSTIC INFO FOR MODULE IMPORT ISSUE ===")
+          print("CWD:", os.getcwd())
+          print("sys.executable:", sys.executable)
+          print("sys.path[0:5]:", sys.path[:5])
+          print("site.getsitepackages():", site.getsitepackages())
+          print("\n=== Checking pkg_resources ===")
+          working_set_keys = [d.key for d in pkg_resources.working_set]
+          print("All packages:", working_set_keys[:10], "...")
+          print("luca packages:", [k for k in working_set_keys if 'luca' in k])
+          
+          print("\n=== Trying import luca_core ===")
+          spec = importlib.util.find_spec("luca_core")
+          print("spec:", spec)
+          if spec and spec.origin:
+              print("origin:", spec.origin)
+              print("submodule_search_locations:", spec.submodule_search_locations)
+          
+          try:
+              import luca_core
+              print("SUCCESS: luca_core imported from:", luca_core.__file__)
+              print("luca_core.__path__:", getattr(luca_core, '__path__', 'No __path__'))
+          except ImportError as e:
+              print("FAILED to import luca_core:", e)
+              
+          print("\n=== Checking directory structure ===")
+          for root, dirs, files in os.walk("luca_core"):
+              level = root.replace("luca_core", "").count(os.sep)
+              indent = " " * 2 * level
+              print(f"{indent}{os.path.basename(root)}/")
+              subindent = " " * 2 * (level + 1)
+              for file in files[:3]:  # Limit output
+                  print(f"{subindent}{file}")
+          PY
           
       - name: Display environment info
         run: |
@@ -30,14 +70,36 @@ jobs:
           python -m pip list
           # Verify pytest installation
           python -c "import pytest; print(f'Pytest version: {pytest.__version__}')"
+          # Verify luca_core installation
+          python -c "import luca_core; print(f'luca_core installed at: {luca_core.__file__}')"
+          python -c "from luca_core.schemas.base import SeverityLevel; print('luca_core imports working')"
       
-      - name: Run tests with timeout
+      - name: 🛠  Real-execution tests (no AutoGen)
         run: |
-          python -m pytest --timeout=60 --timeout_method=thread -v
+          echo "AUTOGEN_USE_MOCK_RESPONSE=${AUTOGEN_USE_MOCK_RESPONSE}"
+          python -m pytest -v -s tests/core/test_registry_execute.py --timeout=60 --timeout_method=thread
         env:
           LUCA_TESTING: 1
           CI: true
-          PYTHONPATH: .
+          AUTOGEN_USE_MOCK_RESPONSE: "0"
+          
+      - name: 🔧 Mocked AutoGen tests
+        run: pytest -q tests/tools tests/test_mcp_integration.py
+        env:
+          LUCA_TESTING: 1
+          CI: true
+          AUTOGEN_USE_MOCK_RESPONSE: "1"
+          
+      - name: 🧪 All other tests (no AutoGen imports)
+        run: |
+          python -m pytest -q --timeout=60 --timeout_method=thread \
+            --ignore=tests/tools \
+            --ignore=tests/test_mcp_integration.py \
+            --ignore=tests/core/test_registry_execute.py
+        env:
+          LUCA_TESTING: 1
+          CI: true
+          AUTOGEN_USE_MOCK_RESPONSE: "0"
 
       - name: Docker build
         uses: docker/build-push-action@v5

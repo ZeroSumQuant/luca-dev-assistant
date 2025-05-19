@@ -278,6 +278,7 @@ class ToolRegistry:
         # Get the function reference
         func_ref = tool.function_reference
         func = globals().get(func_ref)
+
         if not func:
             # When tools are registered from another module, we need to find them
             for module in sys.modules.values():

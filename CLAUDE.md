@@ -1,135 +1,191 @@
-# CLAUDE.md — LUCA Dev‑Assistant Rules (2025‑05‑12)
-*This file is auto‑loaded by Claude Desktop when the **luca‑dev‑assistant** repo is opened. Follow every rule herein before writing code, running shell commands, or suggesting tasks.*
+# CLAUDE.md — LUCA Development Protocol
 
-## 1 Quick Facts
-Key | Value
---- | ---
-**Project** | LUCA Dev Assistant
-**Repo root** | `/Users/dustinkirby/Documents/GitHub/luca-dev-assistant`
-**Stack** | Python 3.11 • Streamlit • AutoGen 0.5 • MCP
-**Branch scheme** | `feature/…`  `fix/…`  `claude‑YYYY‑MM‑DD‑…`
+**Version:** 3.0.0  
+**Updated:** 2025-05-17  
+**Criticality:** Life-safety system - zero defects required
 
-## 2 Startup Ritual (run once per session)
+---
+
+## 🚨 CRITICAL SAFETY CHECKS (RUN FIRST)
 
 ```bash
+# Create this immediately: safety-check.sh
+#!/bin/bash
+set -euo pipefail
+
+echo "🔐 Running LUCA Safety Protocol..."
+
+# Location verification
+[[ $PWD == "/Users/dustinkirby/Documents/GitHub/luca-dev-assistant" ]] || { echo "❌ Wrong directory!"; exit 1; }
+
+# Virtual environment check  
+[[ -n "${VIRTUAL_ENV:-}" ]] || { echo "❌ Virtual env not active!"; exit 1; }
+
+# Quality gates
+black . && isort . && flake8 || { echo "❌ Code quality failed!"; exit 1; }
+
+# Tests with 95% coverage
+pytest --cov=luca_core --cov=app --cov=tools --cov-fail-under=95 || { echo "❌ Tests/coverage failed!"; exit 1; }
+
+# Documentation check
+if ! grep -q "$(date +%Y-%m-%d)" docs/task_log.md; then
+    echo "❌ Update task log!"; exit 1
+fi
+
+echo "✅ All safety checks passed"
+```
+
+---
+
+## 📋 MANDATORY WORKFLOW
+
+### Every Session Start
+```bash
+cd /Users/dustinkirby/Documents/GitHub/luca-dev-assistant
+source .venv/bin/activate
+./safety-check.sh  # Must pass before any work
 pwd && git status && git branch -a && gh pr list --limit 10
 ```
 
-```execute_command
+### Before Every Commit
+1. Run `./safety-check.sh`
+2. Update `docs/task_log.md`
+3. Create `docs/handoff/YYYY-MM-DD-N.md`
+
+---
+
+## 🔧 AUTOMATION ISSUES TO CREATE
+
+### Priority 1: Critical Safety
+1. **Create safety-check.sh script**
+   - All quality gates in one command
+   - 95% coverage enforcement
+   - Documentation verification
+
+2. **Implement pre-push git hook**
+   - Prevent pushes without safety checks
+   - Block on test failures
+   - Require documentation updates
+
+3. **Add Makefile for standardization**
+   - Common commands: test, lint, safety
+   - Consistent interface
+   - Reduce command errors
+
+### Priority 2: Documentation
+1. **Automated documentation checker**
+   - Verify task_log.md updated
+   - Check handoff documents exist
+   - Block commits without docs
+
+2. **Coverage report generator**
+   - Track coverage trends
+   - Fail on decrease below 95%
+   - Generate badges
+
+### Priority 3: CI/CD
+1. **Create GitHub Actions workflow**
+   - Run all safety checks
+   - Test on Python 3.11
+   - Block merge on failures
+
+2. **Dependency security scanner**
+   - Check for vulnerabilities
+   - Automated updates
+   - Security alerts
+
+---
+
+## 📝 DOCUMENTATION FORMAT
+
+### Task Log (docs/task_log.md)
+```markdown
+## YYYY-MM-DD
+- **Changes**: Specific files modified
+- **Tests**: New tests added  
+- **Coverage**: Current percentage
+- **Issues**: Problems encountered
+- **Next**: Required follow-up
 ```
 
-*Purpose:* ensure you are in the repo root, know the active branch, and see current PRs/branches before proposing work.
+### Handoff (docs/handoff/YYYY-MM-DD-N.md)
+```markdown
+# Handoff: YYYY-MM-DD-N
 
-## 3 Command‑Execution Syntax
-Claude Desktop executes the preceding `bash` block **only** when it is followed by *an empty fenced block* labelled `execute_command`.
+## Completed
+- Feature/fix with file paths
+- Tests added (file:function)
+- Documentation updated
 
-```bash
-pytest -q
+## Status
+- Working: List features
+- Broken: Known issues
+- Blocked: Dependencies
+
+## Critical Notes
+- Security considerations
+- Breaking changes
+- Performance impacts
+
+## Next Session
+- Priority tasks
+- Required reviews
 ```
 
-```execute_command
-```
+---
 
-**Rules**
-1. **One atomic step per turn.** Chain with `&&` only if output is still readable.
-2. **Ask for confirmation** before destructive commands (delete, reset, deploy, DB migrate). If the user replies yes/✅, insert the `execute_command` block without further questions.
-3. Use `python3` exclusively—never call bare `python`.
+## 🎯 QUALITY REQUIREMENTS
 
-## 4 Assistant Behaviour Checklist
-# | MUST / MUST NOT
---- | ---
-1 | **Stay inside the repo** unless the user directs otherwise.
-2 | **Follow KISS & DRY.** Implement only what is requested; no speculative refactors.
-3 | **Add/adjust tests** in `tests/` for every new or changed function.
-4 | **Provide status summaries** after discovery phases (≤ 5 lines: *What I learned → Next step*).
-5 | **Ask when uncertain.** Never guess at repo state or feature intent.
-6 | **Never leak secrets.** Use `os.getenv("TOKEN")` placeholders.
-7 | **Document work** at session end → update `docs/task_log.md` & create `docs/handoff/YYYY‑MM‑DD‑N.md`. 
-   NOTE: task_log.md is large (400+ lines) with ordering issues. Consider creating `docs/task_log_2025_05.md` for May entries.
+- **Tests**: 95% coverage minimum
+- **Code**: Black, isort, flake8 clean
+- **Security**: Zero bandit findings
+- **Types**: Mypy clean (where used)
+- **Docs**: Always current
 
-## 5 Quality Gates (CI)
-* `black`, `isort`, `flake8` must pass.
-* `pytest -q` green, > 85 % coverage.
-* `bandit` medium+ issues block merge.
+---
 
-Run locally before committing:
+## 🚦 NAMING CONVENTIONS
 
-```bash
-black . && isort . && flake8 && pytest -q && bandit -c pyproject.toml -r src/ -ll
-```
+### Files
+- Python: `snake_case.py`
+- Tests: `test_module_feature.py`
+- Docs: `kebab-case.md`
 
-```execute_command
-```
+### Code
+- Classes: `PascalCase`
+- Functions: `snake_case`
+- Constants: `UPPER_SNAKE_CASE`
+- Private: `_leading_underscore`
 
-## 6 Git & PR Workflow
-1. Create a task branch (`claude-YYYY-MM-DD-topic`).
-2. Use Conventional Commits: `feat(scope): subject`.
-3. Squash‑merge via PR once CI is green and docs updated.
+### Branches
+- Features: `feature/description`
+- Fixes: `fix/issue-description`
+- Claude: `claude-YYYY-MM-DD-topic`
 
-## 6.1 Git Authentication Tips
+---
 
-### SSH Setup (Recommended)
-- Use SSH for Git operations: `git remote set-url origin git@github.com:username/repo.git`
-- Check authentication with: `gh auth status`
-- If using GitHub CLI, prefer: `gh repo clone repo-name` which automatically sets up SSH
+## ⚠️ NEVER DO
 
-### Common Issues
-- If encountering `could not read Username for 'https://github.com'`, switch to SSH URLs
-- Use `gh repo view --json sshUrl -q .sshUrl` to get the SSH URL for the current repo
-- Set Git to remember credentials: `git config --global credential.helper cache`
+- Skip tests
+- Ignore coverage drops
+- Commit without documentation
+- Push without safety checks
+- Disable security features
+- Trust user input
+- Log sensitive data
 
-## 7 AutoGen & MCP Notes
-* Import tools with `from autogen_core.tools import FunctionTool`.
-* Tool registry in `tools/autogen_tools.py`.
-* MCP bridge in `tools/mcp_autogen_bridge.py`.
+---
 
-"Let all things be done decently and in order." — 1 Cor 14:40
+## ✅ ALWAYS DO
 
-## 8 Docker Guidelines
+- Run safety-check.sh
+- Update documentation
+- Test edge cases
+- Handle all errors
+- Validate inputs
+- Use environment variables for secrets
+- Ask when uncertain
 
-* Build locally with DOCKER_BUILDKIT=1 and --platform linux/amd64; skip Desktop-Cloud.
-* Tag every image twice: one immutable tag that matches git describe --tags (e.g. v0.5.2) and the rolling tag latest.
-* Push the version tag first, then latest. Allow several minutes; never wrap the push in a timeout.
-* After pushing, refresh Docker Hub and confirm both tags show today's timestamp.
-* Nightly: if git describe --tags differs from the value stored in .last_docker_tag, rebuild and push both tags, then update .last_docker_tag.
+---
 
-## 9 Testing Guidelines
-
-* pytest-asyncio must remain in requirements.txt; CI fails without it.
-* CI runs on Python 3.13—pin plugin versions that are known-good for that runtime.
-* Integration tests needing a live MCP server stay skipped in CI; guard them with RUN_MCP_INTEGRATION=1.
-* Maintain overall coverage ≥ 90 %. Add happy-path and targeted error-branch tests—avoid bloat.
-
-## 10 Pre-commit and Linting
-
-* Ensure flake8 runs in the pre-commit hook; fix or ignore violations before every push.
-* Black is the authoritative formatter; let it run automatically on commit.
-
-## 11 Nightly Backup Routine
-
-* Run the full test suite, build and push Docker images as per section 8.
-* Create a tar-gz archive of the repo.
-* docker image prune -f to clear dangling layers.
-* Append one journal line to ~/worklogs/YYYY-MM.txt.
-
-## 12 Future Refactors
-
-* Expose a public executor property on FunctionTool; migrate tests off the private _func.
-* After any coverage-raising PR, bump the coverage gate in pyproject.toml so the bar never drops.
-
-## 13 Documentation Structure
-
-**Task Logs:**
-- Primary log: `docs/task_log.md` (400+ lines, historical entries)
-- Monthly logs: `docs/task_log_YYYY_MM.md` (started May 2025)
-- May 2025 onward: `docs/task_log_2025_05.md`
-
-**Handoff Documents:**
-- Location: `docs/handoff/YYYY-MM-DD-N.md`
-- Create at end of each session
-- Include: what was done, decisions made, next steps
-
-**Other Documentation:**
-- `/docs/repository-structure.md` - Project structure reference
-- `/docs/agent-orchestration.md` - Agent system architecture
-- `/docs/luca_dev_guide.md` - Development guidelines
+*Lives depend on this code. 95% coverage. Zero defects.*

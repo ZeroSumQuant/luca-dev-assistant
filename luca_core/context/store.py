@@ -20,6 +20,7 @@ from ..schemas import (
     Project,
     Task,
     TaskResult,
+    TaskStatus,
     UserPreferences,
 )
 
@@ -396,7 +397,9 @@ class ContextStore:
             row = cursor.fetchone()
             if row:
                 return UserPreferences.model_validate_json(row[0])
-            return UserPreferences()  # Return default preferences if not found
+            return UserPreferences(
+                user_id=user_id
+            )  # Return default preferences if not found
 
     def store_metric(self, metric: MetricRecord) -> str:
         """
@@ -500,8 +503,8 @@ class ContextStore:
                 task = Task.model_validate_json(row[0])
                 tasks.append(task)
 
-        # Sort by priority (higher number = higher priority)
-        return sorted(tasks, key=lambda t: (-t.priority, t.created_at))
+        # Sort by created_at since Task doesn't have priority field
+        return sorted(tasks, key=lambda t: t.created_at)
 
     def update_task_status(self, task_id: str, status: str) -> bool:
         """
@@ -518,7 +521,9 @@ class ContextStore:
         if not task:
             return False
 
-        task.update_status(status)
+        # Update the task status directly since update_status method doesn't exist
+        task.status = TaskStatus(status)
+        task.updated_at = datetime.utcnow()
         self.store_task(task)
         return True
 

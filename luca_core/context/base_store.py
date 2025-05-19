@@ -17,6 +17,7 @@ from luca_core.schemas import (
     Project,
     Task,
     TaskResult,
+    TaskStatus,
     UserPreferences,
 )
 
@@ -205,9 +206,9 @@ class BaseContextStore(abc.ABC):
         """
         task = await self.fetch(Task, task_id, namespace="tasks")
         if task:
-            task.status = status
+            task.status = TaskStatus(status)
             task.updated_at = datetime.utcnow()
-            if status == "completed":
+            if status == TaskStatus.COMPLETED:
                 task.completed_at = datetime.utcnow()
             await self.update(task, namespace="tasks")
 

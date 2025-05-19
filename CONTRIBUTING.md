@@ -165,6 +165,16 @@ pytest --timeout=60 --timeout_method=thread
 - Use pytest fixtures for setup and teardown
 - Add appropriate timeouts to prevent hanging in CI
 
+### AutoGen Mocking Behavior
+
+AUTOGEN_USE_MOCK_RESPONSE is process-wide. Mock-dependent tests run in a dedicated pytest invocation. Do not rely on per-test markers.
+
+In CI, tests are split into two separate pytest runs:
+1. Tests that need AutoGen mocking (`tests/tools/` and `tests/test_mcp_integration.py`) - run with `AUTOGEN_USE_MOCK_RESPONSE=1`
+2. All other tests - run without the mock environment variable
+
+If you add new tests that depend on AutoGen mocking, they must be placed in the appropriate directory or explicitly listed in the CI workflow.
+
 ## Documentation
 
 ### Types of Documentation
