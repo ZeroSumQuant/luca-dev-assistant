@@ -121,7 +121,7 @@ Create automated coverage reporting that tracks trends and fails on regression b
 Implement GitHub Actions workflow that runs all safety checks on every PR and push.
 
 **Requirements**:
-- Run on Python 3.11
+- Run on Python 3.13
 - Execute all safety checks
 - Generate coverage reports
 - Block merge on any failure

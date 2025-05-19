@@ -21,7 +21,7 @@ This project and everyone participating in it is governed by our Code of Conduct
 
 ### Prerequisites
 
-- Python 3.11 or later
+- Python 3.13 or later
 - Git
 - Docker (for running containerized components)
 

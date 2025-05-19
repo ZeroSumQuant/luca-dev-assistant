@@ -1,7 +1,7 @@
 # CLAUDE.md — LUCA Development Protocol
 
-**Version:** 3.0.0  
-**Updated:** 2025-05-17  
+**Version:** 4.0.0  
+**Updated:** 2025-05-18  
 **Criticality:** Life-safety system - zero defects required
 
 ---
@@ -21,10 +21,14 @@ echo "🔐 Running LUCA Safety Protocol..."
 # Virtual environment check  
 [[ -n "${VIRTUAL_ENV:-}" ]] || { echo "❌ Virtual env not active!"; exit 1; }
 
+# Python version check
+PYTHON_VERSION=$(python3 --version | cut -d' ' -f2)
+[[ "$PYTHON_VERSION" =~ ^3\.13 ]] || { echo "❌ Python 3.13 required!"; exit 1; }
+
 # Quality gates
 black . && isort . && flake8 || { echo "❌ Code quality failed!"; exit 1; }
 
-# Tests with 95% coverage
+# Tests with 95% coverage (MANDATORY - NO EXCEPTIONS)
 pytest --cov=luca_core --cov=app --cov=tools --cov-fail-under=95 || { echo "❌ Tests/coverage failed!"; exit 1; }
 
 # Documentation check
@@ -39,60 +43,68 @@ echo "✅ All safety checks passed"
 
 ## 📋 MANDATORY WORKFLOW
 
-### Every Session Start
+### Every Session Start (NON-NEGOTIABLE)
 ```bash
 cd /Users/dustinkirby/Documents/GitHub/luca-dev-assistant
 source .venv/bin/activate
-./safety-check.sh  # Must pass before any work
+./safety-check.sh  # MUST PASS - NO EXCEPTIONS
 pwd && git status && git branch -a && gh pr list --limit 10
 ```
 
-### Before Every Commit
-1. Run `./safety-check.sh`
-2. Update `docs/task_log.md`
-3. Create `docs/handoff/YYYY-MM-DD-N.md`
+### Before Every Commit (MANDATORY)
+1. Run `./safety-check.sh` - MUST PASS
+2. Update `docs/task_log.md` - NO EXCEPTIONS
+3. Create `docs/handoff/YYYY-MM-DD-N.md` - REQUIRED
+4. Verify all related issues are documented
 
 ---
 
 ## 🔧 AUTOMATION ISSUES TO CREATE
 
 ### Priority 1: Critical Safety
-1. **Create safety-check.sh script**
+1. **safety-check.sh script** [✓ COMPLETED - Issue #67]
    - All quality gates in one command
-   - 95% coverage enforcement
-   - Documentation verification
+   - 95% coverage enforcement (HARD REQUIREMENT)
+   - Documentation verification (MANDATORY)
+   - Zero-tolerance for failures
 
-2. **Implement pre-push git hook**
-   - Prevent pushes without safety checks
-   - Block on test failures
-   - Require documentation updates
+2. **Implement pre-push git hook** [Issue #68]
+   - Prevent pushes without safety checks (ABSOLUTE BLOCK)
+   - Block on test failures (NO OVERRIDE)
+   - Require documentation updates (MANDATORY)
+   - Auto-run safety-check.sh
 
-3. **Add Makefile for standardization**
-   - Common commands: test, lint, safety
-   - Consistent interface
+3. **Makefile for standardization** [✓ COMPLETED - Issue #69]
+   - Common commands: test, lint, safety, check-all
+   - Consistent interface across machines
    - Reduce command errors
+   - Include safety-check as default target
 
 ### Priority 2: Documentation
-1. **Automated documentation checker**
-   - Verify task_log.md updated
-   - Check handoff documents exist
-   - Block commits without docs
+1. **Automated documentation checker** [✓ COMPLETED - Issue #70]
+   - Verify task_log.md updated (REQUIRED)
+   - Check handoff documents exist (MANDATORY)
+   - Block commits without docs (ZERO TOLERANCE)
+   - Enforce documentation standards
 
-2. **Coverage report generator**
-   - Track coverage trends
-   - Fail on decrease below 95%
-   - Generate badges
+2. **Coverage report generator** [Issue #71]
+   - Track coverage trends over time
+   - Fail on ANY decrease below 95%
+   - Generate badges automatically
+   - Alert on coverage drops
 
 ### Priority 3: CI/CD
-1. **Create GitHub Actions workflow**
-   - Run all safety checks
-   - Test on Python 3.11
-   - Block merge on failures
+1. **Create GitHub Actions workflow** [Issue #72]
+   - Run all safety checks on every push
+   - Test on Python 3.13 exclusively
+   - Block merge on ANY failures
+   - No manual override option
 
-2. **Dependency security scanner**
-   - Check for vulnerabilities
-   - Automated updates
-   - Security alerts
+2. **Dependency security scanner** [Issue #73]
+   - Check for vulnerabilities daily
+   - Automated security updates
+   - Security alerts (CRITICAL PRIORITY)
+   - Block deploys on vulnerabilities
 
 ---
 
@@ -136,11 +148,12 @@ pwd && git status && git branch -a && gh pr list --limit 10
 
 ## 🎯 QUALITY REQUIREMENTS
 
-- **Tests**: 95% coverage minimum
-- **Code**: Black, isort, flake8 clean
-- **Security**: Zero bandit findings
+- **Tests**: 95% coverage minimum (HARD REQUIREMENT)
+- **Code**: Black, isort, flake8 clean (ZERO TOLERANCE)
+- **Security**: Zero bandit findings (MANDATORY)
 - **Types**: Mypy clean (where used)
-- **Docs**: Always current
+- **Docs**: Always current (NO EXCEPTIONS)
+- **Safety**: Must pass safety-check.sh
 
 ---
 
@@ -164,28 +177,34 @@ pwd && git status && git branch -a && gh pr list --limit 10
 
 ---
 
-## ⚠️ NEVER DO
+## ⚠️ NEVER DO (ZERO TOLERANCE)
 
-- Skip tests
-- Ignore coverage drops
-- Commit without documentation
-- Push without safety checks
-- Disable security features
-- Trust user input
-- Log sensitive data
+- Skip tests (95% coverage is MANDATORY)
+- Ignore coverage drops (ANY drop blocks work)
+- Commit without documentation (ALWAYS update docs)
+- Push without safety checks (safety-check.sh MUST pass)
+- Disable security features (LIFE-CRITICAL SYSTEM)
+- Trust user input (VALIDATE EVERYTHING)
+- Log sensitive data (SECURITY VIOLATION)
+- Override safety protocols (NO EXCEPTIONS)
+- Work without virtual environment
+- Use Python < 3.13
 
 ---
 
-## ✅ ALWAYS DO
+## ✅ ALWAYS DO (MANDATORY)
 
-- Run safety-check.sh
-- Update documentation
-- Test edge cases
-- Handle all errors
-- Validate inputs
+- Run safety-check.sh (EVERY SESSION)
+- Update documentation (EVERY CHANGE)
+- Test edge cases (95% COVERAGE)
+- Handle all errors (NO EXCEPTIONS)
+- Validate inputs (SECURITY CRITICAL)
 - Use environment variables for secrets
 - Ask when uncertain
+- Follow issue linking (#67-#74)
+- Create handoff documents
+- Maintain coverage above 95%
 
 ---
 
-*Lives depend on this code. 95% coverage. Zero defects.*
+**⚠️ CRITICAL: Lives depend on this code. 95% coverage is MANDATORY. Zero defects required. No exceptions.**
