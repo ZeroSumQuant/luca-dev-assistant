@@ -18,6 +18,11 @@ jobs:
         with:
           python-version: "3.13"
 
+      - name: Verify Python Version
+        run: |
+          python --version
+          python3 --version
+
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
@@ -107,6 +112,9 @@ jobs:
           context: .
           push: false   # change to true + set secrets if you want auto-push
           tags: luca-dev:ci
+
+      - name: Verify Python Version in Docker
+        run: docker run luca-dev:ci python --version
 
       - name: Docker-capped tests
         run: make test-docker

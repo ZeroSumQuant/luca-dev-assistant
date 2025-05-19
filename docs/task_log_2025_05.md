@@ -48,6 +48,22 @@
   - Created comprehensive research document: `RESEARCH/module-import-ci-failures/2025-05-18-module-import-shadows.md`
   - Created detailed handoff: `docs/handoff/2025-05-18-2.md`
   - Key commits:
+    - 6af27e9: fix(tests): rename tests/luca_core to tests/luca_core_pkgtests
+    - 4ccd130: fix: mark registry tests as real_exec and skip in Docker
+    - 6c7d755: ci: exclude registry-execute suite from mocked test step
+
+## 2025-05-19
+
+- **03:00 am — Updated CLAUDE.md for stricter safety protocols** – addressed issue #74:
+  - Updated CLAUDE.md to version 4.0.0 with zero-tolerance safety requirements
+  - Standardized Python version to 3.13 across entire codebase
+  - Added Python version check to safety-check.sh script
+  - Updated all documentation files to reflect Python 3.13 requirement
+  - Marked completed automation issues (#67, #69, #70) in CLAUDE.md
+  - Added python_requires=">=3.13" to setup.py
+  - Created PR #79 to implement all changes
+  - Key commits:
+    - 41a11a1: feat(claude-md): update project to require Python 3.13 and enhance safety protocols
     - f8e09a0: Fix module import errors by renaming test directory
     - 6b79f1f: Mark registry tests with real_exec for proper test isolation
     - 23a69e3: Update CI workflow to properly separate mocked vs real tests
