@@ -116,3 +116,13 @@
   - CI was failing with "unrecognized arguments: --cov-config" error
   - Added pytest-cov==5.0.0 to enable coverage configuration
   - Workflow now properly uses .coveragerc for coverage settings
+  
+- **Evening — Fixed registry test flakiness** – improved architectural stability:
+  - Refactored ToolRegistry to use deterministic function cache instead of reflection
+  - Removed reliance on globals() and sys.modules lookups for function resolution
+  - Created explicit reset() method for tests to ensure clean state
+  - Fixed CI failures on Python 3.9 (tests now pass consistently in all environments)
+  - Key files modified:
+    - luca_core/registry/registry.py (added function cache and deterministic lookup)
+    - tests/core/test_final_coverage.py (simplified tests to use direct cache manipulation)
+  - Lesson learned: "Reflection is uncertainty; explicit mapping is certainty"

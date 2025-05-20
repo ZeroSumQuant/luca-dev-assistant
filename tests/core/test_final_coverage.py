@@ -16,6 +16,10 @@ from luca_core.schemas.tools import ToolCategory
 class TestFinalCoverage:
     """Final tests to reach 95% coverage."""
 
+    def teardown_method(self):
+        """Reset registry function cache after each test."""
+        ToolRegistry.reset()
+
     @pytest.mark.asyncio
     async def test_manager_aggregate_results_coverage(self):
         """Test manager aggregate results to cover lines 401 and 407."""
@@ -52,7 +56,9 @@ class TestFinalCoverage:
         )
 
     def test_registry_function_not_found_coverage(self):
-        """Test registry function not found to cover line 290."""
+        """Test registry raises ValueError when function is not found."""
+        # Start with a clean registry
+        ToolRegistry.reset()
         registry = ToolRegistry()
 
         # Register a tool with a function that can't be found
@@ -60,31 +66,27 @@ class TestFinalCoverage:
         def placeholder():
             pass
 
-        # Create a completely unique reference guaranteed not to exist
-        unique_ref = f"non_existent_function_{id(registry)}_{id(placeholder)}"
+        # Use a function reference that doesn't exist in the cache
+        non_existent_function = "non_existent_function_xyz"
 
-        # Explicitly patch both sys.modules and globals() to ensure function can't be found
-        with mock.patch.dict(globals(), clear=True):
-            with mock.patch("sys.modules", {}):
-                with mock.patch.dict(
-                    "builtins.__dict__", {unique_ref: None}, clear=False
-                ):
-                    # Remove the None entry to ensure it's completely missing
-                    if unique_ref in builtins.__dict__:
-                        del builtins.__dict__[unique_ref]
+        # Remove from cache if it somehow exists
+        if non_existent_function in ToolRegistry._function_cache:
+            del ToolRegistry._function_cache[non_existent_function]
 
-                    # Update function reference to our guaranteed non-existent function
-                    registry.tools["missing_func_tool"].function_reference = unique_ref
+        # Update function reference to one that doesn't exist in the cache
+        registry.tools["missing_func_tool"].function_reference = non_existent_function
 
-                    # This should raise ValueError on line 290
-                    with pytest.raises(
-                        ValueError,
-                        match="Function not found for tool: missing_func_tool",
-                    ):
-                        registry.execute_tool("missing_func_tool", {})
+        # This should raise ValueError
+        with pytest.raises(
+            ValueError,
+            match="Function not found for tool: missing_func_tool",
+        ):
+            registry.execute_tool("missing_func_tool", {})
 
     def test_registry_error_metrics_coverage(self):
-        """Test registry error metrics to cover lines 325-337."""
+        """Test registry properly records error metrics when exceptions are raised."""
+        # Make sure the registry starts clean
+        ToolRegistry.reset()
 
         # Create a custom tool class to ensure proper execution
         class TestErrorTool:
@@ -98,9 +100,9 @@ class TestFinalCoverage:
         # Create test tool instance
         error_tool_instance = TestErrorTool()
 
-        # Make it available in both globals and modules
+        # Add the function directly to the cache
         test_func_name = "test_error_func_raise_runtime_error"
-        globals()[test_func_name] = error_tool_instance.raise_error
+        ToolRegistry._function_cache[test_func_name] = error_tool_instance.raise_error
 
         # Create registry with a direct reference to our function
         registry = ToolRegistry()
@@ -116,7 +118,7 @@ class TestFinalCoverage:
 
         # Execute and verify it raises the correct exception
         with pytest.raises(RuntimeError, match="Test error"):
-            result = registry.execute_tool("error_tool", {})
+            registry.execute_tool("error_tool", {})
 
         # Verify the function was actually called
         assert error_tool_instance.called, "Error function was not called"
