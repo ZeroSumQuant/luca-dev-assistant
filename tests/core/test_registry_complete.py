@@ -8,31 +8,27 @@ import pytest
 
 from luca_core.registry.registry import ToolRegistry
 from luca_core.schemas.tools import ToolCategory
+from tests.core.test_base import RegistryTestCase
 
 
-class TestRegistryCompleteCoverage:
+class TestRegistryCompleteCoverage(RegistryTestCase):
     """Tests to achieve complete coverage of registry module."""
 
     def setup_method(self):
         """Set up test registry."""
+        super().setup_method()  # Call the parent class setup_method
         self.registry = ToolRegistry()
 
     @pytest.mark.skip_ci
     @pytest.mark.issue_81
     def test_execute_tool_function_resolution_from_module(self):
-        """Test function resolution from sys.modules."""
-        # Create a mock module with our function
-        mock_module = mock.MagicMock()
+        """Test function resolution with cache."""
 
+        # Create a function for our test
         @pytest.mark.skip_ci
         @pytest.mark.issue_81
         def test_func(x):
             return f"result-{x}"
-
-        setattr(mock_module, "test_func", test_func)
-
-        # Add to sys.modules
-        sys.modules["test_module"] = mock_module
 
         # Register tool - parameters are auto-extracted from function signature
         @self.registry.register(
@@ -44,15 +40,15 @@ class TestRegistryCompleteCoverage:
             """Test function with parameter."""
             pass
 
-        # Update function reference to point to module function
+        # Add function directly to the cache
+        ToolRegistry._function_cache["test_func"] = test_func
+
+        # Update function reference to point to our function in the cache
         self.registry.tools["test_tool"].function_reference = "test_func"
 
-        # Execute - should find function in module
+        # Execute - should find function in the cache
         result = self.registry.execute_tool("test_tool", {"x": "value"})
         assert result == "result-value"
-
-        # Cleanup
-        del sys.modules["test_module"]
 
     @pytest.mark.skip_ci
     @pytest.mark.issue_81

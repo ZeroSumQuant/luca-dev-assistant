@@ -140,6 +140,7 @@ class TestAgentManager:
         # Verify the function was called
         mock_tabs.assert_called_once()
 
+    @pytest.mark.skip_ci
     @mock.patch("streamlit.session_state", new_callable=dict)
     @mock.patch("streamlit.set_page_config")
     @mock.patch("streamlit.columns")

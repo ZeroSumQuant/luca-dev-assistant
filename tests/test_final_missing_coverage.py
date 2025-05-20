@@ -9,9 +9,10 @@ from luca_core.manager.manager import LucaManager, ResponseOptions
 from luca_core.registry.registry import ToolRegistry
 from luca_core.schemas.context import TaskResult
 from luca_core.schemas.tools import ToolCategory
+from tests.core.test_base import RegistryTestCase
 
 
-class TestFinalMissingCoverage:
+class TestFinalMissingCoverage(RegistryTestCase):
     """Test to hit the exact remaining uncovered lines."""
 
     @pytest.mark.asyncio
@@ -78,8 +79,8 @@ class TestFinalMissingCoverage:
         def failing_func():
             raise ValueError("Test failure")
 
-        # Add to current module so it can be found
-        sys.modules[__name__].failing_func = failing_func
+        # Add directly to the function cache
+        ToolRegistry._function_cache["failing_func"] = failing_func
         registry.tools["failing_tool"].function_reference = "failing_func"
 
         # Get initial state

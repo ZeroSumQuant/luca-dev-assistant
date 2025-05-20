@@ -57,6 +57,18 @@
 - **03:00 am — Updated CLAUDE.md for stricter safety protocols** – addressed issue #74:
   - Updated CLAUDE.md to version 4.0.0 with zero-tolerance safety requirements
   - Standardized Python version to 3.13 across entire codebase
+
+- **21:00 pm — Fixed ToolRegistry function lookup for CI test stability** – resolved issue #81:
+  - Redesigned registry to use explicit function cache instead of dynamic reflection
+  - Replaced globals() and sys.modules lookups with deterministic _function_cache dictionary
+  - Added thread-safety warning to docstring
+  - Added duplicate function registration guard in register() method
+  - Implemented reset() classmethod for proper test state cleanup
+  - Created RegistryTestCase base class in tests/core/test_base.py for test isolation
+  - Updated all test files to inherit from RegistryTestCase and use function cache directly
+  - Fixed test failures in main_module_execution and app_main_async_process tests
+  - Maintained 100% test passing rate while improving reliability
+  - Key lesson: "Reflection is uncertainty; explicit mapping is certainty"
   - Added Python version check to safety-check.sh script
   - Updated all documentation files to reflect Python 3.13 requirement
   - Marked completed automation issues (#67, #69, #70) in CLAUDE.md

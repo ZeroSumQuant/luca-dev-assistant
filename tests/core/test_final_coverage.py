@@ -11,14 +11,11 @@ from luca_core.registry.registry import ToolRegistry, tool
 from luca_core.schemas.agent import Agent, AgentConfig, AgentRole
 from luca_core.schemas.context import Project, TaskResult
 from luca_core.schemas.tools import ToolCategory
+from tests.core.test_base import RegistryTestCase
 
 
-class TestFinalCoverage:
+class TestFinalCoverage(RegistryTestCase):
     """Final tests to reach 95% coverage."""
-
-    def teardown_method(self):
-        """Reset registry function cache after each test."""
-        ToolRegistry.reset()
 
     @pytest.mark.asyncio
     async def test_manager_aggregate_results_coverage(self):

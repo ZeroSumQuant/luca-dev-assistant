@@ -7,8 +7,10 @@ import unittest.mock as mock
 
 import pytest
 
+from tests.core.test_base import RegistryTestCase
 
-class TestTo99Coverage:
+
+class TestTo99Coverage(RegistryTestCase):
     """Tests to reach exactly 99% coverage."""
 
     def test_luca_core_main_entry_point(self):
@@ -97,18 +99,20 @@ if __name__ == "__main__":
         def test_func():
             return "test"
 
-        # Get the tool and set a bad function reference
+        # Get the tool and set a bad function reference - it should not be in the cache
         tool = registry.tools["missing_tool"]
-        tool.function_reference = (
-            "completely_nonexistent_function_name_that_will_never_exist"
-        )
+        nonexistent_ref = "completely_nonexistent_function_name_that_will_never_exist"
+        tool.function_reference = nonexistent_ref
 
-        # Mock sys.modules to ensure function isn't found anywhere
-        with mock.patch("sys.modules", {}):
-            with pytest.raises(
-                ValueError, match="Function not found for tool: missing_tool"
-            ):
-                registry.execute_tool("missing_tool", {})
+        # Ensure it's not in the cache
+        if nonexistent_ref in ToolRegistry._function_cache:
+            del ToolRegistry._function_cache[nonexistent_ref]
+
+        # This should fail since the function isn't in the cache
+        with pytest.raises(
+            ValueError, match="Function not found for tool: missing_tool"
+        ):
+            registry.execute_tool("missing_tool", {})
 
     @pytest.mark.skip_ci
     @pytest.mark.issue_81
@@ -131,9 +135,8 @@ if __name__ == "__main__":
         def wrapper():
             return failing_function()
 
-        # Make the function findable by adding it to the current module
-        current_module = sys.modules[__name__]
-        setattr(current_module, "wrapper", wrapper)
+        # Add the function directly to the cache
+        ToolRegistry._function_cache["wrapper"] = wrapper
 
         # Execute and expect the exception (this will hit lines 325-337)
         with pytest.raises(ValueError, match="Intentional test failure"):
