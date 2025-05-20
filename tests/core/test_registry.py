@@ -33,6 +33,10 @@ def optional_params_tool(required: str, optional: Optional[str] = None) -> dict:
 class TestToolRegistry:
     """Test the ToolRegistry class."""
 
+    def setup_method(self):
+        """Reset the registry's function cache before each test."""
+        ToolRegistry.reset()
+
     def test_init(self):
         """Test registry initialization."""
         registry = ToolRegistry()
