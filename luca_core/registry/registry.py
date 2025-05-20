@@ -28,7 +28,14 @@ logger = logging.getLogger(__name__)
 
 
 class ToolRegistry:
-    """Registry for tools that can be used by agents."""
+    """Registry for tools that can be used by agents.
+
+    Note: ToolRegistry is not thread-safe; use one registry per OS process.
+    """
+
+    _function_cache: Dict[str, Callable] = (
+        {}
+    )  # Class-level cache for function references
 
     def __init__(self, default_scope: Optional[ToolScope] = None):
         """Initialize the tool registry.
@@ -75,6 +82,9 @@ class ToolRegistry:
 
         Returns:
             Decorator function
+
+        Raises:
+            KeyError: If a function with the same name is already registered
 
         Example:
             @registry.register(
@@ -167,8 +177,15 @@ class ToolRegistry:
                 enabled=True,
             )
 
+            # Check for duplicate function references
+            if func.__name__ in ToolRegistry._function_cache:
+                raise KeyError(f"Function '{func.__name__}' is already registered")
+
             # Register the tool
             self.tools[func_name] = tool_reg
+
+            # Store the function in the cache
+            ToolRegistry._function_cache[func.__name__] = func
 
             # Return the original function
             return func
@@ -185,6 +202,11 @@ class ToolRegistry:
         decorator = self.register(**kwargs)
         decorator(func)
 
+    @classmethod
+    def reset(cls) -> None:
+        """Reset the function cache - primarily for testing."""
+        cls._function_cache.clear()
+
     def unregister(self, name: str) -> bool:
         """Unregister a tool.
 
@@ -195,6 +217,13 @@ class ToolRegistry:
             True if the tool was found and unregistered, False otherwise
         """
         if name in self.tools:
+            tool = self.tools[name]
+            func_ref = tool.function_reference
+
+            # Remove from function cache if present
+            if func_ref in ToolRegistry._function_cache:
+                del ToolRegistry._function_cache[func_ref]
+
             del self.tools[name]
             return True
         return False
@@ -275,18 +304,11 @@ class ToolRegistry:
         if not tool:
             raise ValueError(f"Tool not found: {name}")
 
-        # Get the function reference
+        # Get the function reference from cache
         func_ref = tool.function_reference
-        func = globals().get(func_ref)
+        func = ToolRegistry._function_cache.get(func_ref)
 
-        if not func:
-            # When tools are registered from another module, we need to find them
-            for module in sys.modules.values():
-                if hasattr(module, func_ref):
-                    func = getattr(module, func_ref)
-                    break
-
-        if not func:
+        if func is None:
             raise ValueError(f"Function not found for tool: {name}")
 
         # Extract expected parameters

@@ -12,6 +12,7 @@ from luca_core.schemas import (
     create_system_error,
     create_user_error,
 )
+from tests.core.test_base import RegistryTestCase
 
 
 # Sample functions to use for testing
@@ -30,7 +31,7 @@ def optional_params_tool(required: str, optional: Optional[str] = None) -> dict:
     return {"required": required, "optional": optional}
 
 
-class TestToolRegistry:
+class TestToolRegistry(RegistryTestCase):
     """Test the ToolRegistry class."""
 
     def test_init(self):

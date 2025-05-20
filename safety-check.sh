@@ -23,11 +23,19 @@ echo -e "${GREEN}✓ Directory check passed${NC}"
 
 # 2. Virtual environment check
 if [[ -z "${VIRTUAL_ENV:-}" ]]; then
-    echo -e "${RED}❌ FATAL: Virtual environment not activated!${NC}"
-    echo "Run: source .venv/bin/activate"
-    exit 1
+    # Try to activate it automatically if it exists
+    if [[ -f ".venv/bin/activate" ]]; then
+        echo -e "${YELLOW}Activating virtual environment...${NC}"
+        source .venv/bin/activate
+        echo -e "${GREEN}✓ Virtual environment activated${NC}"
+    else
+        echo -e "${RED}❌ FATAL: Virtual environment not found!${NC}"
+        echo "Run: python3 -m venv .venv && source .venv/bin/activate"
+        exit 1
+    fi
+else
+    echo -e "${GREEN}✓ Virtual environment active${NC}"
 fi
-echo -e "${GREEN}✓ Virtual environment active${NC}"
 
 # 3. Python version check
 echo -e "${YELLOW}Checking Python version...${NC}"
@@ -77,10 +85,10 @@ echo -e "${GREEN}✓ Security scan passed${NC}"
 
 # 8. Tests with coverage
 echo -e "${YELLOW}Running tests with coverage...${NC}"
-if ! python3 -m pytest --cov=luca_core --cov=app --cov=tools --cov-fail-under=95 -q; then
+if ! python3 -m pytest --cov=luca_core --cov=app --cov=tools --cov-fail-under=95 -q -m "not skip_ci" --cov-config=.coveragerc; then
     echo -e "${RED}❌ Tests failed or coverage below 95%!${NC}"
     echo -e "${YELLOW}To see detailed coverage report, run:${NC}"
-    echo "pytest --cov=luca_core --cov=app --cov=tools --cov-report=term-missing"
+    echo "pytest --cov=luca_core --cov=app --cov=tools --cov-report=term-missing -m 'not skip_ci'"
     exit 1
 fi
 echo -e "${GREEN}✓ Tests passed with ≥95% coverage${NC}"

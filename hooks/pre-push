@@ -16,6 +16,12 @@ echo -e "${YELLOW}=================================${NC}"
 
 # Check if we're in the correct repository
 REPO_ROOT=$(git rev-parse --show-toplevel)
+
+# Automatically activate virtual environment if it exists
+if [[ -f "$REPO_ROOT/.venv/bin/activate" ]] && [[ -z "${VIRTUAL_ENV:-}" ]]; then
+    echo -e "${YELLOW}Activating virtual environment...${NC}"
+    source "$REPO_ROOT/.venv/bin/activate"
+fi
 if [[ ! -f "$REPO_ROOT/safety-check.sh" ]]; then
     echo -e "${RED}❌ ERROR: safety-check.sh not found!${NC}"
     echo -e "${RED}   This may not be the LUCA repository${NC}"
