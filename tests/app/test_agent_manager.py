@@ -140,6 +140,8 @@ class TestAgentManager:
         # Verify the function was called
         mock_tabs.assert_called_once()
 
+    @mock.patch("streamlit.session_state", new_callable=dict)
+    @mock.patch("streamlit.set_page_config")
     @mock.patch("streamlit.columns")
     @mock.patch("streamlit.container")
     @mock.patch("streamlit.multiselect")
@@ -174,22 +176,38 @@ class TestAgentManager:
         mock_multiselect,
         mock_container,
         mock_columns,
+        mock_set_page_config,
+        mock_session_state,
     ):
         """Test error handling in tree visualization."""
-        from app.pages.agent_manager import main
+        # Import here to ensure mocks are applied
+        from app.pages.agent_manager import DEFAULT_AGENT_CONFIG, main
 
-        # Mock tabs
-        mock_tab1 = mock.MagicMock()
-        mock_tab2 = mock.MagicMock()
-        mock_tab3 = mock.MagicMock()
-        mock_tabs.return_value = [mock_tab1, mock_tab2, mock_tab3]
+        # Set up session state before importing
+        mock_session_state["agent_config"] = DEFAULT_AGENT_CONFIG.copy()
+
+        # Set up TabBar mock objects
+        tab1_ctx = mock.MagicMock()
+        tab2_ctx = mock.MagicMock()
+        tab3_ctx = mock.MagicMock()
+
+        # Configure tab context managers
+        mock_tabs.return_value = [tab1_ctx, tab2_ctx, tab3_ctx]
+        tab1_ctx.__enter__ = mock.MagicMock(return_value=tab1_ctx)
+        tab1_ctx.__exit__ = mock.MagicMock(return_value=None)
+        tab2_ctx.__enter__ = mock.MagicMock(return_value=tab2_ctx)
+        tab2_ctx.__exit__ = mock.MagicMock(return_value=None)
+        tab3_ctx.__enter__ = mock.MagicMock(return_value=tab3_ctx)
+        tab3_ctx.__exit__ = mock.MagicMock(return_value=None)
 
         # Mock columns
-        mock_columns.return_value = [
-            mock.MagicMock(),
-            mock.MagicMock(),
-            mock.MagicMock(),
-        ]
+        col_mocks = [mock.MagicMock(), mock.MagicMock(), mock.MagicMock()]
+        mock_columns.return_value = col_mocks
+
+        # Set up column context managers
+        for col in col_mocks:
+            col.__enter__ = mock.MagicMock(return_value=col)
+            col.__exit__ = mock.MagicMock(return_value=None)
 
         # Mock form context
         mock_form_context = mock.MagicMock()
@@ -198,21 +216,25 @@ class TestAgentManager:
         )
         mock_form.return_value.__exit__ = mock.MagicMock(return_value=None)
 
+        # Mock container context
+        mock_container.return_value.__enter__ = mock.MagicMock(
+            return_value=mock.MagicMock()
+        )
+        mock_container.return_value.__exit__ = mock.MagicMock(return_value=None)
+
         # Mock button returns
         mock_button.side_effect = [False, False, False, False]
         mock_form_submit_button.return_value = False
         mock_selectbox.return_value = "luca"
 
-        # Make create_agent_tree raise an exception
+        # Force create_agent_tree to raise exception
         mock_create_tree.side_effect = Exception("Test error")
 
         # Call main which should catch the exception and call st.error
         main()
 
-        # Verify error was displayed
-        mock_error.assert_called_once_with(
-            "Error creating tree visualization: Test error"
-        )
+        # Verify error was displayed (properly ordered in the call sequence)
+        mock_error.assert_called_with("Error creating tree visualization: Test error")
 
     def test_agent_config_completeness(self):
         """Test that all agents have complete configuration."""

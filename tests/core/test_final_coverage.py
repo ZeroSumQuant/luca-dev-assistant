@@ -1,5 +1,6 @@
 """Final tests to reach 95% coverage target."""
 
+import builtins
 import sys
 import unittest.mock as mock
 
@@ -59,45 +60,77 @@ class TestFinalCoverage:
         def placeholder():
             pass
 
-        # Mock sys.modules to ensure the function is not found anywhere
-        original_modules = sys.modules.copy()
-        with mock.patch("sys.modules", new={}):
-            # Update the function reference to something that doesn't exist
-            registry.tools["missing_func_tool"].function_reference = (
-                "non_existent_function"
-            )
+        # Create a completely unique reference guaranteed not to exist
+        unique_ref = f"non_existent_function_{id(registry)}_{id(placeholder)}"
 
-            # This should raise ValueError on line 290
-            with pytest.raises(
-                ValueError, match="Function not found for tool: missing_func_tool"
-            ):
-                registry.execute_tool("missing_func_tool", {})
+        # Explicitly patch both sys.modules and globals() to ensure function can't be found
+        with mock.patch.dict(globals(), clear=True):
+            with mock.patch("sys.modules", {}):
+                with mock.patch.dict(
+                    "builtins.__dict__", {unique_ref: None}, clear=False
+                ):
+                    # Remove the None entry to ensure it's completely missing
+                    if unique_ref in builtins.__dict__:
+                        del builtins.__dict__[unique_ref]
+
+                    # Update function reference to our guaranteed non-existent function
+                    registry.tools["missing_func_tool"].function_reference = unique_ref
+
+                    # This should raise ValueError on line 290
+                    with pytest.raises(
+                        ValueError,
+                        match="Function not found for tool: missing_func_tool",
+                    ):
+                        registry.execute_tool("missing_func_tool", {})
 
     def test_registry_error_metrics_coverage(self):
         """Test registry error metrics to cover lines 325-337."""
+
+        # Create a custom tool class to ensure proper execution
+        class TestErrorTool:
+            def __init__(self):
+                self.called = False
+
+            def raise_error(self):
+                self.called = True
+                raise RuntimeError("Test error")
+
+        # Create test tool instance
+        error_tool_instance = TestErrorTool()
+
+        # Make it available in both globals and modules
+        test_func_name = "test_error_func_raise_runtime_error"
+        globals()[test_func_name] = error_tool_instance.raise_error
+
+        # Create registry with a direct reference to our function
         registry = ToolRegistry()
 
-        # Register a tool that raises an exception
+        # Register the test function
         @registry.register(name="error_tool", category=ToolCategory.UTILITY)
-        def error_func():
-            raise RuntimeError("Test error")
+        def placeholder():
+            # This function is replaced below
+            pass
 
-        # Force the function into globals to ensure it's found
-        globals()["error_func_unique_test"] = error_func
+        # Replace with our test function reference
+        registry.tools["error_tool"].function_reference = test_func_name
 
-        # Update the function reference
-        registry.tools["error_tool"].function_reference = "error_func_unique_test"
-
-        # Execute and catch exception
+        # Execute and verify it raises the correct exception
         with pytest.raises(RuntimeError, match="Test error"):
-            registry.execute_tool("error_tool", {})
+            result = registry.execute_tool("error_tool", {})
 
-        # Check metrics were updated (lines 327-335)
+        # Verify the function was actually called
+        assert error_tool_instance.called, "Error function was not called"
+
+        # Check metrics were properly updated
         tool = registry.tools["error_tool"]
-        assert tool.metrics.error_count == 1
-        assert tool.metrics.last_error is not None
-        assert len(tool.metrics.error_details) > 0
-        assert tool.metrics.error_details[0]["error_type"] == "RuntimeError"
+        assert (
+            tool.metrics.error_count == 1
+        ), f"Error count not incremented, got {tool.metrics.error_count}"
+        assert tool.metrics.last_error is not None, "Last error timestamp not set"
+        assert len(tool.metrics.error_details) > 0, "Error details not recorded"
+        assert (
+            tool.metrics.error_details[0]["error_type"] == "RuntimeError"
+        ), f"Wrong error type: {tool.metrics.error_details[0].get('error_type', 'missing')}"
 
     @pytest.mark.skip_ci
     @pytest.mark.issue_84
