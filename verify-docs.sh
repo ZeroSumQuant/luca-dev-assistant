@@ -22,18 +22,18 @@ EXIT_STATUS=0
 echo "Verifying documentation is current for $TODAY..."
 echo
 
-# Check task_log.md for current month
-if [ -f "docs/task_log_${MONTH}.md" ]; then
-    echo -e "ℹ️  Checking docs/task_log_${MONTH}.md..."
-    if grep -q "^#.* $TODAY" "docs/task_log_${MONTH}.md"; then
-        echo -e "${GREEN}✓ Found entry for today in task_log_${MONTH}.md${NC}"
+# Check consolidated task_log.md
+if [ -f "docs/task_log.md" ]; then
+    echo -e "ℹ️  Checking docs/task_log.md..."
+    if grep -q "^## $TODAY" "docs/task_log.md"; then
+        echo -e "${GREEN}✓ Found entry for today in task_log.md${NC}"
     else
-        echo -e "${RED}✗ No entry for today in task_log_${MONTH}.md${NC}"
-        echo -e "${YELLOW}  Please add an entry for today with: # $TODAY${NC}"
+        echo -e "${RED}✗ No entry for today in task_log.md${NC}"
+        echo -e "${YELLOW}  Please add an entry for today with: ## $TODAY${NC}"
         EXIT_STATUS=1
     fi
 else
-    echo -e "${RED}✗ Task log for $CURRENT_MONTH not found at docs/task_log_${MONTH}.md${NC}"
+    echo -e "${RED}✗ Task log not found at docs/task_log.md${NC}"
     echo -e "${YELLOW}  Please create the file and add an entry for today${NC}"
     EXIT_STATUS=1
 fi
@@ -77,7 +77,7 @@ else
     echo -e "${RED}❌ Documentation needs updating${NC}"
     echo
     echo "To fix:"
-    echo "1. Add an entry for today in docs/task_log_${MONTH}.md"
+    echo "1. Add an entry for today in docs/task_log.md"
     echo "2. Create a handoff document at docs/handoff/${TODAY}-1.md"
     echo "3. Optionally update docs/handoff/changelog.md"
 fi

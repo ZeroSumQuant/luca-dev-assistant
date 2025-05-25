@@ -21,3 +21,6 @@ safety==3.5.1  # For dependency vulnerability scanning
 # Pre-commit
 pre-commit==4.2.0
 pytest-asyncio==0.24.0
+
+# File monitoring
+watchdog==6.0.0  # For real-time code validation
