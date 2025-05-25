@@ -14,7 +14,7 @@ pytest-asyncio==0.24.0  # For async test support in MCP tests
 
 # AutoGen Stack - current versions
 autogen-agentchat==0.5.6
-autogen-ext[docker]==0.5.6
+autogen-ext[docker]==0.5.7
 
 # UI - Let's try a newer streamlit version
 streamlit==1.43.0  # This was before the pillow<11 requirement
