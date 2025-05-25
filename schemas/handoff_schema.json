@@ -1,0 +1,151 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LUCA Handoff Document Schema",
+  "description": "Schema for validating handoff documents",
+  "type": "object",
+  "required": [
+    "title",
+    "sessionSummary",
+    "workCompleted",
+    "currentState",
+    "nextSteps"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "pattern": "^# Handoff Document - \\d{4}-\\d{2}-\\d{2}",
+      "description": "Must start with '# Handoff Document - YYYY-MM-DD'"
+    },
+    "sessionSummary": {
+      "type": "object",
+      "required": ["heading", "content"],
+      "properties": {
+        "heading": {
+          "type": "string",
+          "pattern": "^## Session Summary$"
+        },
+        "content": {
+          "type": "string",
+          "minLength": 50,
+          "description": "Brief summary of what was accomplished"
+        }
+      }
+    },
+    "workCompleted": {
+      "type": "object",
+      "required": ["heading", "items"],
+      "properties": {
+        "heading": {
+          "type": "string",
+          "pattern": "^## Work Completed$"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["title", "details"],
+            "properties": {
+              "title": {
+                "type": "string",
+                "pattern": "^### \\d+\\. .+$"
+              },
+              "details": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "pattern": "^- .+"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "keyDecisions": {
+      "type": "object",
+      "properties": {
+        "heading": {
+          "type": "string",
+          "pattern": "^## Key Decisions$"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^- .+"
+          }
+        }
+      }
+    },
+    "currentState": {
+      "type": "object",
+      "required": ["heading", "items"],
+      "properties": {
+        "heading": {
+          "type": "string",
+          "pattern": "^## Current State$"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^- .+"
+          }
+        }
+      }
+    },
+    "nextSteps": {
+      "type": "object",
+      "required": ["heading", "items"],
+      "properties": {
+        "heading": {
+          "type": "string",
+          "pattern": "^## Next Steps$"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^\\d+\\. .+"
+          }
+        }
+      }
+    },
+    "issuesConcerns": {
+      "type": "object",
+      "properties": {
+        "heading": {
+          "type": "string",
+          "pattern": "^## Issues/Concerns$"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^- .+"
+          }
+        }
+      }
+    },
+    "forNextSession": {
+      "type": "object",
+      "properties": {
+        "heading": {
+          "type": "string",
+          "pattern": "^## For Next Session$"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^- .+"
+          }
+        }
+      }
+    }
+  }
+}

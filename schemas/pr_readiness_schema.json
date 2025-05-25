@@ -1,0 +1,150 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LUCA PR Readiness Schema",
+  "description": "Validates that all required documentation exists before PR creation",
+  "type": "object",
+  "required": [
+    "taskLogEntry",
+    "handoffDocument",
+    "testsPass",
+    "coverageCheck"
+  ],
+  "properties": {
+    "taskLogEntry": {
+      "type": "object",
+      "required": ["exists", "hasCurrentDate", "hasContent"],
+      "properties": {
+        "exists": {
+          "type": "boolean",
+          "const": true,
+          "description": "Task log file must exist"
+        },
+        "hasCurrentDate": {
+          "type": "boolean",
+          "const": true,
+          "description": "Task log must have entry for current date"
+        },
+        "hasContent": {
+          "type": "boolean",
+          "const": true,
+          "description": "Current date entry must have content"
+        }
+      }
+    },
+    "handoffDocument": {
+      "type": "object",
+      "required": ["exists", "followsNamingConvention", "hasRequiredSections"],
+      "properties": {
+        "exists": {
+          "type": "boolean",
+          "const": true,
+          "description": "Handoff document for current date must exist"
+        },
+        "followsNamingConvention": {
+          "type": "boolean",
+          "const": true,
+          "description": "Must follow YYYY-MM-DD-N.md format"
+        },
+        "hasRequiredSections": {
+          "type": "boolean",
+          "const": true,
+          "description": "Must have all required sections"
+        }
+      }
+    },
+    "testsPass": {
+      "type": "object",
+      "required": ["allTestsPass", "noSkippedTests"],
+      "properties": {
+        "allTestsPass": {
+          "type": "boolean",
+          "const": true,
+          "description": "All tests must pass"
+        },
+        "noSkippedTests": {
+          "type": "boolean",
+          "description": "No tests should be skipped without justification"
+        }
+      }
+    },
+    "coverageCheck": {
+      "type": "object",
+      "required": ["meetsMinimum", "noRegression"],
+      "properties": {
+        "meetsMinimum": {
+          "type": "boolean",
+          "const": true,
+          "description": "Coverage must be >= 95%"
+        },
+        "noRegression": {
+          "type": "boolean",
+          "const": true,
+          "description": "Coverage must not decrease from previous value"
+        },
+        "currentCoverage": {
+          "type": "number",
+          "minimum": 95.0,
+          "maximum": 100.0
+        }
+      }
+    },
+    "codeQuality": {
+      "type": "object",
+      "required": ["blackFormatted", "isortClean", "flake8Clean", "mypyClean"],
+      "properties": {
+        "blackFormatted": {
+          "type": "boolean",
+          "const": true
+        },
+        "isortClean": {
+          "type": "boolean",
+          "const": true
+        },
+        "flake8Clean": {
+          "type": "boolean",
+          "const": true
+        },
+        "mypyClean": {
+          "type": "boolean",
+          "const": true
+        }
+      }
+    },
+    "security": {
+      "type": "object",
+      "required": ["banditClean", "noHighSeverity"],
+      "properties": {
+        "banditClean": {
+          "type": "boolean",
+          "const": true
+        },
+        "noHighSeverity": {
+          "type": "boolean",
+          "const": true,
+          "description": "No high severity security issues"
+        }
+      }
+    },
+    "prMetadata": {
+      "type": "object",
+      "required": ["hasTitle", "hasDescription", "referencesIssues"],
+      "properties": {
+        "hasTitle": {
+          "type": "boolean",
+          "const": true,
+          "description": "PR must have meaningful title"
+        },
+        "hasDescription": {
+          "type": "boolean",
+          "const": true,
+          "description": "PR must have detailed description"
+        },
+        "referencesIssues": {
+          "type": "boolean",
+          "description": "Should reference related GitHub issues"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

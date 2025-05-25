@@ -24,3 +24,6 @@ pytest-asyncio==0.24.0
 
 # File monitoring
 watchdog==6.0.0  # For real-time code validation
+
+# Documentation validation
+jsonschema==4.24.0  # For JSON schema validation
