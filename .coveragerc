@@ -8,8 +8,10 @@ omit =
     # Omit files with known test issues until they are fixed
     app/pages/agent_manager.py
     app/__main__.py
-    # Coverage tracker is a utility script
+    # Utility scripts (not core functionality)
     tools/coverage_tracker.py
+    tools/code_watchdog.py
+    tools/consolidate_logs.py
 
 [report]
 precision = 2
