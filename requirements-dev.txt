@@ -19,5 +19,5 @@ bandit[toml]  # For pyproject.toml configuration
 safety==3.5.1  # For dependency vulnerability scanning
 
 # Pre-commit
-pre-commit==3.6.2
+pre-commit==4.2.0
 pytest-asyncio==0.24.0
