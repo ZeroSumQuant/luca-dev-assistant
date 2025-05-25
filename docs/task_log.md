@@ -388,7 +388,6 @@ See [`task_log_2025_05.md`](task_log_2025_05.md) for May 2025 onward.
   - Added detailed logging for each step of the process
   - Created comprehensive handoff document explaining the improvements
   - Set up the groundwork for more reliable CI automation
-<<<<<<< HEAD
 - **06:00 pm — Agent orchestration implementation discovery** – investigated existing agent orchestration code:
   - Discovered that the `luca_core` module already includes comprehensive implementations for all major agent orchestration components:
     - `luca_core/schemas/error.py`: ErrorPayload implementation with error categories and severity levels

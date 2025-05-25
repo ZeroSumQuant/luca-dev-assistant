@@ -8,7 +8,7 @@ pydantic>=2.0.0  # For type validation and data models
 
 # Testing (needed for CI)
 pytest==8.3.5
-pytest-timeout==2.2.0
+pytest-timeout==2.4.0
 pytest-forked==1.6.0  # May be needed for thread method in CI
 pytest-asyncio==0.24.0  # For async test support in MCP tests
 
@@ -17,7 +17,7 @@ autogen-agentchat==0.5.7
 autogen-ext[docker]==0.5.7
 
 # UI - Let's try a newer streamlit version
-streamlit==1.43.0  # This was before the pillow<11 requirement
+streamlit==1.45.1  # This was before the pillow<11 requirement
 graphviz
 plotly
 pandas
