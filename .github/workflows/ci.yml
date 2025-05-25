@@ -103,6 +103,23 @@ jobs:
       - name: 📊 Coverage report
         run: |
           python -m coverage report --fail-under=95
+          
+      - name: 📈 Track coverage trends
+        run: |
+          # Extract coverage percentage
+          COVERAGE_PCT=$(python -m coverage report | grep TOTAL | awk '{print $NF}' | sed 's/%//')
+          echo "Coverage: ${COVERAGE_PCT}%"
+          
+          # Update coverage tracking
+          python tools/coverage_tracker.py ${COVERAGE_PCT} ${GITHUB_SHA}
+          
+      - name: 📤 Upload coverage history
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-history
+          path: |
+            coverage_history.json
+            coverage.xml
 
       - name: Docker build
         uses: docker/build-push-action@v5
