@@ -103,9 +103,17 @@ echo -e "${GREEN}✓ Coverage tracked: ${COVERAGE_PCT}%${NC}"
 # 9. Documentation check
 echo -e "${YELLOW}Checking documentation...${NC}"
 if ! ./verify-docs.sh; then
-    echo -e "${RED}❌ Documentation check failed!${NC}"
+    echo -e "${RED}❌ Basic documentation check failed!${NC}"
     exit 1
 fi
-echo -e "${GREEN}✓ Documentation check passed${NC}"
+echo -e "${GREEN}✓ Basic documentation check passed${NC}"
+
+# 10. Schema validation
+echo -e "${YELLOW}Validating documentation schemas...${NC}"
+if ! python3 tools/validate_documentation.py; then
+    echo -e "${RED}❌ Documentation schema validation failed!${NC}"
+    exit 1
+fi
+echo -e "${GREEN}✓ Documentation schema validation passed${NC}"
 
 echo -e "${GREEN}✅ All safety checks passed! Safe to commit.${NC}"

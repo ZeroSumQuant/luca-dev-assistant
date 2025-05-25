@@ -12,6 +12,9 @@ omit =
     tools/coverage_tracker.py
     tools/code_watchdog.py
     tools/consolidate_logs.py
+    tools/validate_documentation.py
+    tools/pr_create_wrapper.sh
+    tools/merge_resolver.py
 
 [report]
 precision = 2
