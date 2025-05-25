@@ -1,9 +1,9 @@
 {
   "entries": [
     {
-      "timestamp": "2025-05-25T15:04:38.480084",
-      "percentage": 98.84,
-      "commit_sha": "test123"
+      "timestamp": "2025-05-25T15:11:30.985210+00:00",
+      "percentage": 97.34,
+      "commit_sha": "b4ec9b0"
     }
   ]
 }
