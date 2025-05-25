@@ -122,7 +122,7 @@ jobs:
             coverage.xml
 
       - name: Docker build
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: false   # change to true + set secrets if you want auto-push
