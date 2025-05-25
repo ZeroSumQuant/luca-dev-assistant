@@ -93,6 +93,13 @@ if ! python3 -m pytest --cov=luca_core --cov=app --cov=tools --cov-fail-under=95
 fi
 echo -e "${GREEN}✓ Tests passed with ≥95% coverage${NC}"
 
+# 8.1. Track coverage trends
+echo -e "${YELLOW}Tracking coverage trends...${NC}"
+COVERAGE_PCT=$(python3 -m coverage report | grep TOTAL | awk '{print $NF}' | sed 's/%//')
+COMMIT_SHA=$(git rev-parse --short HEAD 2>/dev/null || echo "uncommitted")
+python3 tools/coverage_tracker.py ${COVERAGE_PCT} ${COMMIT_SHA}
+echo -e "${GREEN}✓ Coverage tracked: ${COVERAGE_PCT}%${NC}"
+
 # 9. Documentation check
 echo -e "${YELLOW}Checking documentation...${NC}"
 if ! ./verify-docs.sh; then

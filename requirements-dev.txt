@@ -16,6 +16,7 @@ pytest-cov==5.0.0       # For coverage configuration
 # Security
 bandit==1.8.3
 bandit[toml]  # For pyproject.toml configuration
+safety==3.5.1  # For dependency vulnerability scanning
 
 # Pre-commit
 pre-commit==3.6.2

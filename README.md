@@ -1,5 +1,7 @@
 # LUCA · Developer Assistant
 
+![Coverage](https://img.shields.io/badge/coverage-97.34%-brightgreen)
+
 *A powerful general-purpose development assistant built on agent orchestration technology that helps developers across the entire software development lifecycle.* ✨🧠💻
 
 ---
