@@ -47,14 +47,67 @@ echo "✅ All safety checks passed"
 ```bash
 cd /Users/dustinkirby/Documents/GitHub/luca-dev-assistant
 source .venv/bin/activate
+./claude-startup.sh  # Run helper script for comprehensive checks
 pwd && git status && git branch -a && gh pr list --limit 10
 ```
+
+### Before Creating New Branches (IMPORTANT)
+1. Run `./branch-check.sh` - Ensure you're not behind main
+2. Follow the update instructions if branch is outdated
 
 ### Before Every Commit (MANDATORY)
 1. Run `./safety-check.sh` - MUST PASS
 2. Update `docs/task_log.md` - NO EXCEPTIONS
 3. Create `docs/handoff/YYYY-MM-DD-N.md` - REQUIRED
 4. Verify all related issues are documented
+
+---
+
+## 🛠️ HELPER SCRIPTS FOR CLAUDE
+
+### Available Helper Scripts
+These scripts are designed to help Claude instances work more effectively:
+
+1. **claude-startup.sh** - Preflight checklist for every session
+   ```bash
+   ./claude-startup.sh
+   ```
+   - Verifies correct directory, virtual env, Python version
+   - Checks branch status automatically
+   - Provides useful command reminders
+   - Run this at the START of every session
+
+2. **branch-check.sh** - Prevent merge conflicts
+   ```bash
+   ./branch-check.sh
+   ```
+   - Checks if your branch is behind main
+   - Provides step-by-step update instructions
+   - Run BEFORE creating new branches
+
+3. **issue-checker.sh** - Find completed issues
+   ```bash
+   ./issue-checker.sh
+   ```
+   - Scans codebase for implemented features
+   - Identifies issues that may be ready to close
+   - Helps maintain accurate issue tracking
+
+4. **Code Watchdog** - Real-time Python validation
+   ```bash
+   ./start-watchdog.sh  # Start monitoring
+   ./stop-watchdog.sh   # Stop monitoring
+   ```
+   - Monitors Python files for syntax errors
+   - Validates imports in real-time
+   - Shows errors immediately on file save
+   - Runs in background, check watchdog.log for output
+
+### When to Use Helper Scripts
+- **Always start with**: `./claude-startup.sh`
+- **Before new branches**: `./branch-check.sh`
+- **During issue review**: `./issue-checker.sh`
+- **For continuous validation**: `./start-watchdog.sh` (optional)
 
 ---
 

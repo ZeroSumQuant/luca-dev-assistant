@@ -20,6 +20,15 @@
   - All tests passing, documentation updated
   - Created branch: claude-2025-05-26-automation-helpers
 
+- **Evening — Created issue-checker script and updated CLAUDE.md**:
+  - Created issue-checker.sh to identify potentially completed issues
+  - Script found 9 issues that appear to be implemented
+  - Updated CLAUDE.md with comprehensive helper scripts section
+  - Added claude-startup.sh to mandatory workflow
+  - Added branch-check.sh step before creating new branches
+  - Improved Claude workflow with clear script usage instructions
+  - Created branch: claude-2025-05-26-issue-checker
+
 ## 2025-05-25
 
 - **Morning — Implementing safeguards for Claude Squad**:

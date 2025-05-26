@@ -58,7 +58,11 @@ class CodeValidationHandler(FileSystemEventHandler):
 
     def validate_file(self, file_path: Path) -> bool:
         """Validate a Python file for syntax and import errors."""
-        relative_path = file_path.relative_to(self.project_root)
+        try:
+            relative_path = file_path.relative_to(self.project_root)
+        except ValueError:
+            # File is outside project root, use absolute path for error tracking
+            relative_path = file_path
 
         try:
             # Read the file content
