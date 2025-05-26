@@ -41,6 +41,29 @@ echo "✅ All safety checks passed"
 
 ---
 
+## 🎯 PROJECT PURPOSE & PHILOSOPHY
+
+### Why These Standards Matter
+LUCA is designed for **quantitative development** where bugs can mean real financial losses. The strict quality requirements aren't about perfection for its own sake - they're about:
+
+- **Building Trust**: Users need confidence that AI-assisted code won't unknowingly harm them financially
+- **Protecting Users**: High standards prevent accidental creation of harmful systems
+- **Enabling Adoption**: Reliability and safety foster adoption by everyday developers worldwide
+- **Showcasing AI Capability**: Demonstrating what AI assistants can achieve when properly supported
+
+### For AI Assistants Working on LUCA
+These guidelines create **guardrails that enable confident exploration**. The strict standards aren't meant to be stressful - they're safety nets that let both humans and AI:
+- Move quickly with confidence
+- Explore creative solutions knowing quality gates will catch issues
+- Build collaboratively with transparency and trust
+- Focus on innovation rather than worry about hidden problems
+
+Think of this as a well-equipped playground: the safety equipment enables more creative play, not less. The handoff documents, helper scripts, and quality gates are all designed to make AI-human collaboration more effective and trustworthy.
+
+**Remember**: This is about protecting people AND showcasing how wonderful and capable AI assistants can be. Every quality check, every test, every piece of documentation builds toward a future where AI and humans create amazing things together safely.
+
+---
+
 ## 📋 MANDATORY WORKFLOW
 
 ### Every Session Start (NON-NEGOTIABLE)
