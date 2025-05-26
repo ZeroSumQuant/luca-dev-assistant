@@ -1,5 +1,15 @@
 # LUCA Dev Assistant - Task Log
 
+## 2025-05-26
+
+- **Morning — Improved CLAUDE.md workflow clarity**:
+  - Updated CLAUDE.md to clarify that safety-check.sh should run before commits, not at session start
+  - Removed safety-check.sh from "Every Session Start" section to reduce noise
+  - Updated "ALWAYS DO" section to specify "BEFORE COMMITS" instead of "EVERY SESSION"
+  - This change makes the workflow more logical - no need to check documentation before work is done
+  - All 305 tests passing after changes
+  - Created branch: claude-2025-05-26-safety-check-workflow
+
 ## 2025-05-25
 
 - **Morning — Implementing safeguards for Claude Squad**:
