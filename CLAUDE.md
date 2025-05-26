@@ -93,10 +93,21 @@ These scripts are designed to help Claude instances work more effectively:
    - Identifies issues that may be ready to close
    - Helps maintain accurate issue tracking
 
+4. **Code Watchdog** - Real-time Python validation
+   ```bash
+   ./start-watchdog.sh  # Start monitoring
+   ./stop-watchdog.sh   # Stop monitoring
+   ```
+   - Monitors Python files for syntax errors
+   - Validates imports in real-time
+   - Shows errors immediately on file save
+   - Runs in background, check watchdog.log for output
+
 ### When to Use Helper Scripts
 - **Always start with**: `./claude-startup.sh`
 - **Before new branches**: `./branch-check.sh`
 - **During issue review**: `./issue-checker.sh`
+- **For continuous validation**: `./start-watchdog.sh` (optional)
 
 ---
 
