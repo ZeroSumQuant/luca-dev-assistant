@@ -47,7 +47,6 @@ echo "✅ All safety checks passed"
 ```bash
 cd /Users/dustinkirby/Documents/GitHub/luca-dev-assistant
 source .venv/bin/activate
-./safety-check.sh  # MUST PASS - NO EXCEPTIONS
 pwd && git status && git branch -a && gh pr list --limit 10
 ```
 
@@ -194,7 +193,7 @@ pwd && git status && git branch -a && gh pr list --limit 10
 
 ## ✅ ALWAYS DO (MANDATORY)
 
-- Run safety-check.sh (EVERY SESSION)
+- Run safety-check.sh (BEFORE COMMITS)
 - Update documentation (EVERY CHANGE)
 - Test edge cases (95% COVERAGE)
 - Handle all errors (NO EXCEPTIONS)
