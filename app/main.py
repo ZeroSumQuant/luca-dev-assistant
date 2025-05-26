@@ -11,6 +11,9 @@ from dotenv import load_dotenv
 # Add parent directory to sys.path for importing from project root
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+# Import theme
+from app.theme import get_theme_css, render_icon
+
 # Import Luca components
 from luca import get_manager
 from luca_core.manager.manager import ResponseOptions
@@ -29,27 +32,19 @@ logger = logging.getLogger(__name__)
 # Configure the page
 st.set_page_config(
     page_title="Luca - Quantitative Development Assistant",
-    page_icon="📊",
+    page_icon="L",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# Custom CSS for Claude/ChatGPT-style interface
-CSS_STYLES = """
+# Apply the modern theme
+st.markdown(get_theme_css(), unsafe_allow_html=True)
+
+# Additional page-specific styles
+st.markdown(
+    """
 <style>
-    /* Main container adjustments */
-    .main .block-container {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-        max-width: 1000px;
-    }
-
-    /* Hide default Streamlit elements */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-
-    /* Chat messages styling */
+    /* Chat-specific additions */
     .stChatMessage {
         background-color: transparent;
         border: none;
@@ -57,111 +52,62 @@ CSS_STYLES = """
     }
 
     .stChatMessage[data-testid="user-message"] {
-        background-color: #f7f7f8;
-        border-radius: 1rem;
+        background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+        color: white;
+        border-radius: 18px;
+        padding: 1rem 1.5rem;
         margin: 0.5rem 0;
+        max-width: 70%;
+        margin-left: auto;
     }
 
-    /* Message content styling */
-    .stMarkdown {
-        font-size: 1rem;
-        line-height: 1.6;
-        color: #2c3e50;
+    .stChatMessage[data-testid="assistant-message"] {
+        background: #F3F4F6;
+        color: #1F2937;
+        border-radius: 18px;
+        padding: 1rem 1.5rem;
+        margin: 0.5rem 0;
+        max-width: 70%;
+        margin-right: auto;
     }
 
-    /* Sidebar styling */
-    section[data-testid="stSidebar"] {
-        background-color: #f9f9f9;
-        border-right: 1px solid #e5e5e5;
+    /* Welcome screen */
+    .welcome-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
 
-    /* Sidebar content */
-    section[data-testid="stSidebar"] > div {
-        padding-top: 1rem;
-    }
-
-    /* Code blocks */
-    .stMarkdown pre {
-        background-color: #1e1e1e;
-        color: #d4d4d4;
-        border-radius: 0.5rem;
-        padding: 1rem;
-        position: relative;
-        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-        font-size: 0.875rem;
-        line-height: 1.5;
-    }
-
-    /* Code syntax highlighting */
-    .stMarkdown code {
-        background-color: #f4f4f4;
-        padding: 0.2rem 0.4rem;
-        border-radius: 0.25rem;
-        font-size: 0.875rem;
-    }
-
-    /* Headers */
-    h1, h2, h3 {
-        font-weight: 600;
-        color: #1a1a1a;
-    }
-
-    /* Input area */
-    .stChatInputContainer {
-        border-top: 1px solid #e5e5e5;
-        padding-top: 1rem;
-        background-color: white;
-    }
-
-    /* Chat input styling */
+    /* Chat input enhancement */
     .stChatInput textarea {
-        font-size: 1rem;
-        border: 1px solid #e5e5e5;
-        border-radius: 0.5rem;
+        background-color: #FFFFFF !important;
+        border: 2px solid #E5E7EB !important;
+        border-radius: 12px !important;
+        font-size: 16px !important;
     }
 
     .stChatInput textarea:focus {
-        border-color: #1a73e8;
-        box-shadow: 0 0 0 2px rgba(26,115,232,0.1);
+        border-color: #8b5cf6 !important;
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1) !important;
     }
 
-    /* Sidebar headers */
-    .sidebar-header {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: #666;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin: 1rem 0 0.5rem 0;
-    }
-
-    /* Project cards */
-    .project-card {
-        background: white;
-        border: 1px solid #e5e5e5;
-        border-radius: 0.5rem;
-        padding: 0.75rem;
-        margin: 0.5rem 0;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-
-    .project-card:hover {
-        border-color: #1a73e8;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-
-    /* Domain selector */
-    .domain-selector {
-        background: #f1f3f4;
-        border-radius: 0.5rem;
-        padding: 0.5rem;
-        margin-bottom: 1rem;
+    /* Typing indicator */
+    .typing-dot {
+        width: 8px;
+        height: 8px;
+        background: #8b5cf6;
+        border-radius: 50%;
+        display: inline-block;
+        margin: 0 2px;
     }
 </style>
-"""
-
-st.markdown(CSS_STYLES, unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 
 # Initialize Luca manager in session state
@@ -187,8 +133,20 @@ def set_learning_mode(mode_str):
 def main():
     # Sidebar with navigation and projects
     with st.sidebar:
-        # Domain selector at top
-        st.markdown('<div class="domain-selector">', unsafe_allow_html=True)
+        # Logo section
+        st.markdown(
+            """
+        <div style="text-align: center; padding: 1rem 0; margin-bottom: 1rem;">
+            <h2 class="gradient-text" style="margin: 0;">Luca</h2>
+            <p style="color: #6B7280; font-size: 0.875rem; margin: 0;">Quantitative Assistant</p>
+        </div>
+        """,
+            unsafe_allow_html=True,
+        )
+
+        # Domain selector
+        st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
+        st.markdown('<div class="sidebar-header">Domain</div>', unsafe_allow_html=True)
         domain = st.selectbox(
             "Domain",
             ["Quantitative Trading", "Software Development"],
@@ -197,8 +155,9 @@ def main():
         st.markdown("</div>", unsafe_allow_html=True)
 
         # Projects section
+        st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="sidebar-header">PROJECTS</div>', unsafe_allow_html=True
+            '<div class="sidebar-header">Projects</div>', unsafe_allow_html=True
         )
 
         # Example project cards
@@ -206,25 +165,42 @@ def main():
             st.session_state.selected_project = None
 
         projects = [
-            {"icon": "📊", "name": "Strategy Backtest Q1", "id": "proj_1"},
-            {"icon": "📈", "name": "Portfolio Optimization", "id": "proj_2"},
-            {"icon": "🔬", "name": "Alpha Research", "id": "proj_3"},
-            {"icon": "🎯", "name": "Risk Analysis", "id": "proj_4"},
+            {"icon": "chart", "name": "Strategy Backtest Q1", "id": "proj_1"},
+            {"icon": "trending", "name": "Portfolio Optimization", "id": "proj_2"},
+            {"icon": "flask", "name": "Alpha Research", "id": "proj_3"},
+            {"icon": "target", "name": "Risk Analysis", "id": "proj_4"},
         ]
 
         for project in projects:
-            if st.button(
-                f"{project['icon']} {project['name']}",
-                key=project["id"],
-                use_container_width=True,
-            ):
-                st.session_state.selected_project = project["id"]
-                st.rerun()
+            col1, col2 = st.columns([0.15, 0.85])
+            with col1:
+                st.markdown(
+                    render_icon(project["icon"], size=20), unsafe_allow_html=True
+                )
+            with col2:
+                if st.button(
+                    project["name"],
+                    key=project["id"],
+                    use_container_width=True,
+                    help=f"Open {project['name']}",
+                ):
+                    st.session_state.selected_project = project["id"]
+                    st.rerun()
 
         # New project button
-        if st.button("➕ New Project", use_container_width=True):
-            st.session_state.selected_project = "new"
-            st.rerun()
+        st.markdown(
+            """
+        <button class="new-button" style="width: 100%; margin-top: 0.5rem;">
+            <svg style="width: 20px; height: 20px; margin-right: 0.5rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            New Project
+        </button>
+        """,
+            unsafe_allow_html=True,
+        )
+        st.markdown("</div>", unsafe_allow_html=True)
 
         st.divider()
 
@@ -246,7 +222,7 @@ def main():
         st.divider()
 
         # Settings at bottom
-        with st.expander("⚙️ Settings"):
+        with st.expander("Settings"):
             current_mode = get_learning_mode()
             mode = st.selectbox(
                 "Response Style",
@@ -260,20 +236,7 @@ def main():
                 set_learning_mode(mode)
                 st.rerun()
 
-    # Main chat area - clean, minimal header
-    if not st.session_state.messages or len(st.session_state.messages) == 1:
-        # Show welcome screen when no conversation
-        st.markdown(
-            """
-            <div style="text-align: center; padding: 3rem 0;">
-                <h1 style="font-size: 3rem; font-weight: 600; margin-bottom: 0.5rem;">Luca</h1>
-                <p style="font-size: 1.2rem; color: #666;">Your Quantitative Development Assistant</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    # Initialize chat history
+    # Initialize chat history first
     if "messages" not in st.session_state:
         st.session_state.messages = [
             {
@@ -286,6 +249,19 @@ def main():
             }
         ]
 
+    # Main chat area - clean, minimal header
+    if len(st.session_state.messages) == 1:
+        # Show welcome screen when no conversation
+        st.markdown(
+            """
+            <div style="text-align: center; padding: 3rem 0;">
+                <h1 class="welcome-title">Luca</h1>
+                <p style="font-size: 1.2rem; color: #6B7280;">Your Quantitative Development Assistant</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
     # Create a container for messages to control styling
     messages_container = st.container()
 
@@ -294,7 +270,7 @@ def main():
         for message in st.session_state.messages:
             with st.chat_message(
                 message["role"],
-                avatar="🤖" if message["role"] == "assistant" else "👤",
+                avatar=None,  # We'll use custom styling instead of emojis
             ):
                 st.markdown(message["content"])
 
@@ -305,12 +281,12 @@ def main():
 
         # Display user message
         with messages_container:
-            with st.chat_message("user", avatar="👤"):
+            with st.chat_message("user", avatar=None):
                 st.markdown(prompt)
 
         # Process the request using the LucaManager
         with messages_container:
-            with st.chat_message("assistant", avatar="🤖"):
+            with st.chat_message("assistant", avatar=None):
                 message_placeholder = st.empty()
                 # Show typing indicator
                 typing_indicator = message_placeholder.container()
@@ -318,9 +294,9 @@ def main():
                 with typing_cols[0]:
                     st.markdown(
                         """<div style="display: flex; gap: 4px;">
-                        <div style="width: 8px; height: 8px; background: #666; border-radius: 50%; animation: bounce 1.4s infinite;"></div>
-                        <div style="width: 8px; height: 8px; background: #666; border-radius: 50%; animation: bounce 1.4s infinite 0.2s;"></div>
-                        <div style="width: 8px; height: 8px; background: #666; border-radius: 50%; animation: bounce 1.4s infinite 0.4s;"></div>
+                        <div class="typing-dot" style="animation: bounce 1.4s infinite;"></div>
+                        <div class="typing-dot" style="animation: bounce 1.4s infinite 0.2s;"></div>
+                        <div class="typing-dot" style="animation: bounce 1.4s infinite 0.4s;"></div>
                         </div>
                         <style>
                         @keyframes bounce {
