@@ -24,6 +24,11 @@
       "timestamp": "2025-05-26T18:37:03.873936+00:00",
       "percentage": 97.34,
       "commit_sha": "158e94b"
+    },
+    {
+      "timestamp": "2025-05-26T19:25:36.643267+00:00",
+      "percentage": 97.34,
+      "commit_sha": "2b775d4"
     }
   ]
 }
