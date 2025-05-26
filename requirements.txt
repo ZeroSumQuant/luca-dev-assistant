@@ -10,7 +10,7 @@ pydantic>=2.0.0  # For type validation and data models
 pytest==8.3.5
 pytest-timeout==2.4.0
 pytest-forked==1.6.0  # May be needed for thread method in CI
-pytest-asyncio==0.24.0  # For async test support in MCP tests
+pytest-asyncio==0.26.0  # For async test support in MCP tests
 
 # AutoGen Stack - current versions
 autogen-agentchat==0.5.7
