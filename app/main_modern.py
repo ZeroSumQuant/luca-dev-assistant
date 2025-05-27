@@ -149,15 +149,320 @@ st.markdown(
         width: 120px;
         height: 120px;
         margin: 0 auto 2rem;
-        background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+        background: radial-gradient(circle at 30% 30%, #ec4899 0%, #8b5cf6 50%, #6d28d9 100%);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 3rem;
-        font-weight: 700;
-        color: white;
-        box-shadow: 0 8px 32px rgba(139, 92, 246, 0.25);
+        position: relative;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        animation: pulse-glow 3.6s ease-in-out infinite, rotate-hue 10s linear infinite;
+        overflow: hidden;
+    }
+
+    .logo-container::before {
+        content: '';
+        position: absolute;
+        top: -20px;
+        left: -20px;
+        right: -20px;
+        bottom: -20px;
+        background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, rgba(236, 72, 153, 0.3) 50%, transparent 70%);
+        border-radius: 50%;
+        z-index: -1;
+        opacity: 0.6;
+        animation: aura-pulse 3.6s ease-in-out infinite;
+    }
+
+    .logo-container::after {
+        content: '';
+        position: absolute;
+        top: -40px;
+        left: -40px;
+        right: -40px;
+        bottom: -40px;
+        background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.1) 40%, transparent 60%);
+        border-radius: 50%;
+        z-index: -2;
+        opacity: 0.4;
+        animation: aura-pulse 3.6s ease-in-out infinite 0.5s;
+    }
+
+    .logo-container:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 60px rgba(139, 92, 246, 0.6), 0 0 100px rgba(236, 72, 153, 0.4);
+        filter: brightness(1.3);
+    }
+
+    .logo-container:active {
+        transform: scale(0.95);
+        box-shadow: 0 0 30px rgba(139, 92, 246, 0.4), 0 0 50px rgba(236, 72, 153, 0.3);
+        filter: brightness(0.9);
+        transition: all 0.1s ease;
+    }
+
+    .logo-container:hover::before {
+        opacity: 1;
+        animation-duration: 1.5s;
+    }
+
+    .logo-container:hover::after {
+        opacity: 0.7;
+        animation-duration: 1.5s;
+    }
+
+    @keyframes pulse-glow {
+        0%, 100% {
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.5), 0 0 60px rgba(236, 72, 153, 0.3);
+        }
+        50% {
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.6), 0 0 80px rgba(236, 72, 153, 0.4);
+        }
+    }
+
+    @keyframes aura-pulse {
+        0%, 100% {
+            transform: scale(1);
+            opacity: 0.6;
+        }
+        50% {
+            transform: scale(1.1);
+            opacity: 0.3;
+        }
+    }
+
+    .orb-inner {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: conic-gradient(from 0deg at 50% 50%,
+            transparent 0deg,
+            rgba(236, 72, 153, 0.4) 60deg,
+            transparent 120deg,
+            rgba(139, 92, 246, 0.4) 180deg,
+            transparent 240deg,
+            rgba(236, 72, 153, 0.4) 300deg,
+            transparent 360deg);
+        animation: swirl 5s linear infinite;
+    }
+
+    .orb-inner::before {
+        content: '';
+        position: absolute;
+        inset: 20%;
+        border-radius: 50%;
+        background: radial-gradient(circle,
+            rgba(255, 255, 255, 0.3) 0%,
+            transparent 70%);
+        animation: shimmer 3.6s ease-in-out infinite;
+    }
+
+    .orb-particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+
+    .orb-particles::before,
+    .orb-particles::after {
+        content: '';
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        animation: orbit 7.2s linear infinite;
+    }
+
+    .orb-particles::after {
+        animation-delay: -3s;
+        width: 3px;
+        height: 3px;
+    }
+
+    @keyframes swirl {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes shimmer {
+        0%, 100% {
+            opacity: 0.5;
+            transform: scale(0.8);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+    }
+
+    @keyframes orbit {
+        0% {
+            transform: rotate(0deg) translateX(40px) rotate(0deg);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            transform: rotate(360deg) translateX(40px) rotate(-360deg);
+            opacity: 0;
+        }
+    }
+
+    @keyframes rotate-hue {
+        0% {
+            filter: hue-rotate(0deg) brightness(1);
+        }
+        50% {
+            filter: hue-rotate(20deg) brightness(1.1);
+        }
+        100% {
+            filter: hue-rotate(0deg) brightness(1);
+        }
+    }
+
+    /* Excited State - back to original speed */
+    .logo-container.excited {
+        animation: pulse-glow 3s ease-in-out infinite, rotate-hue 8s linear infinite, excitement-bounce 0.5s ease-in-out infinite;
+        filter: brightness(1.8) saturate(1.5) hue-rotate(0deg);
+        transform: scale(1.15);
+        box-shadow: 0 0 100px rgba(139, 92, 246, 1), 0 0 200px rgba(236, 72, 153, 0.8);
+    }
+
+    .logo-container.excited .orb-particles::before,
+    .logo-container.excited .orb-particles::after {
+        animation: orbit 6s linear infinite;
+    }
+
+    .logo-container.excited .orb-inner {
+        animation: swirl 4s linear infinite;
+    }
+
+    .logo-container.excited::before,
+    .logo-container.excited::after {
+        animation: aura-pulse 3s ease-in-out infinite;
+        opacity: 1 !important;
+    }
+
+    @keyframes excitement-bounce {
+        0%, 100% {
+            transform: scale(1.2) translateY(0);
+        }
+        50% {
+            transform: scale(1.25) translateY(-5px);
+        }
+    }
+
+    /* Extra spinning orbs for excited state */
+    .extra-orbs {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 120px;
+        height: 120px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .logo-container.excited + .extra-orbs {
+        opacity: 1;
+    }
+
+    .extra-orb {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: radial-gradient(circle, #ffffff 0%, #ffffff 30%, rgba(255, 255, 255, 0.6) 60%, transparent 100%);
+        border-radius: 50%;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 1), 0 0 40px rgba(255, 255, 255, 0.8);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .extra-orb:nth-child(1) {
+        animation: spin-orbit-1 1.5s linear infinite;
+    }
+
+    .extra-orb:nth-child(2) {
+        animation: spin-orbit-2 1.8s linear infinite;
+    }
+
+    .extra-orb:nth-child(3) {
+        animation: spin-orbit-3 1.2s linear infinite;
+    }
+
+    .extra-orb:nth-child(4) {
+        animation: spin-orbit-4 2s linear infinite;
+    }
+
+    .extra-orb:nth-child(5) {
+        animation: spin-orbit-5 1s linear infinite;
+    }
+
+    @keyframes spin-orbit-1 {
+        0% {
+            transform: rotate(0deg) translateX(80px) rotate(0deg) scale(0.8);
+        }
+        50% {
+            transform: rotate(180deg) translateX(80px) rotate(-180deg) scale(1.2);
+        }
+        100% {
+            transform: rotate(360deg) translateX(80px) rotate(-360deg) scale(0.8);
+        }
+    }
+
+    @keyframes spin-orbit-2 {
+        0% {
+            transform: rotate(72deg) translateX(90px) rotate(-72deg) scale(1);
+        }
+        100% {
+            transform: rotate(432deg) translateX(90px) rotate(-432deg) scale(1);
+        }
+    }
+
+    @keyframes spin-orbit-3 {
+        0% {
+            transform: rotate(144deg) translateX(70px) rotate(-144deg) scale(1.1);
+        }
+        100% {
+            transform: rotate(504deg) translateX(70px) rotate(-504deg) scale(1.1);
+        }
+    }
+
+    @keyframes spin-orbit-4 {
+        0% {
+            transform: rotate(216deg) translateX(85px) rotate(-216deg) scale(0.9);
+        }
+        100% {
+            transform: rotate(576deg) translateX(85px) rotate(-576deg) scale(0.9);
+        }
+    }
+
+    @keyframes spin-orbit-5 {
+        0% {
+            transform: rotate(288deg) translateX(75px) rotate(-288deg) scale(1.3);
+        }
+        50% {
+            transform: rotate(468deg) translateX(75px) rotate(-468deg) scale(0.7);
+        }
+        100% {
+            transform: rotate(648deg) translateX(75px) rotate(-648deg) scale(1.3);
+        }
     }
 
     /* Project cards */
@@ -321,6 +626,101 @@ st.markdown(
         font-size: 0.875rem;
         line-height: 1.5;
     }
+
+    /* Model Selector Dropdown */
+    .model-dropdown-container {
+        position: relative;
+        display: inline-block;
+        margin: 0 auto;
+    }
+
+    .model-dropdown {
+        position: absolute;
+        top: 50%;
+        left: 130px;
+        transform: translateY(-50%) scale(0.95);
+        background: white;
+        border-radius: 16px;
+        padding: 0.5rem;
+        min-width: 280px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(229, 231, 235, 0.5);
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1000;
+    }
+
+    .model-dropdown.active {
+        opacity: 1;
+        pointer-events: all;
+        transform: translateY(-50%) scale(1);
+    }
+
+    .model-dropdown::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: -8px;
+        transform: translateY(-50%) rotate(45deg);
+        width: 16px;
+        height: 16px;
+        background: white;
+        border-left: 1px solid rgba(229, 231, 235, 0.5);
+        border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+    }
+
+    .model-option {
+        background: white;
+        border: 2px solid transparent;
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        margin: 0.25rem 0;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .model-option:hover {
+        background: rgba(139, 92, 246, 0.05);
+        border-color: rgba(139, 92, 246, 0.3);
+        transform: translateX(4px);
+    }
+
+    .model-option.selected {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
+        border-color: #8b5cf6;
+    }
+
+    .model-info {
+        flex: 1;
+    }
+
+    .model-name {
+        font-weight: 600;
+        color: #1F2937;
+        font-size: 0.95rem;
+        margin-bottom: 0.15rem;
+    }
+
+    .model-desc {
+        font-size: 0.75rem;
+        color: #6B7280;
+    }
+
+    .model-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .model-option.selected .model-indicator {
+        opacity: 1;
+    }
 </style>
 
 <!-- SVG definitions for gradients -->
@@ -342,6 +742,12 @@ if "messages" not in st.session_state:
 
 if "input_key" not in st.session_state:
     st.session_state.input_key = 0
+
+if "selected_model" not in st.session_state:
+    st.session_state.selected_model = "GPT-4o"
+
+if "show_model_selector" not in st.session_state:
+    st.session_state.show_model_selector = False
 
 # Sidebar
 with st.sidebar:
@@ -438,13 +844,59 @@ with col2:
         if len(st.session_state.messages) == 0:
             # Welcome screen
             st.markdown(
-                """
+                f"""
             <div class="welcome-container">
-                <div class="logo-container">L</div>
+                <div class="model-dropdown-container">
+                    <div class="logo-container" title="Click to change model">
+                        <div class="orb-inner"></div>
+                        <div class="orb-particles"></div>
+                    </div>
+                    <div class="extra-orbs">
+                        <div class="extra-orb"></div>
+                        <div class="extra-orb"></div>
+                        <div class="extra-orb"></div>
+                        <div class="extra-orb"></div>
+                        <div class="extra-orb"></div>
+                    </div>
+                    <div id="model-dropdown" class="model-dropdown">
+                        <div class="model-option selected">
+                            <div class="model-info">
+                                <div class="model-name">GPT-4o</div>
+                                <div class="model-desc">Most capable, best for complex tasks</div>
+                            </div>
+                            <div class="model-indicator"></div>
+                        </div>
+                        <div class="model-option">
+                            <div class="model-info">
+                                <div class="model-name">GPT-4 Turbo</div>
+                                <div class="model-desc">Fast and capable</div>
+                            </div>
+                            <div class="model-indicator"></div>
+                        </div>
+                        <div class="model-option">
+                            <div class="model-info">
+                                <div class="model-name">Claude 3 Opus</div>
+                                <div class="model-desc">Advanced reasoning</div>
+                            </div>
+                            <div class="model-indicator"></div>
+                        </div>
+                        <div class="model-option">
+                            <div class="model-info">
+                                <div class="model-name">Claude 3 Sonnet</div>
+                                <div class="model-desc">Balanced performance</div>
+                            </div>
+                            <div class="model-indicator"></div>
+                        </div>
+                    </div>
+                </div>
                 <h2 class="gradient-text" style="font-size: 3rem; margin-bottom: 1rem;">Welcome to Luca</h2>
-                <p style="color: #6B7280; font-size: 1.125rem; margin-bottom: 3rem;">
+                <p style="color: #6B7280; font-size: 1.125rem; margin-bottom: 2rem;">
                     Your AI-powered quantitative development assistant
                 </p>
+                <p style="color: #8b5cf6; font-size: 0.875rem; margin-bottom: 1rem;">
+                    Currently using: <strong class="model-display">{st.session_state.selected_model}</strong>
+                </p>
+                <button data-test-excitement="true" style="background: #8b5cf6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; margin-bottom: 2rem; cursor: pointer;">Test Excitement</button>
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 600px; margin: 0 auto;">
                     <div class="feature-card">
                         <svg class="feature-icon" viewBox="0 0 24 24">
@@ -518,3 +970,178 @@ with col2:
             # Increment key to reset form
             st.session_state.input_key += 1
             st.rerun()
+
+    # Use components.html for better JavaScript execution
+    import streamlit.components.v1 as components
+
+    # Inject the JavaScript properly
+    components.html(
+        """
+        <script>
+        (function() {
+            // Wait for parent document to be ready
+            function initializeLuca() {
+                const parentDoc = window.parent.document;
+
+                // Initialize click tracking
+                if (!window.parent.lucaClickCount) {
+                    window.parent.lucaClickCount = 0;
+                    window.parent.lucaClickTimer = null;
+                    window.parent.lucaExcitementTimer = null;
+                }
+
+                // Handle orb clicks
+                function handleOrbClick() {
+                    const orb = parentDoc.querySelector('.logo-container');
+                    const dropdown = parentDoc.getElementById('model-dropdown');
+                    const extraOrbs = parentDoc.querySelector('.extra-orbs');
+
+                    if (!orb || !dropdown) {
+                        console.log('Elements not found');
+                        return;
+                    }
+
+                    // Increment click count
+                    window.parent.lucaClickCount++;
+
+                    // Reset click count timer
+                    clearTimeout(window.parent.lucaClickTimer);
+                    window.parent.lucaClickTimer = setTimeout(() => {
+                        window.parent.lucaClickCount = 0;
+                    }, 1000);
+
+                    // Check for excitement state
+                    if (window.parent.lucaClickCount >= 3) {
+                        orb.classList.add('excited');
+                        if (extraOrbs) extraOrbs.style.opacity = '1';
+                        console.log('EXCITED STATE ACTIVATED!');
+
+                        // Clear any existing calm down timer
+                        clearTimeout(window.parent.lucaExcitementTimer);
+
+                        // Set calm down timer
+                        window.parent.lucaExcitementTimer = setTimeout(() => {
+                            orb.classList.remove('excited');
+                            if (extraOrbs) extraOrbs.style.opacity = '0';
+                            window.parent.lucaClickCount = 0;
+                            console.log('Calming down...');
+                        }, 5000);
+                    } else {
+                        console.log('Orb clicked', window.parent.lucaClickCount, 'times');
+                    }
+
+                    // Toggle dropdown
+                    dropdown.classList.toggle('active');
+                }
+
+                // Select model function
+                function selectModel(modelName) {
+                    const options = parentDoc.querySelectorAll('.model-option');
+                    options.forEach(el => el.classList.remove('selected'));
+
+                    // Find and select the clicked option
+                    options.forEach(el => {
+                        if (el.querySelector('.model-name').textContent === modelName) {
+                            el.classList.add('selected');
+                        }
+                    });
+
+                    parentDoc.getElementById('model-dropdown').classList.remove('active');
+
+                    const modelDisplay = parentDoc.querySelector('.model-display');
+                    if (modelDisplay) {
+                        modelDisplay.textContent = modelName;
+                    }
+                }
+
+                // Attach event listeners
+                function attachListeners() {
+                    const orb = parentDoc.querySelector('.logo-container');
+                    if (orb && !orb.hasAttribute('data-luca-listeners')) {
+                        orb.setAttribute('data-luca-listeners', 'true');
+                        orb.addEventListener('click', handleOrbClick);
+                        console.log('Orb listener attached');
+                    }
+
+                    // Attach model option listeners
+                    const modelOptions = parentDoc.querySelectorAll('.model-option');
+                    modelOptions.forEach(option => {
+                        if (!option.hasAttribute('data-luca-listeners')) {
+                            option.setAttribute('data-luca-listeners', 'true');
+                            option.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                const modelName = this.querySelector('.model-name').textContent;
+                                selectModel(modelName);
+                            });
+                        }
+                    });
+
+                    // Test button listener
+                    const testBtn = parentDoc.querySelector('[data-test-excitement]');
+                    if (testBtn && !testBtn.hasAttribute('data-luca-listeners')) {
+                        testBtn.setAttribute('data-luca-listeners', 'true');
+                        testBtn.addEventListener('click', function() {
+                            const orb = parentDoc.querySelector('.logo-container');
+                            const extraOrbs = parentDoc.querySelector('.extra-orbs');
+                            if (orb) {
+                                orb.classList.add('excited');
+                                if (extraOrbs) extraOrbs.style.opacity = '1';
+                                console.log('Test button: Excitement triggered');
+                                setTimeout(() => {
+                                    orb.classList.remove('excited');
+                                    if (extraOrbs) extraOrbs.style.opacity = '0';
+                                }, 5000);
+                            }
+                        });
+                        console.log('Test button listener attached');
+                    }
+                }
+
+                // Global click handler for closing dropdown
+                if (!window.parent.lucaGlobalClickHandler) {
+                    window.parent.lucaGlobalClickHandler = true;
+                    parentDoc.addEventListener('click', function(event) {
+                        const dropdown = parentDoc.getElementById('model-dropdown');
+                        const orb = parentDoc.querySelector('.logo-container');
+                        const extraOrbs = parentDoc.querySelector('.extra-orbs');
+
+                        if (dropdown && orb && !dropdown.contains(event.target) &&
+                            !orb.contains(event.target) &&
+                            (!extraOrbs || !extraOrbs.contains(event.target))) {
+                            dropdown.classList.remove('active');
+                        }
+                    });
+                }
+
+                // Attach listeners
+                attachListeners();
+
+                // Set up mutation observer
+                if (!window.parent.lucaObserver) {
+                    window.parent.lucaObserver = new MutationObserver(function() {
+                        attachListeners();
+                    });
+
+                    window.parent.lucaObserver.observe(parentDoc.body, {
+                        childList: true,
+                        subtree: true
+                    });
+                }
+            }
+
+            // Initialize when ready
+            if (document.readyState === 'complete') {
+                initializeLuca();
+            } else {
+                window.addEventListener('load', initializeLuca);
+            }
+
+            // Also try immediately
+            setTimeout(initializeLuca, 100);
+            setTimeout(initializeLuca, 500);
+            setTimeout(initializeLuca, 1000);
+        })();
+        </script>
+        """,
+        height=0,
+    )

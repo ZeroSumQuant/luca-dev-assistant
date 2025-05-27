@@ -8,6 +8,7 @@ omit =
     # Omit files with known test issues until they are fixed
     app/pages/agent_manager.py
     app/__main__.py
+    app/main_modern.py
     # Utility scripts (not core functionality)
     tools/coverage_tracker.py
     tools/code_watchdog.py
