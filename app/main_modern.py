@@ -586,29 +586,34 @@ st.markdown(
         background: rgba(139, 92, 246, 0.05);
     }
 
-    /* Feature cards */
+    /* Feature cards - now just icons */
     .feature-card {
-        background: white;
-        border: 1px solid #E5E7EB;
-        border-radius: 16px;
-        padding: 2rem;
+        background: transparent;
+        border: none;
+        padding: 1rem;
         text-align: center;
         transition: all 0.3s;
+        cursor: pointer;
+        position: relative;
     }
 
     .feature-card:hover {
-        border-color: #8b5cf6;
-        box-shadow: 0 8px 24px rgba(139, 92, 246, 0.1);
-        transform: translateY(-2px);
+        transform: translateY(-5px);
     }
 
     .feature-icon {
         width: 48px;
         height: 48px;
-        margin: 0 auto 1rem;
+        margin: 0 auto;
         stroke: url(#gradient);
         stroke-width: 2;
         fill: none;
+        transition: all 0.3s;
+    }
+
+    .feature-card:hover .feature-icon {
+        transform: scale(1.1);
+        filter: drop-shadow(0 4px 12px rgba(139, 92, 246, 0.25));
     }
 
     .feature-title {
@@ -617,14 +622,21 @@ st.markdown(
         -webkit-text-fill-color: transparent;
         background-clip: text;
         font-weight: 600;
-        font-size: 1.125rem;
-        margin: 0.5rem 0;
+        font-size: 1rem;
+        margin: 0.5rem 0 0 0;
+        white-space: nowrap;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+    }
+
+    .feature-card:hover .feature-title {
+        opacity: 1;
+        transform: translateY(0);
     }
 
     .feature-desc {
-        color: #6B7280;
-        font-size: 0.875rem;
-        line-height: 1.5;
+        display: none;
     }
 
     /* Model Selector Dropdown */
@@ -911,7 +923,7 @@ with col2:
                     Currently using: <strong class="model-display">{st.session_state.selected_model}</strong>
                 </p>
                 <button data-test-excitement="true" style="background: #8b5cf6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; margin-bottom: 2rem; cursor: pointer;">Test Excitement</button>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 600px; margin: 0 auto;">
+                <div style="display: flex; justify-content: center; align-items: center; gap: 4rem; margin: 2rem auto;">
                     <div class="feature-card">
                         <svg class="feature-icon" viewBox="0 0 24 24">
                             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
