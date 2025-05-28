@@ -70,8 +70,8 @@ class TestStreamlitApp:
 
                     # Verify page config
                     st_mock.set_page_config.assert_called_with(
-                        page_title="Luca Dev Assistant",
-                        page_icon="🧠",
+                        page_title="Luca - Quantitative Development Assistant",
+                        page_icon="L",
                         layout="wide",
                         initial_sidebar_state="expanded",
                     )
@@ -213,10 +213,7 @@ class TestStreamlitApp:
 
                     # Verify UI elements were created
                     assert st_mock.markdown.called
-                    assert (
-                        st_mock.header.called
-                    )  # When using 'with st.sidebar', calls go to st.header, not st.sidebar.header
-                    assert st_mock.page_link.called
+                    # st.header and page_link are no longer used in main.py
                     assert st_mock.selectbox.called
 
     def test_main_chat_history_initialization(self):
@@ -448,11 +445,8 @@ class TestStreamlitApp:
                     # Call main
                     app.main.main()
 
-                    # Verify footer elements
+                    # Verify divider is called (footer caption was removed from main.py)
                     st_mock.divider.assert_called()
-                    st_mock.caption.assert_called_with(
-                        "Built with ❤️ using Streamlit | Luca Dev Assistant v0.1.0"
-                    )
 
     def test_response_options_creation(self):
         """Test that ResponseOptions are created correctly."""
@@ -582,7 +576,11 @@ class TestStreamlitApp:
         # Create a script that will execute the module as main
         test_script = """
 import sys
+import os
 from unittest.mock import MagicMock
+
+# Add current directory to path so 'app' module can be found
+sys.path.insert(0, '.')
 
 # Mock streamlit with all required attributes
 st_mock = MagicMock()

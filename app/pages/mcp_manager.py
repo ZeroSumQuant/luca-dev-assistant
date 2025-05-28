@@ -13,7 +13,7 @@ import streamlit as st  # noqa: E402
 from tools.mcp_autogen_bridge import MCPAutogenBridge  # noqa: E402
 from tools.mcp_client import MCPClientManager, MCPServerConfig  # noqa: E402
 
-st.set_page_config(page_title="MCP Manager", page_icon="🔌", layout="wide")
+st.set_page_config(page_title="MCP Manager", page_icon="M", layout="wide")
 
 # Initialize MCP client in session state
 if "mcp_client" not in st.session_state:
@@ -51,9 +51,7 @@ def main():
         return
 
     # Create tabs for different MCP management functions
-    tabs = st.tabs(
-        ["🌐 Connected Servers", "➕ Add Server", "🛠️ Available Tools", "🧪 Test Tools"]
-    )
+    tabs = st.tabs(["Connected Servers", "Add Server", "Available Tools", "Test Tools"])
 
     # Tab 1: Connected Servers
     with tabs[0]:
@@ -66,7 +64,7 @@ def main():
             st.info("No MCP servers currently connected.")
         else:
             for server in connected_servers:
-                with st.expander(f"📡 {server.name}"):
+                with st.expander(f"{server.name}"):
                     col1, col2 = st.columns([3, 1])
 
                     with col1:
@@ -157,10 +155,13 @@ def main():
 
             # Display tools by server
             for server_name, server_tools in tools_by_server.items():
-                st.subheader(f"📡 {server_name}")
+                st.markdown(
+                    f'<h3 style="color: #8b5cf6; margin-top: 1.5rem;">{server_name}</h3>',
+                    unsafe_allow_html=True,
+                )
 
                 for tool in server_tools:
-                    with st.expander(f"🛠️ {tool.name}"):
+                    with st.expander(f"{tool.name}"):
                         st.markdown(f"**Description:** {tool.description}")
 
                         # Show the tool schema
@@ -252,17 +253,17 @@ def main():
     col1, col2, col3 = st.columns([1, 1, 1])
 
     with col1:
-        if st.button("🛑 Stop MCP Client"):
+        if st.button("Stop MCP Client"):
             asyncio.run(stop_mcp_client())
             st.rerun()
 
     with col2:
-        if st.button("🔄 Refresh"):
+        if st.button("Refresh"):
             st.rerun()
 
     with col3:
         # Export connected servers
-        if st.button("📥 Export Config"):
+        if st.button("Export Config"):
             config = {
                 "servers": [
                     {
