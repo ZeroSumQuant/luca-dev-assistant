@@ -751,6 +751,11 @@ if "show_model_selector" not in st.session_state:
 
 # Sidebar
 with st.sidebar:
+    # Navigation link
+    st.page_link("pages/agent_manager.py", label="Agent Manager", use_container_width=True)
+    
+    st.divider()
+    
     st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
     st.markdown('<div class="sidebar-header">Domain</div>', unsafe_allow_html=True)
     domain = st.selectbox(
@@ -813,8 +818,17 @@ with st.sidebar:
     ]
 
     for chat in recent_chats:
-        if st.button(chat, key=f"chat_{chat}", use_container_width=True):
-            pass
+        st.markdown(
+            f"""
+        <div class="project-card">
+            <svg class="icon" viewBox="0 0 24 24">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span style="color: #374151; font-weight: 500;">{chat}</span>
+        </div>
+        """,
+            unsafe_allow_html=True,
+        )
 
     st.markdown("</div>", unsafe_allow_html=True)
 

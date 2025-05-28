@@ -54,7 +54,7 @@ html_content = (
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         
         body {
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            background: #ffffff;
             margin: 0;
             padding: 0;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -124,7 +124,7 @@ html_content = (
             left: 50%;
             transform: translateX(-50%);
             margin-top: 20px;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(0, 0, 0, 0.8);
             font-size: 16px;
             font-weight: 500;
             white-space: nowrap;
@@ -165,38 +165,39 @@ html_content = (
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.6),
-                        0 0 80px rgba(102, 126, 234, 0.3),
-                        inset 0 0 20px rgba(255, 255, 255, 0.2);
-            overflow: visible;
-            animation: pulse-glow 3.6s ease-in-out infinite, rotate-hue 10s linear infinite;
-        }
-        
-        .logo-container::before,
-        .logo-container::after {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%);
+            background: radial-gradient(circle at 30% 30%, #ec4899 0%, #8b5cf6 50%, #6d28d9 100%);
+            cursor: pointer;
+            transition: all 0.4s ease;
             animation: pulse-glow 3.6s ease-in-out infinite;
+            overflow: hidden;
         }
         
         .logo-container::before {
-            width: 140%;
-            height: 140%;
-            top: -20%;
-            left: -20%;
-            animation-delay: 0s;
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, rgba(236, 72, 153, 0.3) 50%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.6;
+            animation: aura-pulse 3.6s ease-in-out infinite;
         }
         
         .logo-container::after {
-            width: 180%;
-            height: 180%;
-            top: -40%;
-            left: -40%;
-            animation-delay: 0.5s;
-            opacity: 0.5;
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: -40px;
+            right: -40px;
+            bottom: -40px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.1) 40%, transparent 60%);
+            border-radius: 50%;
+            z-index: -2;
+            opacity: 0.4;
+            animation: aura-pulse 3.6s ease-in-out infinite 0.5s;
         }
         
         /* Agent-specific orb colors */
@@ -230,56 +231,50 @@ html_content = (
         
         @keyframes pulse-glow {
             0%, 100% {
-                transform: scale(1);
-                opacity: 0.8;
+                box-shadow: 0 0 30px rgba(139, 92, 246, 0.5), 0 0 60px rgba(236, 72, 153, 0.3);
             }
             50% {
-                transform: scale(1.05);
-                opacity: 1;
+                box-shadow: 0 0 40px rgba(139, 92, 246, 0.6), 0 0 80px rgba(236, 72, 153, 0.4);
             }
         }
         
-        @keyframes rotate-hue {
-            0% { filter: hue-rotate(0deg) brightness(1.1); }
-            100% { filter: hue-rotate(360deg) brightness(1.1); }
+        @keyframes aura-pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.3;
+            }
         }
         
+        
         .orb-inner {
-            position: relative;
+            position: absolute;
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, 
-                rgba(255, 255, 255, 0.8) 0%, 
-                rgba(255, 255, 255, 0.4) 10%, 
-                transparent 40%);
-            animation: swirl 20s linear infinite;
+            background: conic-gradient(from 0deg at 50% 50%,
+                transparent 0deg,
+                rgba(236, 72, 153, 0.4) 60deg,
+                transparent 120deg,
+                rgba(139, 92, 246, 0.4) 180deg,
+                transparent 240deg,
+                rgba(236, 72, 153, 0.4) 300deg,
+                transparent 360deg);
+            animation: swirl 5s linear infinite;
         }
         
         .orb-inner::before {
             content: '';
             position: absolute;
-            width: 50%;
-            height: 50%;
-            top: 10%;
-            left: 15%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 70%);
+            inset: 20%;
             border-radius: 50%;
-            filter: blur(10px);
-            animation: shimmer 2.4s ease-in-out infinite;
-        }
-        
-        .orb-inner::after {
-            content: '';
-            position: absolute;
-            width: 30%;
-            height: 30%;
-            bottom: 20%;
-            right: 20%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
-            border-radius: 50%;
-            filter: blur(8px);
-            animation: shimmer 2.4s ease-in-out infinite reverse;
+            background: radial-gradient(circle,
+                rgba(255, 255, 255, 0.3) 0%,
+                transparent 70%);
+            animation: shimmer 3.6s ease-in-out infinite;
         }
         
         .orb-particles {
@@ -347,15 +342,16 @@ html_content = (
         /* Info panel */
         .agent-info-panel {
             position: fixed;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(20, 20, 40, 0.95);
-            border: 1px solid rgba(255, 0, 255, 0.3);
+            top: 50%;
+            right: 40px;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(139, 92, 246, 0.3);
             border-radius: 20px;
             padding: 1.5rem 2rem;
-            min-width: 400px;
-            color: white;
+            width: 300px;
+            color: #1a1a2e;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             opacity: 0;
             visibility: hidden;
@@ -387,7 +383,7 @@ html_content = (
         .agent-info-description {
             font-size: 16px;
             line-height: 1.6;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(0, 0, 0, 0.7);
         }
     </style>
 </head>
@@ -426,7 +422,7 @@ html_content = (
              style="position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%);"
              onclick="selectAgent('luca')"
              id="agent-luca">
-            <div class="logo-container">
+            <div class="logo-container luca-main">
                 <div class="orb-inner"></div>
                 <div class="orb-particles"></div>
             </div>
