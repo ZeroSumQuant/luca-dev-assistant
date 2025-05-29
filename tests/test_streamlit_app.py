@@ -63,9 +63,15 @@ def test_main_modern_import():
 
 def test_agent_manager_import():
     """Test that agent manager page can be imported without errors."""
-    # Mock streamlit before import
+    # Mock streamlit and its components before import
     mock_st = mock.MagicMock()
+    mock_components = mock.MagicMock()
+    mock_components.v1 = mock.MagicMock()
+    mock_components.v1.html = mock.MagicMock()
+
     sys.modules["streamlit"] = mock_st
+    sys.modules["streamlit.components"] = mock_components
+    sys.modules["streamlit.components.v1"] = mock_components.v1
 
     try:
         # Clear any cached import
@@ -80,15 +86,27 @@ def test_agent_manager_import():
         pytest.fail(f"Failed to import agent manager: {e}")
     finally:
         # Clean up
-        if "app.pages.agent_manager" in sys.modules:
-            del sys.modules["app.pages.agent_manager"]
+        for module in [
+            "app.pages.agent_manager",
+            "streamlit",
+            "streamlit.components",
+            "streamlit.components.v1",
+        ]:
+            if module in sys.modules:
+                del sys.modules[module]
 
 
 def test_agent_config():
     """Test that the agent configuration is valid."""
-    # Mock streamlit before import
+    # Mock streamlit and its components before import
     mock_st = mock.MagicMock()
+    mock_components = mock.MagicMock()
+    mock_components.v1 = mock.MagicMock()
+    mock_components.v1.html = mock.MagicMock()
+
     sys.modules["streamlit"] = mock_st
+    sys.modules["streamlit.components"] = mock_components
+    sys.modules["streamlit.components.v1"] = mock_components.v1
 
     from app.pages.agent_manager import AGENT_CONFIG
 
@@ -106,9 +124,15 @@ def test_agent_config():
 
 def test_agent_manager_imports():
     """Test that agent manager can import required modules."""
-    # Mock streamlit before import
+    # Mock streamlit and its components before import
     mock_st = mock.MagicMock()
+    mock_components = mock.MagicMock()
+    mock_components.v1 = mock.MagicMock()
+    mock_components.v1.html = mock.MagicMock()
+
     sys.modules["streamlit"] = mock_st
+    sys.modules["streamlit.components"] = mock_components
+    sys.modules["streamlit.components.v1"] = mock_components.v1
 
     # Clear any cached import
     if "app.pages.agent_manager" in sys.modules:
