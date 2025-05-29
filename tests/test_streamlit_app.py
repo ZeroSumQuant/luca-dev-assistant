@@ -21,7 +21,25 @@ def test_main_modern_import():
     mock_st.form_submit_button = mock.MagicMock(return_value=False)
     mock_st.spinner = mock.MagicMock()
     mock_st.rerun = mock.MagicMock()
-    mock_st.session_state = {}
+
+    # Create a proper mock for session state
+    class MockSessionState:
+        def __init__(self):
+            self._state = {}
+
+        def __getattr__(self, name):
+            return self._state.get(name, None)
+
+        def __setattr__(self, name, value):
+            if name == "_state":
+                super().__setattr__(name, value)
+            else:
+                self._state[name] = value
+
+        def __contains__(self, name):
+            return name in self._state
+
+    mock_st.session_state = MockSessionState()
     mock_st.sidebar = mock.MagicMock()
     mock_st.sidebar.__enter__ = mock.Mock(return_value=mock_st.sidebar)
     mock_st.sidebar.__exit__ = mock.Mock(return_value=None)
