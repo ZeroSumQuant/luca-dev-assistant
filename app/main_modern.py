@@ -764,10 +764,12 @@ if "show_model_selector" not in st.session_state:
 # Sidebar
 with st.sidebar:
     # Navigation link
-    st.page_link("pages/agent_manager.py", label="Agent Manager", use_container_width=True)
-    
+    st.page_link(
+        "pages/agent_manager.py", label="Agent Manager", use_container_width=True
+    )
+
     st.divider()
-    
+
     st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
     st.markdown('<div class="sidebar-header">Domain</div>', unsafe_allow_html=True)
     domain = st.selectbox(

@@ -62,14 +62,16 @@ st.markdown(
 )
 
 # Tabs for different views
-tab1, tab2, tab3, tab4 = st.tabs(["All Orbs", "Individual Orbs", "Size Variations", "Code Example"])
+tab1, tab2, tab3, tab4 = st.tabs(
+    ["All Orbs", "Individual Orbs", "Size Variations", "Code Example"]
+)
 
 with tab1:
     st.markdown("### Complete Agent Collection")
-    
+
     # Display all orbs in a row
     cols = st.columns(5)
-    
+
     orb_configs = [
         ("luca", "LUCA", 1.0, "Lead Universal Coding Assistant"),
         ("coder", "Coder", 0.65, "Code Generation Specialist"),
@@ -77,10 +79,13 @@ with tab1:
         ("doc", "Doc Writer", 0.65, "Documentation Specialist"),
         ("analyst", "Analyst", 0.65, "Code Analysis Expert"),
     ]
-    
+
     for col, (orb_type, label, scale, description) in zip(cols, orb_configs):
         with col:
-            st.markdown(f"<p style='color: white; text-align: center;'>{description}</p>", unsafe_allow_html=True)
+            st.markdown(
+                f"<p style='color: white; text-align: center;'>{description}</p>",
+                unsafe_allow_html=True,
+            )
             render_constellation_orb(
                 orb_type=orb_type,
                 size=120,
@@ -91,21 +96,23 @@ with tab1:
 
 with tab2:
     st.markdown("### Individual Orb Display")
-    
+
     col1, col2 = st.columns([1, 2])
-    
+
     with col1:
         selected_orb = st.selectbox(
             "Select an orb:",
             options=[config[0] for config in orb_configs],
-            format_func=lambda x: next(config[1] for config in orb_configs if config[0] == x),
+            format_func=lambda x: next(
+                config[1] for config in orb_configs if config[0] == x
+            ),
         )
-        
+
         show_label = st.checkbox("Show label", value=True)
         is_selected = st.checkbox("Selected state", value=False)
         size = st.slider("Size", min_value=60, max_value=200, value=120)
         scale = st.slider("Scale", min_value=0.5, max_value=1.5, value=1.0, step=0.05)
-    
+
     with col2:
         config = next(config for config in orb_configs if config[0] == selected_orb)
         render_constellation_orb(
@@ -119,16 +126,19 @@ with tab2:
 
 with tab3:
     st.markdown("### Size Variations")
-    
+
     sizes = [60, 90, 120, 150, 180]
-    
+
     for orb_type, label in [("luca", "LUCA"), ("coder", "Coder")]:
         st.markdown(f"#### {label} Orb - Different Sizes")
         cols = st.columns(len(sizes))
-        
+
         for col, size in zip(cols, sizes):
             with col:
-                st.markdown(f"<p style='color: white; text-align: center;'>{size}px</p>", unsafe_allow_html=True)
+                st.markdown(
+                    f"<p style='color: white; text-align: center;'>{size}px</p>",
+                    unsafe_allow_html=True,
+                )
                 render_constellation_orb(
                     orb_type=orb_type,
                     size=size,
@@ -147,8 +157,8 @@ with tab4:
         """,
         unsafe_allow_html=True,
     )
-    
-    code_example = '''from app.components.constellation_orb import render_constellation_orb
+
+    code_example = """from app.components.constellation_orb import render_constellation_orb
 
 # Basic usage - LUCA orb
 render_constellation_orb(
@@ -174,10 +184,10 @@ render_constellation_orb(
 # - "tester": Pink gradient
 # - "doc": Yellow/pink gradient
 # - "analyst": Cyan/purple gradient
-'''
-    
+"""
+
     st.code(code_example, language="python")
-    
+
     st.markdown(
         """
         <p style='color: rgba(255, 255, 255, 0.8); margin-top: 2rem;'>

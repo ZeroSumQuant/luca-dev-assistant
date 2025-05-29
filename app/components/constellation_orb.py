@@ -4,6 +4,7 @@ A reusable orb component from the Agent Manager constellation view.
 This version has a cleaner look without the prominent aura rings.
 """
 
+import streamlit as st
 import streamlit.components.v1 as components
 
 
@@ -19,7 +20,7 @@ def render_constellation_orb(
 ):
     """
     Render a constellation-style orb component.
-    
+
     Args:
         orb_type: Type of orb ('luca', 'coder', 'tester', 'doc', 'analyst')
         size: Base size of the orb in pixels
@@ -30,7 +31,7 @@ def render_constellation_orb(
         clickable: Whether the orb is clickable
         selected: Whether the orb is in selected state
     """
-    
+
     # Color gradients for different orb types
     orb_colors = {
         "luca": {
@@ -54,9 +55,9 @@ def render_constellation_orb(
             "shadow_color": "48, 207, 208",
         },
     }
-    
+
     colors = orb_colors.get(orb_type, orb_colors["luca"])
-    
+
     html_content = f"""
     <!DOCTYPE html>
     <html>
@@ -278,7 +279,7 @@ def render_constellation_orb(
     </body>
     </html>
     """
-    
+
     return components.html(html_content, height=size * 2 + 100)
 
 
@@ -286,13 +287,13 @@ def render_constellation_orb(
 def show_orb_gallery():
     """Display a gallery of all orb types for testing."""
     st.set_page_config(page_title="Constellation Orb Gallery", layout="wide")
-    
+
     st.title("Constellation Orb Gallery")
     st.markdown("A collection of orb styles from the Agent Manager constellation view.")
-    
+
     # Create columns for different orb types
     cols = st.columns(5)
-    
+
     orb_configs = [
         ("luca", "LUCA", 1.0),
         ("coder", "Coder", 0.65),
@@ -300,7 +301,7 @@ def show_orb_gallery():
         ("doc", "Doc Writer", 0.65),
         ("analyst", "Analyst", 0.65),
     ]
-    
+
     for col, (orb_type, label, scale) in zip(cols, orb_configs):
         with col:
             st.markdown(f"### {label}")
@@ -311,11 +312,11 @@ def show_orb_gallery():
                 label_text=label,
                 selected=False,
             )
-    
+
     # Show selected state
     st.markdown("### Selected State")
     cols2 = st.columns(5)
-    
+
     for col, (orb_type, label, scale) in zip(cols2, orb_configs):
         with col:
             render_constellation_orb(
