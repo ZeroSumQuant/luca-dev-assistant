@@ -192,7 +192,7 @@ def launch_ui():
 
     try:
         print("🚀 Launching Luca Dev Assistant UI...")
-        app_path = os.path.join(os.path.dirname(__file__), "app", "main.py")
+        app_path = os.path.join(os.path.dirname(__file__), "app", "main_modern.py")
         subprocess.run([sys.executable, "-m", "streamlit", "run", app_path])
     except KeyboardInterrupt:
         print("\n👋 Goodbye!")

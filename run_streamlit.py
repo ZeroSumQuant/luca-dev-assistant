@@ -8,7 +8,7 @@ import sys
 
 def main():
     """Start the Streamlit application."""
-    app_path = os.path.join(os.path.dirname(__file__), "app", "main.py")
+    app_path = os.path.join(os.path.dirname(__file__), "app", "main_modern.py")
 
     # Ensure Streamlit is installed
     try:
