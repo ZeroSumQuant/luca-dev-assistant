@@ -4,7 +4,7 @@
 python-dotenv==1.1.0
 PyYAML==6.0.2
 psutil==7.0.0  # For CI memory monitoring
-pydantic>=2.0.0  # For type validation and data models
+pydantic>=2.10.0,<3.0.0  # For type validation and data models (autogen-core requires >=2.10.0)
 
 # Testing (needed for CI)
 pytest==8.3.5
