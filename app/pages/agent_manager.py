@@ -52,19 +52,19 @@ html_content = (
 <head>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        
+
         body {
             background: #ffffff;
             margin: 0;
             padding: 0;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
-        
+
         .constellation-svg {
             width: 100%;
             height: 100%;
         }
-        
+
         /* Constellation lines */
         .constellation-line {
             stroke: #ff00ff;
@@ -74,7 +74,7 @@ html_content = (
             filter: blur(0.5px);
             animation: laser-pulse 2s ease-in-out infinite;
         }
-        
+
         .constellation-line-glow {
             stroke: #ff00ff;
             stroke-width: 8;
@@ -83,7 +83,7 @@ html_content = (
             filter: blur(4px);
             animation: laser-pulse 2s ease-in-out infinite;
         }
-        
+
         .constellation-line-core {
             stroke: #ffffff;
             stroke-width: 1;
@@ -91,32 +91,32 @@ html_content = (
             opacity: 0.9;
             animation: laser-pulse 2s ease-in-out infinite;
         }
-        
+
         @keyframes laser-pulse {
             0%, 100% { opacity: 0.3; }
             50% { opacity: 0.9; }
         }
-        
+
         /* Orb containers */
         .agent-orb-container {
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         .agent-orb-container.selected .agent-label {
             color: #ff00ff;
             text-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
         }
-        
+
         .agent-orb-container.selected .selected-glow {
             opacity: 1;
         }
-        
+
         .agent-orb-wrapper {
             position: relative;
             display: inline-block;
         }
-        
+
         /* Labels */
         .agent-label {
             position: absolute;
@@ -131,17 +131,17 @@ html_content = (
             transition: all 0.3s ease;
             text-align: center;
         }
-        
+
         .agent-label-small {
             font-size: 14px;
         }
-        
+
         .luca-label {
             font-size: 20px;
             font-weight: 600;
             letter-spacing: 2px;
         }
-        
+
         /* Selected glow effect */
         .selected-glow {
             position: absolute;
@@ -155,7 +155,7 @@ html_content = (
             transition: opacity 0.3s ease;
             pointer-events: none;
         }
-        
+
         /* Logo container and orb styles from main page */
         .logo-container {
             position: relative;
@@ -171,7 +171,7 @@ html_content = (
             animation: pulse-glow 3.6s ease-in-out infinite;
             overflow: hidden;
         }
-        
+
         .logo-container::before {
             content: '';
             position: absolute;
@@ -185,7 +185,7 @@ html_content = (
             opacity: 0.6;
             animation: aura-pulse 3.6s ease-in-out infinite;
         }
-        
+
         .logo-container::after {
             content: '';
             position: absolute;
@@ -199,7 +199,7 @@ html_content = (
             opacity: 0.4;
             animation: aura-pulse 3.6s ease-in-out infinite 0.5s;
         }
-        
+
         /* Agent-specific orb colors */
         .coder-orb {
             background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
@@ -207,28 +207,28 @@ html_content = (
                         0 0 80px rgba(0, 210, 255, 0.3),
                         inset 0 0 20px rgba(255, 255, 255, 0.2);
         }
-        
+
         .tester-orb {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             box-shadow: 0 10px 40px rgba(240, 147, 251, 0.6),
                         0 0 80px rgba(240, 147, 251, 0.3),
                         inset 0 0 20px rgba(255, 255, 255, 0.2);
         }
-        
+
         .doc-orb {
             background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
             box-shadow: 0 10px 40px rgba(250, 112, 154, 0.6),
                         0 0 80px rgba(250, 112, 154, 0.3),
                         inset 0 0 20px rgba(255, 255, 255, 0.2);
         }
-        
+
         .analyst-orb {
             background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
             box-shadow: 0 10px 40px rgba(48, 207, 208, 0.6),
                         0 0 80px rgba(48, 207, 208, 0.3),
                         inset 0 0 20px rgba(255, 255, 255, 0.2);
         }
-        
+
         @keyframes pulse-glow {
             0%, 100% {
                 box-shadow: 0 0 30px rgba(139, 92, 246, 0.5), 0 0 60px rgba(236, 72, 153, 0.3);
@@ -237,7 +237,7 @@ html_content = (
                 box-shadow: 0 0 40px rgba(139, 92, 246, 0.6), 0 0 80px rgba(236, 72, 153, 0.4);
             }
         }
-        
+
         @keyframes aura-pulse {
             0%, 100% {
                 transform: scale(1);
@@ -248,8 +248,8 @@ html_content = (
                 opacity: 0.3;
             }
         }
-        
-        
+
+
         .orb-inner {
             position: absolute;
             width: 100%;
@@ -265,7 +265,7 @@ html_content = (
                 transparent 360deg);
             animation: swirl 5s linear infinite;
         }
-        
+
         .orb-inner::before {
             content: '';
             position: absolute;
@@ -276,14 +276,14 @@ html_content = (
                 transparent 70%);
             animation: shimmer 3.6s ease-in-out infinite;
         }
-        
+
         .orb-particles {
             position: absolute;
             width: 100%;
             height: 100%;
             border-radius: 50%;
         }
-        
+
         .orb-particles::before,
         .orb-particles::after {
             content: '';
@@ -295,13 +295,13 @@ html_content = (
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
             animation: orbit 7.2s linear infinite;
         }
-        
+
         .orb-particles::after {
             animation-delay: -3s;
             width: 3px;
             height: 3px;
         }
-        
+
         @keyframes swirl {
             0% {
                 transform: rotate(0deg);
@@ -310,7 +310,7 @@ html_content = (
                 transform: rotate(360deg);
             }
         }
-        
+
         @keyframes shimmer {
             0%, 100% {
                 opacity: 0.5;
@@ -321,7 +321,7 @@ html_content = (
                 transform: scale(1.1);
             }
         }
-        
+
         @keyframes orbit {
             0% {
                 transform: rotate(0deg) translateX(40px) rotate(0deg);
@@ -338,7 +338,7 @@ html_content = (
                 opacity: 0;
             }
         }
-        
+
         /* Info panel */
         .agent-info-panel {
             position: fixed;
@@ -356,12 +356,12 @@ html_content = (
             opacity: 0;
             visibility: hidden;
         }
-        
+
         .agent-info-panel.active {
             opacity: 1;
             visibility: visible;
         }
-        
+
         .agent-info-name {
             font-size: 24px;
             font-weight: 600;
@@ -371,7 +371,7 @@ html_content = (
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .agent-info-role {
             font-size: 14px;
             color: #ff00ff;
@@ -379,7 +379,7 @@ html_content = (
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        
+
         .agent-info-description {
             font-size: 16px;
             line-height: 1.6;
@@ -416,7 +416,7 @@ html_content = (
                 <path class="constellation-line-core" d="M 50 80 Q 65 60 80 40" />
             </g>
         </svg>
-        
+
         <!-- LUCA at bottom center -->
         <div class="agent-orb-container" 
              style="position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%);"
@@ -429,7 +429,7 @@ html_content = (
             <div class="selected-glow"></div>
             <div class="agent-label luca-label">LUCA</div>
         </div>
-        
+
         <!-- Coder agent -->
         <div class="agent-orb-container"
              style="position: absolute; left: 20%; top: 40%; transform: translate(-50%, -50%);"
@@ -444,7 +444,7 @@ html_content = (
             <div class="selected-glow"></div>
             <div class="agent-label agent-label-small">Coder</div>
         </div>
-        
+
         <!-- Tester agent -->
         <div class="agent-orb-container"
              style="position: absolute; left: 35%; top: 25%; transform: translate(-50%, -50%);"
@@ -459,7 +459,7 @@ html_content = (
             <div class="selected-glow"></div>
             <div class="agent-label agent-label-small">Tester</div>
         </div>
-        
+
         <!-- Doc Writer agent -->
         <div class="agent-orb-container"
              style="position: absolute; left: 65%; top: 25%; transform: translate(-50%, -50%);"
@@ -474,7 +474,7 @@ html_content = (
             <div class="selected-glow"></div>
             <div class="agent-label agent-label-small">Doc Writer</div>
         </div>
-        
+
         <!-- Analyst agent -->
         <div class="agent-orb-container"
              style="position: absolute; left: 80%; top: 40%; transform: translate(-50%, -50%);"
@@ -489,7 +489,7 @@ html_content = (
             <div class="selected-glow"></div>
             <div class="agent-label agent-label-small">Analyst</div>
         </div>
-        
+
         <!-- Agent info panel -->
         <div id="agentInfoPanel" class="agent-info-panel">
             <div class="agent-info-name" id="agentName"></div>
@@ -497,24 +497,24 @@ html_content = (
             <div class="agent-info-description" id="agentDescription"></div>
         </div>
     </div>
-    
+
     <script>
         let selectedAgent = null;
-        
+
         // Agent data
         const agents = """
     + json.dumps(AGENT_CONFIG)
     + """;
-        
+
         function selectAgent(agentId) {
             // Remove previous selection
             if (selectedAgent) {
                 document.getElementById(`agent-${selectedAgent}`).classList.remove('selected');
             }
-            
+
             // Add new selection
             document.getElementById(`agent-${agentId}`).classList.add('selected');
-            
+
             // Update info panel
             const agent = agents[agentId];
             if (agent) {
@@ -522,17 +522,17 @@ html_content = (
                 document.getElementById('agentRole').textContent = agent.role;
                 document.getElementById('agentDescription').textContent = agent.description;
                 document.getElementById('agentInfoPanel').classList.add('active');
-                
+
                 // Communicate with Streamlit
                 window.parent.postMessage({
                     type: 'agent_selected',
                     agent: agentId
                 }, '*');
             }
-            
+
             selectedAgent = agentId;
         }
-        
+
         // Auto-select LUCA on load
         window.addEventListener('DOMContentLoaded', function() {
             selectAgent('luca');

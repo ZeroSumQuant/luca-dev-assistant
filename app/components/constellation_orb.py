@@ -64,7 +64,7 @@ def render_constellation_orb(
     <head>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-            
+
             body {{
                 margin: 0;
                 padding: 20px;
@@ -75,14 +75,14 @@ def render_constellation_orb(
                 align-items: center;
                 height: 100vh;
             }}
-            
+
             .orb-container {{
                 position: relative;
                 cursor: {'pointer' if clickable else 'default'};
                 transition: all 0.3s ease;
                 transform: scale({scale});
             }}
-            
+
             .logo-container {{
                 position: relative;
                 width: {size}px;
@@ -98,7 +98,7 @@ def render_constellation_orb(
                 overflow: visible;
                 animation: pulse-glow 3.6s ease-in-out infinite, rotate-hue 10s linear infinite;
             }}
-            
+
             .logo-container::before,
             .logo-container::after {{
                 content: '';
@@ -107,7 +107,7 @@ def render_constellation_orb(
                 background: radial-gradient(circle, rgba({colors['shadow_color']}, 0.4) 0%, transparent 70%);
                 animation: pulse-glow 3.6s ease-in-out infinite;
             }}
-            
+
             .logo-container::before {{
                 width: 140%;
                 height: 140%;
@@ -115,7 +115,7 @@ def render_constellation_orb(
                 left: -20%;
                 animation-delay: 0s;
             }}
-            
+
             .logo-container::after {{
                 width: 180%;
                 height: 180%;
@@ -124,7 +124,7 @@ def render_constellation_orb(
                 animation-delay: 0.5s;
                 opacity: 0.5;
             }}
-            
+
             @keyframes pulse-glow {{
                 0%, 100% {{
                     transform: scale(1);
@@ -135,12 +135,12 @@ def render_constellation_orb(
                     opacity: 1;
                 }}
             }}
-            
+
             @keyframes rotate-hue {{
                 0% {{ filter: hue-rotate(0deg) brightness(1.1); }}
                 100% {{ filter: hue-rotate(360deg) brightness(1.1); }}
             }}
-            
+
             .orb-inner {{
                 position: relative;
                 width: 100%;
@@ -152,7 +152,7 @@ def render_constellation_orb(
                     transparent 40%);
                 animation: swirl 20s linear infinite;
             }}
-            
+
             .orb-inner::before {{
                 content: '';
                 position: absolute;
@@ -165,7 +165,7 @@ def render_constellation_orb(
                 filter: blur(10px);
                 animation: shimmer 2.4s ease-in-out infinite;
             }}
-            
+
             .orb-inner::after {{
                 content: '';
                 position: absolute;
@@ -178,14 +178,14 @@ def render_constellation_orb(
                 filter: blur(8px);
                 animation: shimmer 2.4s ease-in-out infinite reverse;
             }}
-            
+
             .orb-particles {{
                 position: absolute;
                 width: 100%;
                 height: 100%;
                 border-radius: 50%;
             }}
-            
+
             .orb-particles::before,
             .orb-particles::after {{
                 content: '';
@@ -197,18 +197,18 @@ def render_constellation_orb(
                 box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
                 animation: orbit 7.2s linear infinite;
             }}
-            
+
             .orb-particles::after {{
                 animation-delay: -3s;
                 width: 3px;
                 height: 3px;
             }}
-            
+
             @keyframes swirl {{
                 0% {{ transform: rotate(0deg); }}
                 100% {{ transform: rotate(360deg); }}
             }}
-            
+
             @keyframes shimmer {{
                 0%, 100% {{
                     opacity: 0.5;
@@ -219,7 +219,7 @@ def render_constellation_orb(
                     transform: scale(1.1);
                 }}
             }}
-            
+
             @keyframes orbit {{
                 0% {{
                     transform: rotate(0deg) translateX(40px) rotate(0deg);
@@ -236,7 +236,7 @@ def render_constellation_orb(
                     opacity: 0;
                 }}
             }}
-            
+
             .orb-label {{
                 position: absolute;
                 top: 100%;
@@ -252,7 +252,7 @@ def render_constellation_orb(
                 {'text-shadow: 0 0 20px rgba(255, 0, 255, 0.8);' if selected else ''}
                 {'display: none;' if not show_label else ''}
             }}
-            
+
             .selected-glow {{
                 position: absolute;
                 top: 50%;
