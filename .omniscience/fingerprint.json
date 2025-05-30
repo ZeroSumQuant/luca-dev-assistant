@@ -1,0 +1,1025 @@
+[
+  {
+    "path": "run_streamlit.py",
+    "classes": [],
+    "funcs": [
+      "main"
+    ],
+    "doc": "Launch the Luca Streamlit app."
+  },
+  {
+    "path": "luca.py",
+    "classes": [],
+    "funcs": [
+      "get_manager",
+      "build_tools",
+      "launch_ui",
+      "process_prompt",
+      "main"
+    ],
+    "doc": "Luca Dev Assistant \u2013 main entry point."
+  },
+  {
+    "path": "omn_plugins.py",
+    "classes": [
+      "Plugin"
+    ],
+    "funcs": [
+      "register",
+      "run_all_plugins"
+    ],
+    "doc": "Central plugin registry for Omniscience add-ons."
+  },
+  {
+    "path": "fingerprint.py",
+    "classes": [
+      "FingerprintPlugin"
+    ],
+    "funcs": [
+      "sha1_bytes",
+      "py_files",
+      "analyse",
+      "build_fingerprints"
+    ],
+    "doc": "Fingerprint plugin \u2013 creates a cached \"purpose map\" for every .py file."
+  },
+  {
+    "path": "setup.py",
+    "classes": [],
+    "funcs": [],
+    "doc": "Setup script for luca_core package."
+  },
+  {
+    "path": "convert_issues.py",
+    "classes": [],
+    "funcs": [],
+    "doc": ""
+  },
+  {
+    "path": "claude_omniscience.py",
+    "classes": [
+      "ClaudeOmniscience",
+      "OmniscienceWatcher"
+    ],
+    "funcs": [
+      "main"
+    ],
+    "doc": "Claude Omniscience Script - Everything Claude needs to know in one command"
+  },
+  {
+    "path": "tools/git_tools.py",
+    "classes": [],
+    "funcs": [
+      "_run",
+      "get_git_diff",
+      "git_commit"
+    ],
+    "doc": "Git helpers for Luca \u2013 subprocess-only, no extra deps."
+  },
+  {
+    "path": "tools/validate_documentation.py",
+    "classes": [
+      "DocumentationValidator"
+    ],
+    "funcs": [
+      "main"
+    ],
+    "doc": "Validate documentation against JSON schemas."
+  },
+  {
+    "path": "tools/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": "Tools package for LUCA Dev Assistant"
+  },
+  {
+    "path": "tools/coverage_tracker.py",
+    "classes": [
+      "CoverageTracker"
+    ],
+    "funcs": [
+      "main"
+    ],
+    "doc": "Coverage tracking and badge generation for LUCA project."
+  },
+  {
+    "path": "tools/merge_resolver.py",
+    "classes": [],
+    "funcs": [
+      "resolve_task_log_conflict",
+      "main"
+    ],
+    "doc": "Quick merge conflict resolver for task logs."
+  },
+  {
+    "path": "tools/changelog_helper.py",
+    "classes": [],
+    "funcs": [
+      "format_commit_message"
+    ],
+    "doc": "Helper module for generating more detailed changelog entries."
+  },
+  {
+    "path": "tools/mcp_client.py",
+    "classes": [
+      "MCPServerConfig",
+      "MCPTool",
+      "MCPClientManager"
+    ],
+    "funcs": [],
+    "doc": "MCP Client Manager for LUCA Dev Assistant"
+  },
+  {
+    "path": "tools/file_io.py",
+    "classes": [],
+    "funcs": [
+      "_safe",
+      "read_text",
+      "write_text"
+    ],
+    "doc": "Safe file read/write helpers for Luca."
+  },
+  {
+    "path": "tools/mcp_autogen_bridge.py",
+    "classes": [
+      "MCPAutogenBridge"
+    ],
+    "funcs": [],
+    "doc": "Bridge between MCP and AutoGen agents"
+  },
+  {
+    "path": "tools/code_watchdog.py",
+    "classes": [
+      "CodeValidationHandler"
+    ],
+    "funcs": [
+      "main"
+    ],
+    "doc": "Real-time code validation watchdog for LUCA project."
+  },
+  {
+    "path": "tools/consolidate_logs.py",
+    "classes": [],
+    "funcs": [
+      "parse_log_entry",
+      "merge_entries",
+      "format_log",
+      "main"
+    ],
+    "doc": "Consolidate and clean task logs for LUCA project."
+  },
+  {
+    "path": "app/theme.py",
+    "classes": [],
+    "funcs": [
+      "get_theme_css",
+      "get_icon",
+      "render_icon"
+    ],
+    "doc": "Shared theme and styling for LUCA's Streamlit UI."
+  },
+  {
+    "path": "app/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": ""
+  },
+  {
+    "path": "app/main.py",
+    "classes": [],
+    "funcs": [
+      "get_learning_mode",
+      "set_learning_mode",
+      "main"
+    ],
+    "doc": "Streamlit UI for LUCA Dev Assistant."
+  },
+  {
+    "path": "app/main_modern.py",
+    "classes": [],
+    "funcs": [
+      "get_icon"
+    ],
+    "doc": "Modern ChatGPT/Claude-style Streamlit UI for LUCA."
+  },
+  {
+    "path": "tests/test_fingerprint.py",
+    "classes": [],
+    "funcs": [
+      "test_fingerprint_returns_records",
+      "test_fingerprint_caching",
+      "test_fingerprint_plugin_integration"
+    ],
+    "doc": "Tests for the fingerprint plugin."
+  },
+  {
+    "path": "tests/test_agent_manager_coverage.py",
+    "classes": [
+      "TestAgentManagerCoverage"
+    ],
+    "funcs": [],
+    "doc": "Test coverage for app/pages/agent_manager.py."
+  },
+  {
+    "path": "tests/test_basic.py",
+    "classes": [],
+    "funcs": [
+      "test_bootstrap_runs"
+    ],
+    "doc": ""
+  },
+  {
+    "path": "tests/conftest.py",
+    "classes": [],
+    "funcs": [
+      "pytest_configure",
+      "resource_fixture"
+    ],
+    "doc": "Test configuration for LUCA Dev Assistant."
+  },
+  {
+    "path": "tests/debug_imports.py",
+    "classes": [],
+    "funcs": [
+      "debug_import"
+    ],
+    "doc": "Debug import chain to find where AutoGen is coming from."
+  },
+  {
+    "path": "tests/test_mcp_integration.py",
+    "classes": [
+      "TestMCPClientManager",
+      "TestMCPAutogenBridge",
+      "TestMCPClientAdvanced",
+      "TestMCPFullIntegration"
+    ],
+    "funcs": [
+      "make_list_tools_request",
+      "make_list_tools_response",
+      "make_call_tool_request",
+      "make_call_tool_response"
+    ],
+    "doc": "Tests for MCP integration"
+  },
+  {
+    "path": "tests/test_streamlit_app.py",
+    "classes": [],
+    "funcs": [
+      "test_main_modern_import",
+      "test_agent_manager_import",
+      "test_agent_config",
+      "test_agent_manager_imports"
+    ],
+    "doc": "Tests for Streamlit app components."
+  },
+  {
+    "path": "tests/test_luca_smoke.py",
+    "classes": [],
+    "funcs": [
+      "test_luca_cli_runs"
+    ],
+    "doc": "Basic smoke tests for the LUCA Dev Assistant."
+  },
+  {
+    "path": "tests/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": ""
+  },
+  {
+    "path": "tests/test_changelog_helper.py",
+    "classes": [],
+    "funcs": [
+      "test_format_commit_message_simple",
+      "test_format_commit_message_with_scope",
+      "test_format_commit_message_with_body",
+      "test_format_commit_message_with_footer"
+    ],
+    "doc": "Tests for the changelog_helper module."
+  },
+  {
+    "path": "tests/test_to_99_coverage.py",
+    "classes": [
+      "TestTo99Coverage"
+    ],
+    "funcs": [],
+    "doc": "Final tests to reach 99% coverage."
+  },
+  {
+    "path": "tests/test_git_tools.py",
+    "classes": [],
+    "funcs": [
+      "test_run_success",
+      "test_run_failure",
+      "test_get_git_diff",
+      "test_git_commit"
+    ],
+    "doc": "Tests for git_tools module"
+  },
+  {
+    "path": "tests/test_sandbox_timeout.py",
+    "classes": [],
+    "funcs": [
+      "_image_available",
+      "test_infinite_loop_times_out"
+    ],
+    "doc": ""
+  },
+  {
+    "path": "tests/test_luca_echo.py",
+    "classes": [],
+    "funcs": [
+      "test_luca_echo"
+    ],
+    "doc": ""
+  },
+  {
+    "path": "tests/test_registry_specific_coverage.py",
+    "classes": [
+      "TestRegistrySpecificCoverage"
+    ],
+    "funcs": [],
+    "doc": "Specific test for registry.py lines that aren't covered."
+  },
+  {
+    "path": "tests/test_file_io.py",
+    "classes": [],
+    "funcs": [
+      "test_safe_path_valid",
+      "test_safe_path_escape",
+      "test_read_write_roundtrip"
+    ],
+    "doc": "Tests for file_io module"
+  },
+  {
+    "path": "tests/test_app_main_coverage.py",
+    "classes": [
+      "TestAppMainCoverage"
+    ],
+    "funcs": [],
+    "doc": "Test coverage for app/main.py."
+  },
+  {
+    "path": "tests/test_final_missing_coverage.py",
+    "classes": [
+      "TestFinalMissingCoverage"
+    ],
+    "funcs": [],
+    "doc": "Final test to reach exact 95% coverage by hitting remaining lines."
+  },
+  {
+    "path": "tests/fixtures.py",
+    "classes": [],
+    "funcs": [
+      "autogen_mode",
+      "no_autogen_mock"
+    ],
+    "doc": "Test fixtures for managing AutoGen mock behavior."
+  },
+  {
+    "path": "luca_core/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": "LUCA Core - Agent Orchestration System"
+  },
+  {
+    "path": "luca_core/__main__.py",
+    "classes": [],
+    "funcs": [
+      "get_status",
+      "main"
+    ],
+    "doc": "CLI entry point for luca_core module."
+  },
+  {
+    "path": "scripts/start_assistant.py",
+    "classes": [],
+    "funcs": [
+      "main"
+    ],
+    "doc": "Luca bootstrap: loads YAML config, checks the API key, and prints a readiness banner."
+  },
+  {
+    "path": "mcp_servers/filesystem_server.py",
+    "classes": [],
+    "funcs": [],
+    "doc": "Simple Filesystem MCP Server"
+  },
+  {
+    "path": "luca_core/context/store.py",
+    "classes": [
+      "ContextStore"
+    ],
+    "funcs": [],
+    "doc": "Context storage system for LUCA."
+  },
+  {
+    "path": "luca_core/context/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": "Context package for LUCA Core."
+  },
+  {
+    "path": "luca_core/context/sqlite_store.py",
+    "classes": [
+      "SQLiteContextStore"
+    ],
+    "funcs": [],
+    "doc": "SQLite implementation of ContextStore."
+  },
+  {
+    "path": "luca_core/context/factory.py",
+    "classes": [],
+    "funcs": [
+      "create_context_store"
+    ],
+    "doc": "Context store factory module."
+  },
+  {
+    "path": "luca_core/context/base_store.py",
+    "classes": [
+      "BaseContextStore"
+    ],
+    "funcs": [],
+    "doc": "Base interface for context storage."
+  },
+  {
+    "path": "luca_core/schemas/error.py",
+    "classes": [
+      "ErrorCategory",
+      "ErrorSeverity",
+      "ErrorPayload",
+      "ErrorCode"
+    ],
+    "funcs": [
+      "create_user_error",
+      "create_system_error",
+      "create_timeout_error"
+    ],
+    "doc": "Schema definitions for error handling."
+  },
+  {
+    "path": "luca_core/schemas/tools.py",
+    "classes": [
+      "ToolCategory",
+      "ToolScope",
+      "ToolMetadata",
+      "ToolParameter",
+      "ToolSpecification",
+      "ToolUsageMetrics",
+      "ToolRegistration"
+    ],
+    "funcs": [],
+    "doc": "Schema definitions for tool registry."
+  },
+  {
+    "path": "luca_core/schemas/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": "Schema package for LUCA Core."
+  },
+  {
+    "path": "luca_core/schemas/context.py",
+    "classes": [
+      "MessageRole",
+      "Message",
+      "Conversation",
+      "TaskStatus",
+      "Task",
+      "ClarificationRequest",
+      "TaskResult",
+      "MetricRecord",
+      "Project",
+      "UserPreferences"
+    ],
+    "funcs": [],
+    "doc": "Schema definitions for ContextStore models."
+  },
+  {
+    "path": "luca_core/schemas/agent.py",
+    "classes": [
+      "AgentRole",
+      "AgentStatus",
+      "LLMModelConfig",
+      "AgentCapability",
+      "AgentConfig",
+      "Agent",
+      "AgentTeam",
+      "LearningMode"
+    ],
+    "funcs": [],
+    "doc": "Schema definitions for agent management."
+  },
+  {
+    "path": "luca_core/schemas/base.py",
+    "classes": [
+      "SeverityLevel",
+      "CompletionStatus",
+      "DomainType",
+      "LearningMode",
+      "AgentRole"
+    ],
+    "funcs": [],
+    "doc": "Core schema definitions for LUCA's agent orchestration system."
+  },
+  {
+    "path": "luca_core/manager/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": ""
+  },
+  {
+    "path": "luca_core/manager/manager.py",
+    "classes": [
+      "ResponseOptions",
+      "LucaManager"
+    ],
+    "funcs": [],
+    "doc": "LUCA Manager implementation."
+  },
+  {
+    "path": "luca_core/sandbox/runner.py",
+    "classes": [
+      "SandboxTimeoutError",
+      "SandboxRunner"
+    ],
+    "funcs": [],
+    "doc": ""
+  },
+  {
+    "path": "luca_core/sandbox/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": "Sandbox execution module for LUCA Dev Assistant."
+  },
+  {
+    "path": "luca_core/registry/registry.py",
+    "classes": [
+      "ToolRegistry"
+    ],
+    "funcs": [
+      "tool"
+    ],
+    "doc": "Tool registry implementation."
+  },
+  {
+    "path": "luca_core/registry/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": "Registry package for LUCA Core."
+  },
+  {
+    "path": "luca_core/error/handler.py",
+    "classes": [
+      "ErrorHandler"
+    ],
+    "funcs": [
+      "handle_exceptions"
+    ],
+    "doc": "Error handler implementation."
+  },
+  {
+    "path": "luca_core/error/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": "Error package for LUCA Core."
+  },
+  {
+    "path": "luca_core/store/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": ""
+  },
+  {
+    "path": "tests/tools/test_mcp_autogen_bridge.py",
+    "classes": [
+      "TestMCPAutogenBridge"
+    ],
+    "funcs": [],
+    "doc": "Tests for the MCP AutoGen bridge."
+  },
+  {
+    "path": "tests/tools/test_mcp_client.py",
+    "classes": [
+      "TestMCPTool",
+      "TestMCPServerConfig",
+      "TestMCPClientManager"
+    ],
+    "funcs": [],
+    "doc": "Tests for the MCP client."
+  },
+  {
+    "path": "tests/tools/test_code_watchdog.py",
+    "classes": [
+      "TestCodeValidationHandler"
+    ],
+    "funcs": [],
+    "doc": "Tests for code watchdog functionality."
+  },
+  {
+    "path": "tests/tools/test_mcp_bridge_coverage.py",
+    "classes": [
+      "TestMCPBridgeCoverage"
+    ],
+    "funcs": [],
+    "doc": "Tests to improve coverage for MCP AutoGen bridge."
+  },
+  {
+    "path": "tests/core/test_context_factory_coverage.py",
+    "classes": [
+      "TestContextFactoryCoverage"
+    ],
+    "funcs": [],
+    "doc": "Tests to improve coverage for context factory module."
+  },
+  {
+    "path": "tests/core/test_error_handler_coverage.py",
+    "classes": [
+      "TestErrorHandlerCoverage"
+    ],
+    "funcs": [],
+    "doc": "Additional tests to improve coverage for error handler module."
+  },
+  {
+    "path": "tests/core/test_registry_execute.py",
+    "classes": [
+      "TestToolExecute"
+    ],
+    "funcs": [
+      "example_tool",
+      "failing_tool",
+      "optional_params_tool"
+    ],
+    "doc": "Tests for tool registry execute_tool functionality."
+  },
+  {
+    "path": "tests/core/test_final_coverage.py",
+    "classes": [
+      "TestFinalCoverage"
+    ],
+    "funcs": [],
+    "doc": "Final tests to reach 95% coverage target."
+  },
+  {
+    "path": "tests/core/test_registry.py",
+    "classes": [
+      "TestToolRegistry"
+    ],
+    "funcs": [
+      "sample_tool",
+      "no_params_tool",
+      "optional_params_tool"
+    ],
+    "doc": "Tests for the tool registry implementation."
+  },
+  {
+    "path": "tests/core/test_registry_coverage.py",
+    "classes": [
+      "TestToolDecorator",
+      "TestRegistryErrorHandling"
+    ],
+    "funcs": [],
+    "doc": "Additional tests to improve coverage for registry module."
+  },
+  {
+    "path": "tests/core/test_error_schema.py",
+    "classes": [
+      "TestErrorPayload"
+    ],
+    "funcs": [],
+    "doc": "Unit tests for the ErrorPayload schema v1.0.0."
+  },
+  {
+    "path": "tests/core/test_main_coverage.py",
+    "classes": [
+      "TestMainCoverage"
+    ],
+    "funcs": [],
+    "doc": "Tests to improve coverage for __main__ module."
+  },
+  {
+    "path": "tests/core/test_sandbox_runner.py",
+    "classes": [
+      "TestSandboxRunner"
+    ],
+    "funcs": [],
+    "doc": "Tests for the sandbox runner module."
+  },
+  {
+    "path": "tests/core/test_manager_coverage.py",
+    "classes": [
+      "TestManagerCoverage"
+    ],
+    "funcs": [],
+    "doc": "Tests to improve coverage for manager module."
+  },
+  {
+    "path": "tests/core/test_base_schema.py",
+    "classes": [
+      "TestSeverityLevel",
+      "TestCompletionStatus",
+      "TestDomainType",
+      "TestLearningMode",
+      "TestAgentRole",
+      "TestEnumErrorHandling"
+    ],
+    "funcs": [],
+    "doc": "Tests for base schema definitions."
+  },
+  {
+    "path": "tests/core/test_context_coverage.py",
+    "classes": [
+      "TestContextCoverage"
+    ],
+    "funcs": [],
+    "doc": "Tests to improve coverage for context schemas."
+  },
+  {
+    "path": "tests/core/test_base.py",
+    "classes": [
+      "RegistryTestCase"
+    ],
+    "funcs": [],
+    "doc": "Base test class for tests involving the registry to ensure proper isolation."
+  },
+  {
+    "path": "tests/core/test_agent_coverage.py",
+    "classes": [
+      "TestAgentCoverage"
+    ],
+    "funcs": [],
+    "doc": "Tests to improve coverage for agent schemas."
+  },
+  {
+    "path": "tests/core/test_error_handler.py",
+    "classes": [
+      "TestErrorHandler"
+    ],
+    "funcs": [
+      "test_handle_exceptions_decorator",
+      "test_handle_exceptions_decorator_with_reraise",
+      "test_handle_exceptions_decorator_returns_error_payload",
+      "test_handle_exceptions_decorator_preserves_function_attributes",
+      "test_global_error_handler"
+    ],
+    "doc": "Tests for the error handler implementation."
+  },
+  {
+    "path": "tests/core/test_registry_complete.py",
+    "classes": [
+      "TestRegistryCompleteCoverage"
+    ],
+    "funcs": [],
+    "doc": "Complete coverage tests for registry module."
+  },
+  {
+    "path": "tests/app/test_constellation_orb.py",
+    "classes": [
+      "TestConstellationOrb"
+    ],
+    "funcs": [],
+    "doc": "Tests for the constellation orb component."
+  },
+  {
+    "path": "tests/app/test_orb_showcase_comprehensive.py",
+    "classes": [
+      "TestOrbShowcaseComprehensive"
+    ],
+    "funcs": [],
+    "doc": "Comprehensive tests for orb showcase page to improve coverage."
+  },
+  {
+    "path": "tests/app/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": ""
+  },
+  {
+    "path": "tests/app/test_agent_manager.py",
+    "classes": [
+      "TestAgentManager"
+    ],
+    "funcs": [],
+    "doc": "Tests for the agent manager Streamlit page."
+  },
+  {
+    "path": "tests/app/test_main_modern.py",
+    "classes": [
+      "TestMainModern"
+    ],
+    "funcs": [],
+    "doc": "Tests for the modern main Streamlit UI."
+  },
+  {
+    "path": "tests/app/test_orb_showcase.py",
+    "classes": [
+      "TestOrbShowcase"
+    ],
+    "funcs": [],
+    "doc": "Tests for orb showcase page."
+  },
+  {
+    "path": "tests/app/test_main.py",
+    "classes": [
+      "SessionStateMock",
+      "TestStreamlitApp"
+    ],
+    "funcs": [],
+    "doc": "Tests for the Streamlit UI main app."
+  },
+  {
+    "path": "tests/luca_core_pkgtests/conftest.py",
+    "classes": [],
+    "funcs": [],
+    "doc": "Configuration file for pytest to run luca_core tests."
+  },
+  {
+    "path": "tests/luca_core_pkgtests/test_base_store.py",
+    "classes": [
+      "MockContextStore"
+    ],
+    "funcs": [
+      "store"
+    ],
+    "doc": "Tests for the BaseContextStore abstract class."
+  },
+  {
+    "path": "tests/luca_core_pkgtests/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": "Tests for luca_core package."
+  },
+  {
+    "path": "tests/luca_core_pkgtests/test_context_store_additional.py",
+    "classes": [],
+    "funcs": [
+      "temp_db_path",
+      "context_store",
+      "test_store_and_retrieve_conversation",
+      "test_get_nonexistent_conversation",
+      "test_store_and_retrieve_message_with_conversation",
+      "test_get_conversation_messages_empty",
+      "test_get_project_conversations",
+      "test_store_task_with_conversation",
+      "test_get_active_tasks",
+      "test_update_task_status",
+      "test_update_task_status_nonexistent",
+      "test_get_user_preferences_returns_default",
+      "test_clear_all_data",
+      "test_get_metrics_for_task",
+      "test_get_metrics_for_nonexistent_task",
+      "test_message_retrieval_none",
+      "test_store_project_and_retrieve",
+      "test_get_project_nonexistent",
+      "test_store_user_preferences_and_retrieve",
+      "test_get_user_preferences_handles_error",
+      "test_task_retrieval_none",
+      "test_task_result_retrieval_none",
+      "test_store_and_retrieve_task_result",
+      "test_message_retrieval_existing"
+    ],
+    "doc": "Additional tests for ContextStore to reach 95% coverage."
+  },
+  {
+    "path": "tests/luca_core_pkgtests/test_error.py",
+    "classes": [],
+    "funcs": [
+      "test_error_payload_creation",
+      "test_error_payload_from_exception",
+      "test_error_payload_get_user_message",
+      "test_create_user_error",
+      "test_create_system_error",
+      "test_create_timeout_error"
+    ],
+    "doc": "Tests for the ErrorPayload schema and error handling utilities."
+  },
+  {
+    "path": "tests/luca_core_pkgtests/test_sqlite_store.py",
+    "classes": [
+      "SampleModel",
+      "TestSQLiteContextStore"
+    ],
+    "funcs": [],
+    "doc": "Tests for the SQLite implementation of ContextStore."
+  },
+  {
+    "path": "tests/luca_core_pkgtests/test_integration.py",
+    "classes": [],
+    "funcs": [
+      "test_modules_importable"
+    ],
+    "doc": "Test integration file for luca_core module."
+  },
+  {
+    "path": "tests/luca_core_pkgtests/test_cli.py",
+    "classes": [],
+    "funcs": [
+      "test_cli_status_command",
+      "test_cli_status_custom_db_path",
+      "test_cli_no_args_shows_help",
+      "test_cli_verbose_flag",
+      "test_get_status_function",
+      "test_get_status_error_handling",
+      "test_cli_error_output"
+    ],
+    "doc": "Test the luca_core CLI entry point."
+  },
+  {
+    "path": "tests/luca_core_pkgtests/test_main.py",
+    "classes": [],
+    "funcs": [
+      "test_get_status_success",
+      "test_get_status_error",
+      "test_main_status_success",
+      "test_main_status_error",
+      "test_main_verbose_flag",
+      "test_main_custom_db_path",
+      "test_main_no_args",
+      "test_main_as_module"
+    ],
+    "doc": "Tests for the luca_core.__main__ module."
+  },
+  {
+    "path": "tests/luca_core_pkgtests/test_context_store.py",
+    "classes": [],
+    "funcs": [
+      "temp_db_path",
+      "context_store",
+      "test_context_store_initialization",
+      "test_store_and_retrieve_message",
+      "test_store_and_retrieve_task",
+      "test_store_and_retrieve_task_result",
+      "test_store_and_retrieve_project",
+      "test_store_and_retrieve_user_preferences",
+      "test_store_and_retrieve_metric"
+    ],
+    "doc": "Tests for the ContextStore implementation."
+  },
+  {
+    "path": "tests/integration/test_agent_orchestration.py",
+    "classes": [],
+    "funcs": [],
+    "doc": "Integration tests for agent orchestration."
+  },
+  {
+    "path": "tests/helpers/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": "Helper utilities for tests."
+  },
+  {
+    "path": "tests/helpers/streamlit_mock.py",
+    "classes": [
+      "MockSessionState"
+    ],
+    "funcs": [
+      "create_streamlit_mock",
+      "patch_streamlit",
+      "setup_streamlit_test"
+    ],
+    "doc": "Streamlit mocking utilities for tests."
+  },
+  {
+    "path": "app/ui_templates/perfect_ui_template.py",
+    "classes": [],
+    "funcs": [
+      "get_icon"
+    ],
+    "doc": "Modern ChatGPT/Claude-style Streamlit UI for LUCA."
+  },
+  {
+    "path": "app/components/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": ""
+  },
+  {
+    "path": "app/components/constellation_orb.py",
+    "classes": [],
+    "funcs": [
+      "render_constellation_orb",
+      "show_orb_gallery"
+    ],
+    "doc": "Constellation Orb Component"
+  },
+  {
+    "path": "app/pages/orb_showcase.py",
+    "classes": [],
+    "funcs": [],
+    "doc": "Orb Showcase Page"
+  },
+  {
+    "path": "app/pages/agent_manager.py",
+    "classes": [],
+    "funcs": [],
+    "doc": ""
+  },
+  {
+    "path": "app/pages/mcp_manager.py",
+    "classes": [],
+    "funcs": [
+      "main"
+    ],
+    "doc": "MCP Server Manager for Streamlit UI"
+  }
+]

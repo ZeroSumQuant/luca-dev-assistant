@@ -1,0 +1,8 @@
+# Optional dependencies for claude_omniscience.py
+# These enhance functionality but aren't required for basic operation
+
+# Token counting - provides accurate token counts for efficiency tracking
+tiktoken>=0.5.0
+
+# File watching - enables real-time updates in watch mode
+watchdog>=3.0.0

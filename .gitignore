@@ -138,3 +138,8 @@ cython_debug/
 *.swa
 *.saa
 *.szz
+# Omniscience artefacts
+.omniscience/cache.json
+.omniscience/*.dot
+.omniscience/*.png
+.omniscience/embeddings*
