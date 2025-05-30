@@ -1,5 +1,13 @@
 # LUCA Dev Assistant - Task Log
 
+## 2025-05-28
+
+- **09:00 pm — API key setup and testing** – Added OpenAI API key to `.env`, verified connectivity with direct API test
+- **09:30 pm — Backend integration attempt** – Created `main_modern_integrated.py` but caused server crashes, reverted changes
+- **10:00 pm — MVP gap analysis** – Reviewed 30 open issues, identified AutoGen integration as critical missing piece
+- **10:30 pm — Architecture deep dive** – Discovered all manager methods are placeholders, no actual agent execution
+- **11:00 pm — Directory cleanup planning** – Identified cluttered root structure, planned reorganization into scripts/examples/archive folders
+
 ## 2025-05-26
 
 - **Morning — Improved CLAUDE.md workflow clarity**:
