@@ -22,7 +22,9 @@ def test_luca_echo():
     # Print test start for debugging
     print(f"\n{'='*50}\nStarting test_luca_echo at {time.time()}\n{'='*50}")
     print(
-        f"Environment variables: LUCA_TESTING={env.get('LUCA_TESTING')}, LUCA_DEBUG={env.get('LUCA_DEBUG')}, LUCA_SKIP_ASYNC={env.get('LUCA_SKIP_ASYNC')}"
+        f"Environment variables: LUCA_TESTING={env.get('LUCA_TESTING')}, "
+        f"LUCA_DEBUG={env.get('LUCA_DEBUG')}, "
+        f"LUCA_SKIP_ASYNC={env.get('LUCA_SKIP_ASYNC')}"
     )
     print(f"Python executable: {sys.executable}")
 
@@ -31,7 +33,7 @@ def test_luca_echo():
         # Use a more direct subprocess call to ensure environment is passed correctly
         print("Launching subprocess...")
         process = subprocess.Popen(
-            [sys.executable, "luca.py", "Hello"],
+            [sys.executable, "scripts/luca.py", "Hello"],
             stdout=PIPE,
             stderr=PIPE,
             text=True,
@@ -51,7 +53,7 @@ def test_luca_echo():
         print(f"\n{'='*20} STDERR {'='*20}\n{stderr}")
         print(f"Return code: {process.returncode}")
 
-        # Verify the results with less strict assertions that will work with the new agent architecture
+        # Verify the results - work with the new agent architecture
         assert (
             process.returncode == 0
         ), f"Process returned non-zero exit code: {process.returncode}"
@@ -62,7 +64,7 @@ def test_luca_echo():
             "skip async mode detected" in stdout.lower()
         ), "Skip async mode not detected!"
 
-        # The new process no longer echoes the input directly, but processes it through the manager
+        # The new process no longer echoes the input directly
         assert (
             "processing prompt" in stdout.lower()
         ), "No 'processing prompt' output found"
@@ -84,5 +86,6 @@ def test_luca_echo():
             print(f"Could not retrieve partial output: {e}")
 
         pytest.fail(
-            "Process timed out - agent initialization might be taking too long or hanging"
+            "Process timed out - agent initialization might be "
+            "taking too long or hanging"
         )

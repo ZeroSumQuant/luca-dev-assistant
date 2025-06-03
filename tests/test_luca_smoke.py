@@ -16,7 +16,7 @@ def test_luca_cli_runs():
 
     # Run luca.py with testing environment
     result = subprocess.run(
-        [sys.executable, "luca.py"],
+        [sys.executable, "scripts/luca.py"],
         capture_output=True,
         text=True,
         env=env,

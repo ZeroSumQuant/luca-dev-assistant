@@ -22,15 +22,21 @@ if [[ -f "$REPO_ROOT/.venv/bin/activate" ]] && [[ -z "${VIRTUAL_ENV:-}" ]]; then
     echo -e "${YELLOW}Activating virtual environment...${NC}"
     source "$REPO_ROOT/.venv/bin/activate"
 fi
-if [[ ! -f "$REPO_ROOT/safety-check.sh" ]]; then
+# Look for safety-check.sh in multiple locations
+SAFETY_CHECK=""
+if [[ -f "$REPO_ROOT/safety-check.sh" ]]; then
+    SAFETY_CHECK="$REPO_ROOT/safety-check.sh"
+elif [[ -f "$REPO_ROOT/scripts/dev-tools/safety-check.sh" ]]; then
+    SAFETY_CHECK="$REPO_ROOT/scripts/dev-tools/safety-check.sh"
+else
     echo -e "${RED}❌ ERROR: safety-check.sh not found!${NC}"
-    echo -e "${RED}   This may not be the LUCA repository${NC}"
+    echo -e "${RED}   Looked in: root and scripts/dev-tools/${NC}"
     exit 1
 fi
 
 # Run the safety check
 echo -e "${YELLOW}Running comprehensive safety checks...${NC}"
-if ! "$REPO_ROOT/safety-check.sh"; then
+if ! "$SAFETY_CHECK"; then
     echo -e "${RED}❌ PUSH BLOCKED: Safety checks failed!${NC}"
     echo -e "${RED}   Fix all issues before pushing to remote${NC}"
     echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"

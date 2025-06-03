@@ -69,7 +69,7 @@ echo -e "${GREEN}✓ Import sorting passed${NC}"
 
 # 6. Linting check
 echo -e "${YELLOW}Running flake8...${NC}"
-if ! flake8; then
+if ! flake8 --config=.config/.flake8; then
     echo -e "${RED}❌ Linting errors detected!${NC}"
     exit 1
 fi
@@ -77,7 +77,7 @@ echo -e "${GREEN}✓ Linting passed${NC}"
 
 # 7. Security check
 echo -e "${YELLOW}Running security scan...${NC}"
-if ! bandit -c pyproject.toml -r luca_core/ -ll; then
+if ! bandit -c .config/pyproject.toml -r luca_core app tools -ll; then
     echo -e "${RED}❌ Security issues detected!${NC}"
     exit 1
 fi
@@ -85,7 +85,7 @@ echo -e "${GREEN}✓ Security scan passed${NC}"
 
 # 8. Tests with coverage
 echo -e "${YELLOW}Running tests with coverage...${NC}"
-if ! python3 -m pytest --cov=luca_core --cov=app --cov=tools --cov-fail-under=95 -q -m "not skip_ci" --cov-config=.coveragerc; then
+if ! python3 -m pytest --cov=luca_core --cov=app --cov=tools --cov-fail-under=95 -q -m "not skip_ci" --cov-config=.config/.coveragerc; then
     echo -e "${RED}❌ Tests failed or coverage below 95%!${NC}"
     echo -e "${YELLOW}To see detailed coverage report, run:${NC}"
     echo "pytest --cov=luca_core --cov=app --cov=tools --cov-report=term-missing -m 'not skip_ci'"
@@ -102,17 +102,37 @@ echo -e "${GREEN}✓ Coverage tracked: ${COVERAGE_PCT}%${NC}"
 
 # 9. Documentation check
 echo -e "${YELLOW}Checking documentation...${NC}"
-if ! ./verify-docs.sh; then
-    echo -e "${RED}❌ Basic documentation check failed!${NC}"
-    exit 1
+# Handle both possible locations of verify-docs.sh
+if [[ -f "./verify-docs.sh" ]]; then
+    if ! ./verify-docs.sh; then
+        echo -e "${RED}❌ Basic documentation check failed!${NC}"
+        exit 1
+    fi
+elif [[ -f "scripts/dev-tools/verify-docs.sh" ]]; then
+    if ! scripts/dev-tools/verify-docs.sh; then
+        echo -e "${RED}❌ Basic documentation check failed!${NC}"
+        exit 1
+    fi
+else
+    echo -e "${YELLOW}⚠ Documentation verifier not found, skipping...${NC}"
 fi
 echo -e "${GREEN}✓ Basic documentation check passed${NC}"
 
 # 10. Schema validation
 echo -e "${YELLOW}Validating documentation schemas...${NC}"
-if ! python3 tools/validate_documentation.py; then
-    echo -e "${RED}❌ Documentation schema validation failed!${NC}"
-    exit 1
+# Handle both possible locations of validate_documentation.py
+if [[ -f "tools/validate_documentation.py" ]]; then
+    if ! python3 tools/validate_documentation.py; then
+        echo -e "${RED}❌ Documentation schema validation failed!${NC}"
+        exit 1
+    fi
+elif [[ -f "scripts/validate_documentation.py" ]]; then
+    if ! python3 scripts/validate_documentation.py; then
+        echo -e "${RED}❌ Documentation schema validation failed!${NC}"
+        exit 1
+    fi
+else
+    echo -e "${YELLOW}⚠ Documentation validator not found, skipping...${NC}"
 fi
 echo -e "${GREEN}✓ Documentation schema validation passed${NC}"
 

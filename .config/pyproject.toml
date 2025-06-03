@@ -1,0 +1,17 @@
+[tool.bandit]
+exclude_dirs = ["tests", "docs", "venv", ".venv", ".git", "__pycache__", "build", "dist"]
+skips = ["B101", "B103", "B303", "B608"]
+
+[tool.bandit.medium_severity]
+confidence_level = "medium"
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.flake8]
+max-line-length = 100
+exclude = [".venv", ".git", "__pycache__", "build", "dist"]
