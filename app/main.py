@@ -11,13 +11,13 @@ from dotenv import load_dotenv
 # Add parent directory to sys.path for importing from project root
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# Import theme
-from app.theme import get_theme_css, render_icon
-
 # Import Luca components
-from luca import get_manager
-from luca_core.manager.manager import ResponseOptions
-from luca_core.schemas import LearningMode
+from luca import get_manager  # noqa: E402
+
+# Import theme
+from app.theme import get_theme_css, render_icon  # noqa: E402
+from luca_core.manager.manager import ResponseOptions  # noqa: E402
+from luca_core.schemas import LearningMode  # noqa: E402
 
 # Load environment variables
 load_dotenv()
@@ -138,7 +138,9 @@ def main():
             """
         <div style="text-align: center; padding: 1rem 0; margin-bottom: 1rem;">
             <h2 class="gradient-text" style="margin: 0;">Luca</h2>
-            <p style="color: #6B7280; font-size: 0.875rem; margin: 0;">Quantitative Assistant</p>
+            <p style="color: #6B7280; font-size: 0.875rem; margin: 0;">
+                Quantitative Assistant
+            </p>
         </div>
         """,
             unsafe_allow_html=True,
@@ -147,7 +149,7 @@ def main():
         # Domain selector
         st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
         st.markdown('<div class="sidebar-header">Domain</div>', unsafe_allow_html=True)
-        domain = st.selectbox(
+        _ = st.selectbox(  # Currently unused but kept for future domain switching
             "Domain",
             ["Quantitative Trading", "Software Development"],
             label_visibility="collapsed",
@@ -191,7 +193,8 @@ def main():
         st.markdown(
             """
         <button class="new-button" style="width: 100%; margin-top: 0.5rem;">
-            <svg style="width: 20px; height: 20px; margin-right: 0.5rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <svg style="width: 20px; height: 20px; margin-right: 0.5rem;"
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
@@ -244,7 +247,8 @@ def main():
                 "content": (
                     "Hello! I'm Luca, your quantitative development assistant. "
                     "I can help you build trading strategies, run backtests, "
-                    "optimize parameters, and analyze results. What would you like to work on today?"
+                    "optimize parameters, and analyze results. "
+                    "What would you like to work on today?"
                 ),
             }
         ]
@@ -256,7 +260,9 @@ def main():
             """
             <div style="text-align: center; padding: 3rem 0;">
                 <h1 class="welcome-title">Luca</h1>
-                <p style="font-size: 1.2rem; color: #6B7280;">Your Quantitative Development Assistant</p>
+                <p style="font-size: 1.2rem; color: #6B7280;">
+                    Your Quantitative Development Assistant
+                </p>
             </div>
             """,
             unsafe_allow_html=True,
@@ -294,9 +300,12 @@ def main():
                 with typing_cols[0]:
                     st.markdown(
                         """<div style="display: flex; gap: 4px;">
-                        <div class="typing-dot" style="animation: bounce 1.4s infinite;"></div>
-                        <div class="typing-dot" style="animation: bounce 1.4s infinite 0.2s;"></div>
-                        <div class="typing-dot" style="animation: bounce 1.4s infinite 0.4s;"></div>
+                        <div class="typing-dot"
+                             style="animation: bounce 1.4s infinite;"></div>
+                        <div class="typing-dot"
+                             style="animation: bounce 1.4s infinite 0.2s;"></div>
+                        <div class="typing-dot"
+                             style="animation: bounce 1.4s infinite 0.4s;"></div>
                         </div>
                         <style>
                         @keyframes bounce {
@@ -336,7 +345,8 @@ def main():
                     error_msg = (
                         f"I encountered an error while processing your request:\n\n"
                         f"```\n{str(e)}\n```\n\n"
-                        f"Please try again with a simpler request or check the logs for more details."
+                        f"Please try again with a simpler request "
+                        f"or check the logs for more details."
                     )
                     typing_indicator.empty()
                     message_placeholder.markdown(error_msg)
