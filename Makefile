@@ -15,13 +15,13 @@ lint:
 	@echo "Running linters..."
 	black .
 	isort .
-	flake8
-	bandit -c pyproject.toml -r src/ -ll
+	flake8 --config=.config/.flake8
+	bandit -c .config/pyproject.toml -r luca_core app tools -ll
 
 # Run safety check script
 safety:
 	@echo "Running safety checks..."
-	./safety-check.sh
+	./scripts/dev-tools/safety-check.sh
 
 # Remove generated files
 clean:
@@ -37,7 +37,7 @@ clean:
 # Check documentation is current
 docs:
 	@echo "Checking documentation..."
-	./verify-docs.sh
+	./scripts/dev-tools/verify-docs.sh
 
 # Build Docker image and run tests with CPU/RAM caps
 test-docker:
