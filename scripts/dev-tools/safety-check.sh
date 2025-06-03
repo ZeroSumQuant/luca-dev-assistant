@@ -85,7 +85,7 @@ echo -e "${GREEN}✓ Security scan passed${NC}"
 
 # 8. Tests with coverage
 echo -e "${YELLOW}Running tests with coverage...${NC}"
-if ! python3 -m pytest --cov=luca_core --cov=app --cov=tools --cov-fail-under=95 -q -m "not skip_ci" --cov-config=.coveragerc; then
+if ! python3 -m pytest --cov=luca_core --cov=app --cov=tools --cov-fail-under=95 -q -m "not skip_ci" --cov-config=.config/.coveragerc; then
     echo -e "${RED}❌ Tests failed or coverage below 95%!${NC}"
     echo -e "${YELLOW}To see detailed coverage report, run:${NC}"
     echo "pytest --cov=luca_core --cov=app --cov=tools --cov-report=term-missing -m 'not skip_ci'"
