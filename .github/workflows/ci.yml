@@ -92,7 +92,7 @@ jobs:
           python -m pytest -v --timeout=60 --timeout_method=thread \
             -m "not skip_ci" \
             --cov=luca_core --cov=app --cov=tools \
-            --cov-config=.coveragerc \
+            --cov-config=.config/.coveragerc \
             --cov-report=term-missing \
             --cov-fail-under=95 || true
         env:
