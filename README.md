@@ -1,8 +1,21 @@
 # LUCA · Developer Assistant
 
-![Coverage](https://img.shields.io/badge/coverage-97.34%-brightgreen)
+[![CI Status](https://github.com/ZeroSumQuant/luca-dev-assistant/workflows/CI/badge.svg)](https://github.com/ZeroSumQuant/luca-dev-assistant/actions/workflows/ci.yml)
+[![Security](https://github.com/ZeroSumQuant/luca-dev-assistant/workflows/Security/badge.svg)](https://github.com/ZeroSumQuant/luca-dev-assistant/actions/workflows/security.yml)
+[![Coverage](https://img.shields.io/badge/coverage-95%25+-brightgreen.svg)](https://github.com/ZeroSumQuant/luca-dev-assistant/actions)
+[![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 *A powerful general-purpose development assistant built on agent orchestration technology that helps developers across the entire software development lifecycle.* ✨🧠💻
+
+## 🚀 Development Status
+
+- **✅ Production-Ready Architecture**: Modular design with 95%+ test coverage
+- **✅ CI/CD Pipeline**: Automated testing, linting, and security scanning on every commit
+- **✅ Code Quality**: Enforced with Black, isort, Flake8, and Bandit
+- **✅ Documentation**: Comprehensive docs with automated changelog generation
+- **🔧 Active Development**: Regular updates and feature additions
 
 ---
 
@@ -80,6 +93,22 @@ Switch modes anytime through the dropdown or simply ask LUCA to "switch to Guru 
 | 4    | Code is generated, unit‑tested, lint‑clean, and committed.                                           |
 | 5    | LUCA provides documentation and guidance for extending the project.                                  |
 | 6    | Iterate, deploy, and maintain with LUCA's continued assistance. 🔄📤📊                                |
+
+---
+
+## Project Structure
+
+```
+luca-dev-assistant/
+├── luca_core/          # Core agent orchestration engine
+├── app/                # Streamlit UI application
+├── tools/              # Utility modules (file I/O, git, MCP bridge)
+├── mcp_servers/        # Model Context Protocol servers
+├── tests/              # Comprehensive test suite (95%+ coverage)
+├── docs/               # Documentation and handoffs
+├── scripts/            # Development and utility scripts
+└── config/             # Configuration files
+```
 
 ---
 
