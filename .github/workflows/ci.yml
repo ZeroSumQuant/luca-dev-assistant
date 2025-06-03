@@ -125,6 +125,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          file: ./docker/Dockerfile
           push: false   # change to true + set secrets if you want auto-push
           tags: luca-dev:ci
 
