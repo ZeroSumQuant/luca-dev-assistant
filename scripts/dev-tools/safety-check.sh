@@ -69,7 +69,7 @@ echo -e "${GREEN}✓ Import sorting passed${NC}"
 
 # 6. Linting check
 echo -e "${YELLOW}Running flake8...${NC}"
-if ! flake8; then
+if ! flake8 --config=.config/.flake8; then
     echo -e "${RED}❌ Linting errors detected!${NC}"
     exit 1
 fi
@@ -77,7 +77,7 @@ echo -e "${GREEN}✓ Linting passed${NC}"
 
 # 7. Security check
 echo -e "${YELLOW}Running security scan...${NC}"
-if ! bandit -c pyproject.toml -r luca_core/ -ll; then
+if ! bandit -c .config/pyproject.toml -r luca_core app tools -ll; then
     echo -e "${RED}❌ Security issues detected!${NC}"
     exit 1
 fi
