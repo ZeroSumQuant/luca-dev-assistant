@@ -20,51 +20,10 @@
     "doc": "Luca Dev Assistant \u2013 main entry point."
   },
   {
-    "path": "omn_plugins.py",
-    "classes": [
-      "Plugin"
-    ],
-    "funcs": [
-      "register",
-      "run_all_plugins"
-    ],
-    "doc": "Central plugin registry for Omniscience add-ons."
-  },
-  {
-    "path": "fingerprint.py",
-    "classes": [
-      "FingerprintPlugin"
-    ],
-    "funcs": [
-      "sha1_bytes",
-      "py_files",
-      "analyse",
-      "build_fingerprints"
-    ],
-    "doc": "Fingerprint plugin \u2013 creates a cached \"purpose map\" for every .py file."
-  },
-  {
     "path": "setup.py",
     "classes": [],
     "funcs": [],
     "doc": "Setup script for luca_core package."
-  },
-  {
-    "path": "convert_issues.py",
-    "classes": [],
-    "funcs": [],
-    "doc": ""
-  },
-  {
-    "path": "claude_omniscience.py",
-    "classes": [
-      "ClaudeOmniscience",
-      "OmniscienceWatcher"
-    ],
-    "funcs": [
-      "main"
-    ],
-    "doc": "Claude Omniscience Script - Everything Claude needs to know in one command"
   },
   {
     "path": "tools/git_tools.py",
@@ -404,6 +363,47 @@
     "classes": [],
     "funcs": [],
     "doc": "Simple Filesystem MCP Server"
+  },
+  {
+    "path": "scripts/omniscience/omn_plugins.py",
+    "classes": [
+      "Plugin"
+    ],
+    "funcs": [
+      "register",
+      "run_all_plugins"
+    ],
+    "doc": "Central plugin registry for Omniscience add-ons."
+  },
+  {
+    "path": "scripts/omniscience/fingerprint.py",
+    "classes": [
+      "FingerprintPlugin"
+    ],
+    "funcs": [
+      "sha1_bytes",
+      "py_files",
+      "analyse",
+      "build_fingerprints"
+    ],
+    "doc": "Fingerprint plugin \u2013 creates a cached \"purpose map\" for every .py file."
+  },
+  {
+    "path": "scripts/omniscience/claude_omniscience.py",
+    "classes": [
+      "ClaudeOmniscience",
+      "OmniscienceWatcher"
+    ],
+    "funcs": [
+      "main"
+    ],
+    "doc": "Claude Omniscience Script - Everything Claude needs to know in one command"
+  },
+  {
+    "path": "scripts/dev-tools/convert_issues.py",
+    "classes": [],
+    "funcs": [],
+    "doc": ""
   },
   {
     "path": "luca_core/context/store.py",
