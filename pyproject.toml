@@ -9,6 +9,10 @@ markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "integration: marks tests as integration tests",
     "skip_ci: skip test in CI environment",
+    "issue_81: marks tests related to issue 81",
+    "issue_83: marks tests related to issue 83",
+    "issue_84: marks tests related to issue 84",
+    "real_exec: marks tests that require real execution",
 ]
 filterwarnings = [
     "ignore::DeprecationWarning",
