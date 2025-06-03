@@ -1,12 +1,17 @@
 """Specific test for registry.py lines that aren't covered."""
 
+import sys
 import unittest.mock as mock
+from pathlib import Path
 
 import pytest
 
-from luca_core.registry.registry import ToolRegistry
-from luca_core.schemas.tools import ToolCategory
-from tests.core.test_base import RegistryTestCase
+# Add scripts directory to path for luca imports
+sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
+
+from luca_core.registry.registry import ToolRegistry  # noqa: E402
+from luca_core.schemas.tools import ToolCategory  # noqa: E402
+from tests.core.test_base import RegistryTestCase  # noqa: E402
 
 
 class TestRegistrySpecificCoverage(RegistryTestCase):
@@ -105,6 +110,12 @@ class TestRegistrySpecificCoverage(RegistryTestCase):
         mock_manager = mock.AsyncMock()
 
         # Mock the get_manager function to return our mock
+        # Import sys and add scripts to path
+        import sys
+        from pathlib import Path
+
+        sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
+
         with mock.patch("luca.get_manager", return_value=mock_manager):
             # Test the async process function directly
             async def process():

@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # Import Luca components
+sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
 from luca import get_manager  # noqa: E402
 
 # Import theme

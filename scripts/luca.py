@@ -12,18 +12,21 @@ import subprocess
 import sys
 from pathlib import Path
 
-from autogen_core.tools import FunctionTool
+# Add parent directory to sys.path to find luca_core
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from autogen_core.tools import FunctionTool  # noqa: E402
 
 # Import luca_core components
-from luca_core.context import factory
-from luca_core.error import error_handler
-from luca_core.manager.manager import LucaManager, ResponseOptions
-from luca_core.registry import registry
-from luca_core.schemas.agent import LearningMode
+from luca_core.context import factory  # noqa: E402
+from luca_core.error import error_handler  # noqa: E402
+from luca_core.manager.manager import LucaManager, ResponseOptions  # noqa: E402
+from luca_core.registry import registry  # noqa: E402
+from luca_core.schemas.agent import LearningMode  # noqa: E402
 
 # Project helpers
-from tools.file_io import read_text, write_text
-from tools.git_tools import get_git_diff, git_commit
+from tools.file_io import read_text, write_text  # noqa: E402
+from tools.git_tools import get_git_diff, git_commit  # noqa: E402
 
 # Configure logging
 logging.basicConfig(
@@ -33,7 +36,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # DB path for context store
-DB_PATH = Path(__file__).parent / "data" / "luca.db"
+DB_PATH = Path(__file__).parent.parent / "data" / "luca.db"
 DB_PATH.parent.mkdir(exist_ok=True)
 
 # Global manager instance
@@ -192,7 +195,9 @@ def launch_ui():
 
     try:
         print("🚀 Launching Luca Dev Assistant UI...")
-        app_path = os.path.join(os.path.dirname(__file__), "app", "main_modern.py")
+        app_path = os.path.join(
+            os.path.dirname(__file__), "..", "app", "main_modern.py"
+        )
         subprocess.run([sys.executable, "-m", "streamlit", "run", app_path])
     except KeyboardInterrupt:
         print("\n👋 Goodbye!")

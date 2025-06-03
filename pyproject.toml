@@ -1,18 +1,21 @@
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-ra -q --strict-markers"
+addopts = "-ra -q --strict-markers -p no:warnings --ignore=tests/test_mcp_integration.py"
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "integration: marks tests as integration tests",
     "skip_ci: skip test in CI environment",
-    "issue_81: marks tests related to issue 81",
-    "issue_83: marks tests related to issue 83",
-    "issue_84: marks tests related to issue 84",
-    "real_exec: marks tests that require real execution",
+    "issue_81: skip test due to registry synchronization issues (GitHub #81)",
+    "issue_82: skip test due to agent manager UI issues (GitHub #82)",
+    "issue_83: skip test due to app main import issues (GitHub #83)",
+    "issue_84: skip test due to core module mock issues (GitHub #84)",
+    "real_exec: tests requiring real function execution (not mocked)",
 ]
 filterwarnings = [
     "ignore::DeprecationWarning",

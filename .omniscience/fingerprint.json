@@ -1,25 +1,5 @@
 [
   {
-    "path": "run_streamlit.py",
-    "classes": [],
-    "funcs": [
-      "main"
-    ],
-    "doc": "Launch the Luca Streamlit app."
-  },
-  {
-    "path": "luca.py",
-    "classes": [],
-    "funcs": [
-      "get_manager",
-      "build_tools",
-      "launch_ui",
-      "process_prompt",
-      "main"
-    ],
-    "doc": "Luca Dev Assistant \u2013 main entry point."
-  },
-  {
     "path": "setup.py",
     "classes": [],
     "funcs": [],
@@ -349,6 +329,26 @@
       "main"
     ],
     "doc": "CLI entry point for luca_core module."
+  },
+  {
+    "path": "scripts/run_streamlit.py",
+    "classes": [],
+    "funcs": [
+      "main"
+    ],
+    "doc": "Launch the Luca Streamlit app."
+  },
+  {
+    "path": "scripts/luca.py",
+    "classes": [],
+    "funcs": [
+      "get_manager",
+      "build_tools",
+      "launch_ui",
+      "process_prompt",
+      "main"
+    ],
+    "doc": "Luca Dev Assistant \u2013 main entry point."
   },
   {
     "path": "scripts/start_assistant.py",
