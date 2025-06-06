@@ -270,6 +270,17 @@
   - All quality gates (black, isort, flake8, bandit, mypy, pytest) pass
   - Ready for Phase 2: SecurityAgent stub, QuantAnalyst rename, sandbox limits
 
+## 2025-06-05
+
+- **Repository cleanup for presentation**:
+  - Removed all .DS_Store files and temporary artifacts
+  - Ensured clean working tree on main branch
+  - Repository ready for recruiter review
+- **Fixed autogen dependency conflicts**:
+  - Updated both autogen-agentchat and autogen-ext to 0.6.1 together
+  - Resolved version lock issue causing dependabot PR failures
+  - Created fix/autogen-version-sync branch with solution
+
 ## 2025-05-15
 
 - **Morning — ErrorPayload Schema v1.0.0** – enhanced error schema per CTO requirements:
