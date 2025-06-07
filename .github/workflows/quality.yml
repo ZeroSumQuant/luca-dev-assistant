@@ -13,9 +13,12 @@ jobs:
         with:
           python-version: "3.12"
           
-      - name: Install dev-deps
+      - name: Install deps
         run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
           python -m pip install -r requirements-dev.txt
+          python -m pip install -e .
           
       - name: Lint & format
         run: |
@@ -26,3 +29,5 @@ jobs:
       - name: Unit tests
         run: |
           pytest -q
+        env:
+          LUCA_TESTING: 1
