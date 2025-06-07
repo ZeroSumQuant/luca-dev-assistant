@@ -2,7 +2,6 @@
 """Coverage tracking and badge generation for LUCA project."""
 
 import json
-import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -114,21 +113,40 @@ class CoverageTracker:
 def main():
     """Main function for CLI usage."""
     if len(sys.argv) < 2:
-        print("Usage: python coverage_tracker.py <coverage_percentage> [commit_sha]")
+        print(
+            "Usage: python coverage_tracker.py <coverage_percentage> "
+            "[commit_sha] [--allow-regression]"
+        )
         sys.exit(1)
 
     try:
         coverage_pct = float(sys.argv[1])
-        commit_sha = sys.argv[2] if len(sys.argv) > 2 else None
+        commit_sha = (
+            sys.argv[2]
+            if len(sys.argv) > 2 and not sys.argv[2].startswith("--")
+            else None
+        )
+        allow_regression = "--allow-regression" in sys.argv
 
         tracker = CoverageTracker()
 
         # Check for regression
-        if tracker.check_coverage_regression(coverage_pct):
+        if tracker.check_coverage_regression(coverage_pct) and not allow_regression:
             print(f"⚠️  Coverage regression detected! Current: {coverage_pct:.2f}%")
             last_entry = tracker.history["entries"][-1]
             print(f"Previous: {last_entry['percentage']:.2f}%")
+            print("\nNote: This is expected when adding significant new code.")
+            print(
+                "As long as coverage stays ≥95%, the project "
+                "maintains its quality standards."
+            )
+            print("To bypass this check, use --allow-regression flag.")
             sys.exit(1)
+        elif tracker.check_coverage_regression(coverage_pct) and allow_regression:
+            print(f"⚠️  Coverage regression detected! Current: {coverage_pct:.2f}%")
+            last_entry = tracker.history["entries"][-1]
+            print(f"Previous: {last_entry['percentage']:.2f}%")
+            print("Regression allowed due to --allow-regression flag.")
 
         # Add entry to history
         tracker.add_coverage_entry(coverage_pct, commit_sha)
