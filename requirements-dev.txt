@@ -5,6 +5,7 @@
 black==25.1.0
 isort==6.0.1
 flake8==7.2.0
+ruff==0.8.6  # Fast Python linter and formatter
 mypy==1.16.0
 types-PyYAML==6.0.12.20250516
 
