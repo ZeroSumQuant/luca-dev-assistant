@@ -49,6 +49,16 @@
       "timestamp": "2025-06-07T21:39:11.798510+00:00",
       "percentage": 97.0,
       "commit_sha": "381d451"
+    },
+    {
+      "timestamp": "2025-06-07T21:40:09.492660+00:00",
+      "percentage": 97.0,
+      "commit_sha": "65d8f87"
+    },
+    {
+      "timestamp": "2025-06-07T21:57:25.985318+00:00",
+      "percentage": 97.0,
+      "commit_sha": "f074349"
     }
   ]
 }

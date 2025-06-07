@@ -2,6 +2,35 @@
 
 ## 2025-06-07
 
+- **11:00 pm — Comprehensive sandbox implementation** – Implemented issue #26 sandboxing with multiple security strategies:
+  - Created `luca_core/sandbox/sandbox_manager.py` with Docker, Process, and Restricted Python executors
+  - Implemented all CTO security review feedback:
+    - Added security hardening flags to Docker (non-root user, capability drops, PID limits)
+    - Added AST validation to RestrictedPythonExecutor to prevent unauthorized imports
+    - Made builtins read-only with MappingProxyType
+    - Added thread-local factory for sandbox manager concurrency
+    - Added Docker resource metrics collection
+    - Fixed Python interpreter to use sys.executable
+    - Added returncode check to timeout handlers
+    - Added platform support check for Windows
+  - Created comprehensive unit tests in `tests/test_sandbox_manager.py` (29 tests, all passing)
+  - Integrated sandbox into `luca_core/manager/manager.py` with `execute_code_securely()` method
+  - Created security documentation at `docs/security/sandbox.md`
+  - All tests passing, code formatted with black/isort, flake8 clean
+
+- **8:00 pm — Simplified issue ordering** – Implemented KISS principle for issue management:
+  - Created `scripts/dev-tools/update-issue-order.py` to prefix GitHub issue titles with [01], [02], etc.
+  - Applied ordering to all 29 open issues directly in GitHub
+  - Renamed branch from `fix/issue-dependency-tracking` to `feature/26-sandboxing-implementation`
+  - Pushed branch and began actual implementation work
+
+- **6:00 pm — Ruff removal** – Removed ruff from project after discovering it was incorrectly being used:
+  - Removed ruff from `requirements-dev.txt`
+  - Updated `.github/workflows/quality.yml` to use black/isort/flake8 instead of ruff
+  - Fixed Python version mismatch in quality.yml (3.12 to 3.13)
+  - Fixed all line length violations
+  - Successfully merged PR #129
+
 - **4:00 pm — Issue dependency tracking enhancement** – Fixed validation script to detect dependencies from planning docs:
   - Enhanced `scripts/dev-tools/validate-issue-order.py` to parse planning document
   - Created `scripts/dev-tools/sync-issue-dependencies.py` to sync dependencies to GitHub
