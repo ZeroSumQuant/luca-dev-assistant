@@ -2,6 +2,18 @@
 
 ## 2025-06-07
 
+- **11:45 pm — Sandbox limits module implementation** – Implemented issue #60 resource limits:
+  - Created `luca_core/sandbox/limits.py` with ResourceLimits dataclass and validation
+  - Implemented default limits as specified: CPU=1, MEM_MB=1024, DISK_MB=512, NET_OFFLINE=True
+  - Added strict and relaxed limit presets for different trust levels
+  - Created comprehensive unit tests in `tests/test_sandbox_limits.py` (25 tests, all passing)
+  - Updated `sandbox_manager.py` to use the new limits module
+  - Added backward compatibility properties for existing code
+  - Updated documentation in `docs/security/sandbox.md` with resource limits section
+  - Exported all limits functionality from sandbox package init file
+
+## 2025-06-07
+
 - **11:00 pm — Comprehensive sandbox implementation** – Implemented issue #26 sandboxing with multiple security strategies:
   - Created `luca_core/sandbox/sandbox_manager.py` with Docker, Process, and Restricted Python executors
   - Implemented all CTO security review feedback:

@@ -139,6 +139,54 @@ result = await self.execute_code_securely(
 )
 ```
 
+## Resource Limits
+
+The sandbox system enforces strict resource limits through the `limits` module:
+
+### Default Limits (as specified in issue #60)
+- **CPU**: 1.0 cores
+- **Memory**: 1024 MB
+- **Disk**: 512 MB
+- **Network**: Offline (disabled by default)
+
+### Trust-Based Limits
+
+```python
+from luca_core.sandbox.limits import get_limits_for_trust_level
+
+# Automatically select limits based on trust level
+limits = get_limits_for_trust_level("untrusted")  # Strict limits
+limits = get_limits_for_trust_level("limited")    # Default limits
+limits = get_limits_for_trust_level("trusted")    # Relaxed limits
+```
+
+### Custom Limits
+
+```python
+from luca_core.sandbox.limits import ResourceLimits
+from luca_core.sandbox.sandbox_manager import SandboxConfig
+
+# Create custom limits
+custom_limits = ResourceLimits(
+    cpu_cores=2.0,
+    memory_mb=2048,
+    disk_mb=1024,
+    network_offline=False,  # Enable network
+    timeout_seconds=60,
+)
+
+# Use with sandbox config
+config = SandboxConfig(limits=custom_limits)
+```
+
+### Limit Validation
+
+All resource limits are validated to ensure they don't exceed safe maximums:
+- Max CPU: 4.0 cores
+- Max Memory: 4096 MB
+- Max Disk: 2048 MB
+- Max Timeout: 300 seconds
+
 ## Known Limitations
 
 1. **Windows Support**: Process sandboxing is not available on Windows
