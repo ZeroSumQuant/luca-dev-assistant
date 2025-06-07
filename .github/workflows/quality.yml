@@ -19,8 +19,9 @@ jobs:
           
       - name: Lint & format
         run: |
-          ruff format --check . --target-version py312
-          ruff check .
+          black --check .
+          isort --check-only .
+          flake8 --config=.config/.flake8
           
       - name: Unit tests
         run: |
