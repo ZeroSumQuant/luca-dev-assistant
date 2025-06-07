@@ -8,8 +8,16 @@ This script checks:
 3. No circular dependencies exist
 4. High priority issues are appropriately positioned
 
+The script reads dependencies from:
+- GitHub issue labels (blocked-by:#123)
+- GitHub issue body text (Blocked by: #123, Depends on: #456)
+- Planning document (docs/development/issue-dependency-order-*.md)
+
 Usage:
     python scripts/dev-tools/validate-issue-order.py [--verbose] [--dry-run]
+
+    # To sync dependencies from planning doc to GitHub:
+    python scripts/dev-tools/sync-issue-dependencies.py [--dry-run]
 
 Exit codes:
     0 = all clear
@@ -129,6 +137,58 @@ def extract_dependencies(
     if has_errors:
         print("❌ Found references to non-existent issues!")
         sys.exit(2)
+
+    return dependencies
+
+
+def parse_planning_doc_dependencies(
+    order_file: str, verbose: bool = False
+) -> Dict[int, Set[int]]:
+    """Parse dependencies from the planning document format."""
+    dependencies = defaultdict(set)
+    current_issue = None
+
+    try:
+        with open(order_file, "r") as f:
+            for line in f:
+                # Match issue headers like "- **#26** - Description"
+                issue_match = re.match(r"^\s*-\s*\*\*#(\d+)\*\*", line)
+                if issue_match:
+                    current_issue = int(issue_match.group(1))
+                    continue
+
+                if current_issue:
+                    # Match "Blocks: #60, #50, #120" pattern
+                    blocks_match = re.search(r"Blocks:\s*(#\d+(?:\s*,\s*#\d+)*)", line)
+                    if blocks_match:
+                        blocked_issues = re.findall(r"#(\d+)", blocks_match.group(1))
+                        for blocked in blocked_issues:
+                            blocked_num = int(blocked)
+                            dependencies[blocked_num].add(current_issue)
+                            if verbose:
+                                print(
+                                    f"  Found dependency: #{blocked_num} blocked by "
+                                    f"#{current_issue} (from planning doc)"
+                                )
+
+                    # Match "Depends on: #26" pattern
+                    depends_match = re.search(
+                        r"Depends on:\s*(#\d+(?:\s*,\s*#\d+)*)", line
+                    )
+                    if depends_match:
+                        blocker_issues = re.findall(r"#(\d+)", depends_match.group(1))
+                        for blocker in blocker_issues:
+                            blocker_num = int(blocker)
+                            dependencies[current_issue].add(blocker_num)
+                            if verbose:
+                                print(
+                                    f"  Found dependency: #{current_issue} blocked by "
+                                    f"#{blocker_num} (from planning doc)"
+                                )
+
+    except FileNotFoundError:
+        if verbose:
+            print(f"Planning document not found: {order_file}")
 
     return dependencies
 
@@ -273,7 +333,22 @@ def main():
 
     # Get data
     issues = get_all_issues(verbose=args.verbose)
-    dependencies = extract_dependencies(issues, verbose=args.verbose)
+    github_dependencies = extract_dependencies(issues, verbose=args.verbose)
+
+    # Parse dependencies from planning document
+    if args.verbose:
+        print("\nParsing planning document dependencies...")
+    doc_dependencies = parse_planning_doc_dependencies(
+        args.order_file, verbose=args.verbose
+    )
+
+    # Merge dependencies from both sources
+    dependencies = defaultdict(set)
+    for issue, blockers in github_dependencies.items():
+        dependencies[issue].update(blockers)
+    for issue, blockers in doc_dependencies.items():
+        dependencies[issue].update(blockers)
+
     order = get_issue_order(args.order_file)
 
     if not order:
@@ -281,7 +356,9 @@ def main():
         sys.exit(2)
 
     print(f"Found {len(issues)} open issues")
-    print(f"Found {len(dependencies)} issues with dependencies")
+    print(f"Found {len(github_dependencies)} issues with GitHub dependencies")
+    print(f"Found {len(doc_dependencies)} issues with planning doc dependencies")
+    print(f"Total {len(dependencies)} issues with dependencies")
     print(f"Loaded order with {len(order)} issues")
     print()
 

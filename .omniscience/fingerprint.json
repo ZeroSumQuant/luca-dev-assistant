@@ -400,6 +400,18 @@
     "doc": "Claude Omniscience Script - Everything Claude needs to know in one command"
   },
   {
+    "path": "scripts/dev-tools/sync-issue-dependencies.py",
+    "classes": [],
+    "funcs": [
+      "run_gh_command",
+      "parse_planning_doc_dependencies",
+      "update_issue_body",
+      "add_issue_labels",
+      "main"
+    ],
+    "doc": "Sync issue dependencies from planning document to GitHub."
+  },
+  {
     "path": "scripts/dev-tools/convert_issues.py",
     "classes": [],
     "funcs": [],
@@ -413,6 +425,7 @@
       "get_all_issues",
       "validate_issue_exists",
       "extract_dependencies",
+      "parse_planning_doc_dependencies",
       "detect_cycles",
       "get_issue_order",
       "validate_order",
