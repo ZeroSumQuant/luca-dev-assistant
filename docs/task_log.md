@@ -2,6 +2,12 @@
 
 ## 2025-06-07
 
+- **4:00 pm — Issue dependency tracking enhancement** – Fixed validation script to detect dependencies from planning docs:
+  - Enhanced `scripts/dev-tools/validate-issue-order.py` to parse planning document
+  - Created `scripts/dev-tools/sync-issue-dependencies.py` to sync dependencies to GitHub
+  - Discovered 7 issues with dependencies documented in planning but not in GitHub
+  - Scripts now validate dependencies from both GitHub and planning documents
+
 - **3:30 pm — CAKE integration planning** – Analyzed CAKE project and created integration strategy:
   - Reviewed CAKE architecture and components (Operator, RecallDB, PTYShim, Watchdog)
   - Analyzed all 29 open GitHub issues for dependencies and conflicts
