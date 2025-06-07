@@ -185,6 +185,19 @@
     "doc": "Debug import chain to find where AutoGen is coming from."
   },
   {
+    "path": "tests/test_sandbox_manager.py",
+    "classes": [
+      "TestSandboxConfig",
+      "TestSandboxResult",
+      "TestDockerSandboxExecutor",
+      "TestProcessSandboxExecutor",
+      "TestRestrictedPythonExecutor",
+      "TestSandboxManager"
+    ],
+    "funcs": [],
+    "doc": "Comprehensive tests for the sandbox manager."
+  },
+  {
     "path": "tests/test_mcp_integration.py",
     "classes": [
       "TestMCPClientManager",
@@ -400,6 +413,15 @@
     "doc": "Claude Omniscience Script - Everything Claude needs to know in one command"
   },
   {
+    "path": "scripts/dev-tools/update-issue-order.py",
+    "classes": [],
+    "funcs": [
+      "run_gh_command",
+      "main"
+    ],
+    "doc": "Update GitHub issue titles with order numbers."
+  },
+  {
     "path": "scripts/dev-tools/sync-issue-dependencies.py",
     "classes": [],
     "funcs": [
@@ -580,6 +602,23 @@
     "classes": [],
     "funcs": [],
     "doc": "Sandbox execution module for LUCA Dev Assistant."
+  },
+  {
+    "path": "luca_core/sandbox/sandbox_manager.py",
+    "classes": [
+      "SandboxStrategy",
+      "SandboxConfig",
+      "SandboxResult",
+      "SandboxExecutor",
+      "DockerSandboxExecutor",
+      "ProcessSandboxExecutor",
+      "RestrictedPythonExecutor",
+      "SandboxManager"
+    ],
+    "funcs": [
+      "get_sandbox_manager"
+    ],
+    "doc": "Comprehensive sandboxing manager for secure code execution."
   },
   {
     "path": "luca_core/registry/registry.py",

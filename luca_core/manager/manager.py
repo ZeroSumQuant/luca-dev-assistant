@@ -4,37 +4,29 @@ This module provides the core orchestration layer that connects all components
 and implements the main LUCA functionality.
 """
 
-import asyncio
 import logging
 import uuid
-from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
 
 from luca_core.context import BaseContextStore
-from luca_core.error import ErrorHandler, error_handler, handle_exceptions
+from luca_core.error import ErrorHandler
 from luca_core.registry import ToolRegistry, registry
+from luca_core.sandbox.sandbox_manager import SandboxManager
 from luca_core.schemas import (
     Agent,
     AgentConfig,
     AgentRole,
     AgentStatus,
-    ClarificationRequest,
-    ErrorCategory,
-    ErrorPayload,
-    ErrorSeverity,
     LearningMode,
     LLMModelConfig,
     Message,
     MessageRole,
-    MetricRecord,
     Project,
     Task,
     TaskResult,
     TaskStatus,
-    create_system_error,
-    create_user_error,
 )
 
 logger = logging.getLogger(__name__)
@@ -52,7 +44,8 @@ class ResponseOptions(BaseModel):
 class LucaManager:
     """Core orchestration manager for LUCA.
 
-    The manager coordinates all components and implements the main LUCA functionality.
+    The manager coordinates all components and implements the main LUCA
+    functionality.
     """
 
     def __init__(
@@ -60,17 +53,22 @@ class LucaManager:
         context_store: BaseContextStore,
         tool_registry: Optional[ToolRegistry] = None,
         error_handler: Optional[ErrorHandler] = None,
+        sandbox_manager: Optional[SandboxManager] = None,
     ):
         """Initialize the LUCA manager.
 
         Args:
             context_store: Context store for persistent memory
-            tool_registry: Tool registry for tool management (defaults to global registry)
-            error_handler: Error handler for error management (defaults to global handler)
+            tool_registry: Tool registry for tool management
+                (defaults to global registry)
+            error_handler: Error handler for error management
+                (defaults to global handler)
+            sandbox_manager: Sandbox manager for secure code execution
         """
         self.context_store = context_store
         self.tool_registry = tool_registry or registry
-        self.error_handler = error_handler or error_handler
+        self.error_handler = error_handler or ErrorHandler()
+        self.sandbox_manager = sandbox_manager or SandboxManager()
         self.agents: Dict[str, Agent] = {}
         self.current_project: Optional[Project] = None
         self.user_id = "default"
@@ -78,7 +76,7 @@ class LucaManager:
     async def initialize(self) -> None:
         """Initialize the manager and load default agents."""
         # Load user preferences
-        preferences = await self.context_store.get_user_preferences(self.user_id)
+        await self.context_store.get_user_preferences(self.user_id)
 
         # Create default agents if not already registered
         await self._create_default_agents()
@@ -183,12 +181,14 @@ class LucaManager:
             id="analyst",
             name="Analyst",
             role=AgentRole.ANALYST,
-            description="Specialist agent for analyzing data and QuantConnect strategies",
+            description=(
+                "Specialist agent for analyzing data and QuantConnect strategies"
+            ),
             llm_config=LLMModelConfig(
                 model_name="gpt-4o",
                 temperature=0.2,
             ),
-            system_prompt="You are a data analysis and QuantConnect specialist...",
+            system_prompt=("You are a data analysis and QuantConnect specialist..."),
             capabilities=[],
             tools=[
                 "file_io.read_text",
@@ -272,7 +272,8 @@ class LucaManager:
     async def _understand(self, request: str) -> Dict[str, Any]:
         """Understand the user request.
 
-        This analyzes the request to extract intent, domain, and other information.
+        This analyzes the request to extract intent, domain, and other
+        information.
 
         Args:
             request: User request text
@@ -404,7 +405,10 @@ class LucaManager:
         combined_result = "\n\n".join(r.result for r in results if r.success)
 
         if not combined_result:
-            return "I processed your request, but encountered errors and couldn't produce results."
+            return (
+                "I processed your request, but encountered errors and "
+                "couldn't produce results."
+            )
 
         return combined_result
 
@@ -422,7 +426,44 @@ class LucaManager:
         # In Phase 0, we'll just log the metrics
 
         logger.info(
-            f"Processed request of length {len(request)} in learning mode {options.learning_mode}"
+            f"Processed request of length {len(request)} in learning mode "
+            f"{options.learning_mode}"
         )
 
-        # In a more advanced implementation, we would store metrics in the context store
+        # In a more advanced implementation, we would store metrics in the
+        # context store
+
+    async def execute_code_securely(
+        self, code: str, trust_level: str = "untrusted"
+    ) -> Dict[str, Any]:
+        """Execute code securely in a sandboxed environment.
+
+        Args:
+            code: Code to execute
+            trust_level: Trust level for the code
+                ("untrusted", "limited", "trusted")
+
+        Returns:
+            Dictionary with execution results
+        """
+        # Get recommended configuration based on trust level
+        config = self.sandbox_manager.get_recommended_config(trust_level)
+
+        # Log the execution attempt
+        logger.info(
+            f"Executing code with {config.strategy} strategy "
+            f"(trust level: {trust_level})"
+        )
+
+        # Execute the code
+        result = await self.sandbox_manager.execute(code, config)
+
+        # Convert result to dictionary
+        return {
+            "success": result.success,
+            "stdout": result.stdout,
+            "stderr": result.stderr,
+            "exit_code": result.exit_code,
+            "error": str(result.error) if result.error else None,
+            "resource_usage": result.resource_usage,
+        }
