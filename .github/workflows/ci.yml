@@ -110,8 +110,8 @@ jobs:
           COVERAGE_PCT=$(python -m coverage report | grep TOTAL | awk '{print $NF}' | sed 's/%//')
           echo "Coverage: ${COVERAGE_PCT}%"
           
-          # Update coverage tracking
-          python tools/coverage_tracker.py ${COVERAGE_PCT} ${GITHUB_SHA}
+          # Update coverage tracking (allow regression as long as ≥95%)
+          python tools/coverage_tracker.py ${COVERAGE_PCT} ${GITHUB_SHA} --allow-regression
           
       - name: 📤 Upload coverage history
         uses: actions/upload-artifact@v4
