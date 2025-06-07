@@ -4,15 +4,12 @@ This module provides a registry for tools that can be used by agents,
 with support for registration, discovery, and execution.
 """
 
-import functools
 import inspect
 import logging
-import sys
 from datetime import datetime
-from typing import Any, Callable, Dict, List, Optional, Set, Type, Union, get_type_hints
+from typing import Any, Callable, Dict, List, Optional, Union, get_type_hints
 
 from luca_core.schemas import (
-    ErrorPayload,
     ToolCategory,
     ToolMetadata,
     ToolParameter,
@@ -20,8 +17,6 @@ from luca_core.schemas import (
     ToolScope,
     ToolSpecification,
     ToolUsageMetrics,
-    create_system_error,
-    create_user_error,
 )
 
 logger = logging.getLogger(__name__)
@@ -123,7 +118,7 @@ class ToolRegistry:
                 parameters.append(
                     ToolParameter(
                         name=param_name,
-                        description=f"Parameter {param_name}",  # Could parse from docstring in a more advanced version
+                        description=f"Parameter {param_name}",  # From docstring
                         type=param_type,
                         required=param_required,
                         default=param_default,
@@ -161,7 +156,7 @@ class ToolRegistry:
                 metadata=tool_metadata,
                 parameters=parameters,
                 return_type=return_type,
-                return_description=f"Returns {return_type}",  # Could parse from docstring
+                return_description=f"Returns {return_type}",  # From docstring
             )
 
             # Create usage metrics

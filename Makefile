@@ -32,7 +32,6 @@ clean:
 	find . -type f -name ".coverage" -delete
 	rm -rf htmlcov/
 	rm -rf .pytest_cache/
-	rm -rf .ruff_cache/
 
 # Check documentation is current
 docs:

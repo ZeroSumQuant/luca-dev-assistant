@@ -1,6 +1,5 @@
 """Test coverage for app/main.py."""
 
-import asyncio
 import sys
 import unittest.mock as mock
 
@@ -101,9 +100,8 @@ class TestAppMainCoverage:
         mock_st.session_state.__contains__ = mock.Mock(return_value=False)
 
         # Set up form submission
-        mock_st.sidebar.form.return_value.__enter__.return_value.form_submit_button.return_value = (
-            False
-        )
+        form_mock = mock_st.sidebar.form.return_value.__enter__.return_value
+        form_mock.form_submit_button.return_value = False
         mock_st.sidebar.selectbox.return_value = "balanced"
         mock_st.toggle.return_value = False
         mock_st.text_input.return_value = ""

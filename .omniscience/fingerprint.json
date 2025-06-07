@@ -406,6 +406,22 @@
     "doc": ""
   },
   {
+    "path": "scripts/dev-tools/validate-issue-order.py",
+    "classes": [],
+    "funcs": [
+      "run_gh_command",
+      "get_all_issues",
+      "validate_issue_exists",
+      "extract_dependencies",
+      "detect_cycles",
+      "get_issue_order",
+      "validate_order",
+      "check_priority_placement",
+      "main"
+    ],
+    "doc": "Validate GitHub issue dependencies and ordering."
+  },
+  {
     "path": "luca_core/context/store.py",
     "classes": [
       "ContextStore"

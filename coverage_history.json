@@ -1,0 +1,49 @@
+{
+  "entries": [
+    {
+      "timestamp": "2025-06-06T02:03:07.227126+00:00",
+      "percentage": 97.0,
+      "commit_sha": "52bebd2"
+    },
+    {
+      "timestamp": "2025-06-06T02:04:23.035448+00:00",
+      "percentage": 97.0,
+      "commit_sha": "ed80ea0"
+    },
+    {
+      "timestamp": "2025-06-06T02:05:55.017973+00:00",
+      "percentage": 97.0,
+      "commit_sha": "bc0df67"
+    },
+    {
+      "timestamp": "2025-06-06T02:08:42.766503+00:00",
+      "percentage": 97.0,
+      "commit_sha": "fedde54"
+    },
+    {
+      "timestamp": "2025-06-07T19:47:05.075576+00:00",
+      "percentage": 97.0,
+      "commit_sha": "8f4e344"
+    },
+    {
+      "timestamp": "2025-06-07T20:36:55.059964+00:00",
+      "percentage": 97.0,
+      "commit_sha": "8f4e344"
+    },
+    {
+      "timestamp": "2025-06-07T20:37:56.918866+00:00",
+      "percentage": 97.0,
+      "commit_sha": "8f4e344"
+    },
+    {
+      "timestamp": "2025-06-07T20:40:57.298799+00:00",
+      "percentage": 97.0,
+      "commit_sha": "7a93ae2"
+    },
+    {
+      "timestamp": "2025-06-07T20:54:44.168243+00:00",
+      "percentage": 97.0,
+      "commit_sha": "50e66e4"
+    }
+  ]
+}
