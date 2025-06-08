@@ -51,6 +51,11 @@ class TestMCPBridgeCoverage:
         # Verify string result is returned as-is
         assert result == "string result"
 
+        # Critical: Ensure no pending tasks remain (from the research)
+        current_task = asyncio.current_task()
+        pending = [t for t in asyncio.all_tasks() if not t.done() and t != current_task]
+        assert pending == [], f"No pending tasks should remain, found: {pending}"
+
         # Explicit cleanup - break circular references
         del wrapped_func
         del tools
@@ -141,6 +146,11 @@ class TestMCPBridgeCoverage:
         # Test with non-existent tool
         with pytest.raises(ValueError, match="Tool not found: nonexistent"):
             await bridge.test_tool_execution("nonexistent", {})
+
+        # Critical: Ensure no pending tasks remain
+        current_task = asyncio.current_task()
+        pending = [t for t in asyncio.all_tasks() if not t.done() and t != current_task]
+        assert pending == [], f"No pending tasks should remain, found: {pending}"
 
         # Explicit cleanup
         del bridge
