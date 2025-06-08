@@ -1,11 +1,9 @@
 """Tests for the MCP client."""
 
-import json
-from typing import Any, Dict
+from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
 import pytest
-from mcp import types
 
 from tools.mcp_client import (
     MCPClientManager,
@@ -118,11 +116,15 @@ class TestMCPClientManager:
             # Make stdio_client return the mock session
             mock_client.return_value = mock_session
 
-            result = await manager.connect_to_server(config)
+            # Mock the validate_file_path function
+            with patch("tools.mcp_client.validate_file_path") as mock_validate:
+                mock_validate.return_value = Path("/path/to/script.py")
 
-            assert result is True
-            assert "test_server" in manager.connections
-            assert mock_client.called
+                result = await manager.connect_to_server(config)
+
+                assert result is True
+                assert "test_server" in manager.connections
+                assert mock_client.called
 
     @pytest.mark.asyncio
     async def test_connect_to_server_stdio_no_path(self):

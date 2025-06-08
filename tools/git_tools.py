@@ -1,8 +1,12 @@
-"""Git helpers for Luca – subprocess-only, no extra deps."""
+"""Git helpers for Luca – subprocess-only, no extra deps.
+Enhanced with input validation to prevent command injection.
+"""
 
 import shlex
 import subprocess
 from pathlib import Path
+
+from luca_core.validation import ValidationError
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -55,7 +59,37 @@ def git_commit(message: str) -> str:
 
     Raises:
         RuntimeError: If a git command fails
+        ValidationError: If the commit message contains dangerous characters
     """
+    # Validate the commit message to prevent injection
+    if not message:
+        raise ValidationError("Commit message cannot be empty")
+
+    # Check for dangerous characters that could break out of quotes
+    dangerous_chars = ['"', "'", "`", "$", "\\", "\n", "\r", "\x00"]
+    for char in dangerous_chars:
+        if char in message:
+            raise ValidationError(
+                f"Commit message contains forbidden character: {repr(char)}"
+            )
+
+    # Additional length check
+    if len(message) > 1000:
+        raise ValidationError("Commit message too long (max 1000 characters)")
+
     _run("git add -A")
-    out = _run(f'git commit -m "{message}"')
+
+    # Use subprocess directly for better control
+    result = subprocess.run(
+        ["git", "commit", "-m", message],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    if result.returncode != 0:
+        raise RuntimeError(f"git commit failed: {result.stderr.strip()}")
+
+    out = result.stdout.strip()
     return out.split()[-1]  # last token is the SHA

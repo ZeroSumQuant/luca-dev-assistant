@@ -1,4 +1,6 @@
-"""MCP Client Manager for LUCA Dev Assistant"""
+"""MCP Client Manager for LUCA Dev Assistant
+Enhanced with comprehensive input validation for security.
+"""
 
 import asyncio
 import logging
@@ -8,6 +10,13 @@ from typing import Any, Dict, List, Optional, TypeVar, Union
 from mcp import ClientSession, types
 from mcp.client.stdio import StdioServerParameters, stdio_client
 from mcp.client.streamable_http import streamablehttp_client
+
+from luca_core.validation import (
+    ValidationError,
+    validate_file_path,
+    validate_json_data,
+    validate_url,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +92,8 @@ class MCPClientManager:
             True if connection was successful, False otherwise
 
         Raises:
-            ValueError: If required configuration is missing or an unknown server type is specified
+            ValueError: If required configuration is missing or an unknown
+                server type is specified
             NotImplementedError: For server types that are not yet implemented
         """
         try:
@@ -91,9 +101,17 @@ class MCPClientManager:
                 if not config.script_path:
                     raise ValueError("script_path required for stdio servers")
 
+                # Validate the script path
+                try:
+                    validated_path = validate_file_path(
+                        config.script_path, must_exist=True, allow_directories=False
+                    )
+                except ValidationError as e:
+                    raise ValueError(f"Invalid script path: {e}")
+
                 # Create server parameters for stdio connection
                 server_params = StdioServerParameters(
-                    command="python", args=[config.script_path]
+                    command="python", args=[str(validated_path)]
                 )
 
                 # Connect to the server
@@ -102,6 +120,12 @@ class MCPClientManager:
             elif config.type == "http":
                 if not config.url:
                     raise ValueError("url required for HTTP servers")
+
+                # Validate the URL
+                try:
+                    validated_url = validate_url(config.url)
+                except ValidationError as e:
+                    raise ValueError(f"Invalid URL: {e}")
 
                 # Implement HTTP connection with retry logic
                 for attempt in range(config.max_retries):
@@ -112,7 +136,7 @@ class MCPClientManager:
                             f"(attempt {attempt + 1}/{config.max_retries})"
                         )
                         session = await streamablehttp_client(
-                            config.url, timeout=config.timeout_seconds
+                            validated_url, timeout=config.timeout_seconds
                         )
                         logger.info(
                             f"Successfully connected to HTTP server at {config.url}"
@@ -162,7 +186,8 @@ class MCPClientManager:
             True if disconnection was successful, False if the server wasn't connected
 
         Raises:
-            Exception: Any exception that occurs during disconnection will be logged and re-raised
+            Exception: Any exception that occurs during disconnection will be
+                logged and re-raised
         """
         try:
             if server_name in self.connections:
@@ -240,7 +265,8 @@ class MCPClientManager:
             arguments: A dictionary of arguments to pass to the tool
 
         Returns:
-            The result of the tool execution, which could be a string, dictionary, list, or None
+            The result of the tool execution, which could be a string,
+            dictionary, list, or None
 
         Raises:
             ValueError: If the tool or server is not found
@@ -255,6 +281,14 @@ class MCPClientManager:
             raise ValueError(f"Server not connected: {tool.server_name}")
 
         try:
+            # Validate arguments - ensure it's a safe JSON-serializable dict
+            try:
+                validated_args = validate_json_data(
+                    arguments, max_size=1024 * 1024  # 1MB limit for tool arguments
+                )
+            except ValidationError as e:
+                raise ValueError(f"Invalid tool arguments: {e}")
+
             # Extract the actual tool name (remove server prefix)
             actual_tool_name = tool.name
 
@@ -262,7 +296,7 @@ class MCPClientManager:
             request = types.CallToolRequest(
                 method="tools/call",
                 params=types.CallToolRequestParams(
-                    name=actual_tool_name, arguments=arguments
+                    name=actual_tool_name, arguments=validated_args
                 ),
             )
 

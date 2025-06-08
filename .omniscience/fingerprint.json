@@ -747,6 +747,29 @@
     "doc": "Error package for LUCA Core."
   },
   {
+    "path": "luca_core/validation/validators.py",
+    "classes": [
+      "ValidationError"
+    ],
+    "funcs": [
+      "validate_file_path",
+      "validate_file_content",
+      "validate_url",
+      "validate_prompt",
+      "validate_shell_command",
+      "validate_sql_input",
+      "validate_json_data",
+      "validate_environment_var"
+    ],
+    "doc": "Core validation functions for external data inputs."
+  },
+  {
+    "path": "luca_core/validation/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": "Input validation module for LUCA Dev Assistant."
+  },
+  {
     "path": "luca_core/store/__init__.py",
     "classes": [],
     "funcs": [],
@@ -761,6 +784,14 @@
     "doc": "Tests for the MCP AutoGen bridge."
   },
   {
+    "path": "tests/tools/test_git_tools_validation.py",
+    "classes": [
+      "TestGitToolsValidation"
+    ],
+    "funcs": [],
+    "doc": "Tests for git tools with input validation."
+  },
+  {
     "path": "tests/tools/test_mcp_client.py",
     "classes": [
       "TestMCPTool",
@@ -769,6 +800,14 @@
     ],
     "funcs": [],
     "doc": "Tests for the MCP client."
+  },
+  {
+    "path": "tests/tools/test_file_io_validation.py",
+    "classes": [
+      "TestFileIOValidation"
+    ],
+    "funcs": [],
+    "doc": "Tests for file I/O with input validation."
   },
   {
     "path": "tests/tools/test_code_watchdog.py",
@@ -994,6 +1033,21 @@
     "classes": [],
     "funcs": [],
     "doc": "Configuration file for pytest to run luca_core tests."
+  },
+  {
+    "path": "tests/luca_core_pkgtests/test_validation.py",
+    "classes": [
+      "TestFilePathValidation",
+      "TestFileContentValidation",
+      "TestURLValidation",
+      "TestPromptValidation",
+      "TestShellCommandValidation",
+      "TestSQLInputValidation",
+      "TestJSONDataValidation",
+      "TestEnvironmentVariableValidation"
+    ],
+    "funcs": [],
+    "doc": "Comprehensive tests for input validation module."
   },
   {
     "path": "tests/luca_core_pkgtests/test_base_store.py",
