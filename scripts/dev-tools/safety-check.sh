@@ -85,7 +85,15 @@ echo -e "${GREEN}✓ Security scan passed${NC}"
 
 # 8. Tests with coverage
 echo -e "${YELLOW}Running tests with coverage...${NC}"
-if ! python3 -m pytest --cov=luca_core --cov=app --cov=tools --cov-fail-under=95 -q -m "not skip_ci" --cov-config=.config/.coveragerc; then
+# Use parallel testing if available
+if command -v pytest-xdist >/dev/null 2>&1 || python3 -c "import xdist" 2>/dev/null; then
+    echo -e "${YELLOW}Using parallel test execution...${NC}"
+    PYTEST_ARGS="-n auto"
+else
+    PYTEST_ARGS=""
+fi
+
+if ! python3 -m pytest $PYTEST_ARGS --cov=luca_core --cov=app --cov=tools --cov-fail-under=95 -q -m "not skip_ci" --cov-config=.config/.coveragerc; then
     echo -e "${RED}❌ Tests failed or coverage below 95%!${NC}"
     echo -e "${YELLOW}To see detailed coverage report, run:${NC}"
     echo "pytest --cov=luca_core --cov=app --cov=tools --cov-report=term-missing -m 'not skip_ci'"

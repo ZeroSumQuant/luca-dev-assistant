@@ -2,6 +2,14 @@
 
 ## 2025-06-08
 
+- **5:00 am — Test suite performance optimization** – Achieved 6.5x speedup (36s → 5.6s):
+  - Replaced sleep-based waits with direct method calls in SQLite backup tests
+  - Reduced sandbox timeout test from 1s to 0.1s while maintaining test validity
+  - Added pytest-xdist for parallel test execution with `-n auto`
+  - Updated Makefile with `test-fast` target and safety-check.sh for auto-detection
+  - Created research document in `docs/research/test-suite-optimization.md`
+  - Pre-push hooks now complete in ~20 seconds instead of 90+ seconds
+
 - **4:30 am — Fixed CI hanging issue** – Resolved test-and-build job hanging in PR #132:
   - Modified `tests/test_sandbox_manager.py` and `tests/test_sandbox_manager_coverage.py`
   - Replaced infinite loops (`while True: pass`) with finite loops (`for i in range(10**9): pass`)
