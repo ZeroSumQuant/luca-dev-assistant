@@ -172,7 +172,8 @@
     "classes": [],
     "funcs": [
       "pytest_configure",
-      "resource_fixture"
+      "resource_fixture",
+      "ensure_clean_async_state"
     ],
     "doc": "Test configuration for LUCA Dev Assistant."
   },

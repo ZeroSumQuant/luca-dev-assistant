@@ -89,6 +89,13 @@ def ensure_clean_async_state():
         # Don't fail immediately - try to diagnose
         print(f"WARNING: Non-daemon threads still running: {thread_info}")
 
+        # Try to stop threads if they're from our sandbox tests
+        for thread in non_daemon_threads:
+            if hasattr(thread, "_target") and thread._target:
+                # Log what the thread was doing
+                print(f"Thread {thread.name} target: {thread._target}")
+            # Note: We can't forcefully kill threads in Python, but logging helps
+
     # Check for pending asyncio tasks
     try:
         loop = asyncio.get_running_loop()

@@ -72,8 +72,9 @@ class TestRestrictedPythonEdgeCases:
         executor = RestrictedPythonExecutor()
         config = SandboxConfig(limits=ResourceLimits(timeout_seconds=0.1))
 
-        # Code that will timeout
-        result = await executor.execute("while True: pass", config)
+        # Code that will timeout - use a counter to avoid true infinite loop
+        # This prevents CI hangs while still testing timeout behavior
+        result = await executor.execute("for i in range(10**9): pass", config)
 
         assert result.success is False
         assert "timeout" in result.stderr.lower()
