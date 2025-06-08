@@ -1,10 +1,7 @@
 """Tests for the Streamlit UI main app."""
 
-import asyncio
 import os
 import sys
-import unittest.mock
-from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
@@ -54,7 +51,7 @@ class TestStreamlitApp:
                     mock_get_manager.return_value = MagicMock()
 
                     # Import should work without errors
-                    import app.main
+                    import app.main  # noqa: F401
 
                     # Verify basic setup was called
                     assert st_mock.set_page_config.called
@@ -66,7 +63,7 @@ class TestStreamlitApp:
                 with patch("app.main.get_manager") as mock_get_manager:
                     mock_get_manager.return_value = MagicMock()
 
-                    import app.main
+                    import app.main  # noqa: F401
 
                     # Verify page config
                     st_mock.set_page_config.assert_called_with(
@@ -83,7 +80,7 @@ class TestStreamlitApp:
                 with patch("app.main.get_manager") as mock_get_manager:
                     mock_get_manager.return_value = MagicMock()
 
-                    import app.main
+                    import app.main  # noqa: F401
 
                     # Verify CSS was added via markdown
                     assert st_mock.markdown.called
@@ -507,7 +504,7 @@ class TestStreamlitApp:
                             )
 
     def test_process_coroutine_execution(self):
-        """Test that the process coroutine executes correctly and covers lines 173-175."""
+        """Test that process coroutine executes correctly & covers lines 173-175."""
         st_mock.session_state = SessionStateMock()
         st_mock.session_state.messages = []
 
@@ -552,7 +549,6 @@ class TestStreamlitApp:
                     )
 
                     # Mock asyncio.run to track execution
-                    original_run = asyncio.run
                     async_ran = False
 
                     def mock_asyncio_run(coro):
@@ -599,6 +595,7 @@ sys.modules['luca_core'] = MagicMock()
 sys.modules['luca_core.manager'] = MagicMock()
 sys.modules['luca_core.manager.manager'] = MagicMock()
 sys.modules['luca_core.schemas'] = MagicMock()
+sys.modules['luca_core.validation'] = MagicMock()
 
 # Load and execute main module
 with open('app/main.py', 'r') as f:

@@ -2,6 +2,21 @@
 
 ## 2025-06-08
 
+- **Changes**: Implemented comprehensive input validation (Issue #27)
+  - Created `luca_core/validation/validators.py` with validation functions for paths, URLs, prompts, SQL, JSON, shell commands
+  - Modified `tools/file_io.py` to add path validation and file size limits
+  - Modified `tools/git_tools.py` to validate commit messages and prevent injection
+  - Modified `tools/mcp_client.py` to validate server configurations and tool arguments
+  - Modified `app/main.py` and `app/pages/mcp_manager.py` to validate user inputs
+- **Tests**: Added comprehensive test coverage
+  - `tests/luca_core_pkgtests/test_validation.py` - 46 tests for validation module
+  - `tests/tools/test_file_io_validation.py` - 6 tests for file I/O validation
+  - `tests/tools/test_git_tools_validation.py` - 7 tests for git tools validation
+  - Updated `tests/tools/test_mcp_client.py` to mock validation for tests
+- **Coverage**: 95.78% (increased from baseline)
+- **Issues**: Pre-commit hooks required fixing test imports and formatting
+- **Next**: None - feature complete
+
 - **5:00 am — Test suite performance optimization** – Achieved 6.5x speedup (36s → 5.6s):
   - Replaced sleep-based waits with direct method calls in SQLite backup tests
   - Reduced sandbox timeout test from 1s to 0.1s while maintaining test validity

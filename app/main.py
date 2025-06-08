@@ -19,6 +19,7 @@ from luca import get_manager  # noqa: E402
 from app.theme import get_theme_css, render_icon  # noqa: E402
 from luca_core.manager.manager import ResponseOptions  # noqa: E402
 from luca_core.schemas import LearningMode  # noqa: E402
+from luca_core.validation import ValidationError, validate_prompt  # noqa: E402
 
 # Load environment variables
 load_dotenv()
@@ -283,13 +284,20 @@ def main():
 
     # Chat input at the bottom
     if prompt := st.chat_input("Message Luca..."):
+        # Validate the prompt
+        try:
+            validated_prompt = validate_prompt(prompt, max_length=10000)
+        except ValidationError as e:
+            st.error(f"Invalid input: {e}")
+            return
+
         # Add user message to chat history
-        st.session_state.messages.append({"role": "user", "content": prompt})
+        st.session_state.messages.append({"role": "user", "content": validated_prompt})
 
         # Display user message
         with messages_container:
             with st.chat_message("user", avatar=None):
-                st.markdown(prompt)
+                st.markdown(validated_prompt)
 
         # Process the request using the LucaManager
         with messages_container:
@@ -329,7 +337,9 @@ def main():
                     async def process():
                         manager = get_manager()
                         await manager.initialize()  # Ensure manager is initialized
-                        return await manager.process_request(prompt, response_options)
+                        return await manager.process_request(
+                            validated_prompt, response_options
+                        )
 
                     full_response = asyncio.run(process())
 

@@ -10,6 +10,11 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 import streamlit as st  # noqa: E402
 
+from luca_core.validation import (  # noqa: E402
+    ValidationError,
+    validate_file_path,
+    validate_url,
+)
 from tools.mcp_autogen_bridge import MCPAutogenBridge  # noqa: E402
 from tools.mcp_client import MCPClientManager, MCPServerConfig  # noqa: E402
 
@@ -115,23 +120,50 @@ def main():
             submitted = st.form_submit_button("Connect to Server")
 
             if submitted:
-                config = MCPServerConfig(
-                    name=server_name,
-                    type=server_type,
-                    script_path=script_path,
-                    url=url,
-                    description=description,
-                )
+                # Validate inputs based on server type
+                validation_error = None
 
-                # Connect to the server
-                async def connect():
-                    success = await st.session_state.mcp_client.connect_to_server(
-                        config
-                    )
-                    if success:
-                        st.success(f"Successfully connected to {server_name}")
+                if not server_name:
+                    validation_error = "Server name is required"
+                elif server_type == "stdio":
+                    if not script_path:
+                        validation_error = "Script path is required for stdio servers"
                     else:
-                        st.error(f"Failed to connect to {server_name}")
+                        try:
+                            validate_file_path(
+                                script_path, must_exist=True, allow_directories=False
+                            )
+                        except ValidationError as e:
+                            validation_error = f"Invalid script path: {e}"
+                elif server_type == "http":
+                    if not url:
+                        validation_error = "URL is required for HTTP servers"
+                    else:
+                        try:
+                            validate_url(url)
+                        except ValidationError as e:
+                            validation_error = f"Invalid URL: {e}"
+
+                if validation_error:
+                    st.error(validation_error)
+                else:
+                    config = MCPServerConfig(
+                        name=server_name,
+                        type=server_type,
+                        script_path=script_path,
+                        url=url,
+                        description=description,
+                    )
+
+                    # Connect to the server
+                    async def connect():
+                        success = await st.session_state.mcp_client.connect_to_server(
+                            config
+                        )
+                        if success:
+                            st.success(f"Successfully connected to {server_name}")
+                        else:
+                            st.error(f"Failed to connect to {server_name}")
 
                 asyncio.run(connect())
                 st.rerun()
@@ -156,7 +188,8 @@ def main():
             # Display tools by server
             for server_name, server_tools in tools_by_server.items():
                 st.markdown(
-                    f'<h3 style="color: #8b5cf6; margin-top: 1.5rem;">{server_name}</h3>',
+                    f'<h3 style="color: #8b5cf6; '
+                    f'margin-top: 1.5rem;">{server_name}</h3>',
                     unsafe_allow_html=True,
                 )
 
