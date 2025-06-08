@@ -287,7 +287,9 @@ class TestRestrictedPythonExecutor:
     async def test_timeout_handling(self):
         """Test timeout handling in restricted executor."""
         executor = RestrictedPythonExecutor()
-        config = SandboxConfig(limits=ResourceLimits(timeout_seconds=1))
+        config = SandboxConfig(
+            limits=ResourceLimits(timeout_seconds=0.1)
+        )  # 100ms timeout
 
         # Use a large loop instead of infinite to prevent CI hangs
         result = await executor.execute("for i in range(10**9): pass", config)

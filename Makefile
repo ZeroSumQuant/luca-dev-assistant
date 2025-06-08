@@ -10,6 +10,11 @@ test:
 	@echo "Running tests..."
 	LUCA_TESTING=1 pytest -q
 
+# Run tests in parallel (faster)
+test-fast:
+	@echo "Running tests in parallel..."
+	LUCA_TESTING=1 pytest -q -n auto
+
 # Run all linters
 lint:
 	@echo "Running linters..."
@@ -48,6 +53,7 @@ help:
 	@echo "LUCA Dev Assistant Makefile Commands:"
 	@echo "  make all        - Run full safety check (default)"
 	@echo "  make test       - Run all tests"
+	@echo "  make test-fast  - Run tests in parallel (faster)"
 	@echo "  make lint       - Run all linters (black, isort, flake8, bandit)"
 	@echo "  make safety     - Run safety-check.sh script"
 	@echo "  make clean      - Remove generated files and caches"
