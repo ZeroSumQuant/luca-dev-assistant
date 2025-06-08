@@ -11,6 +11,7 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
+from luca_core.sandbox.limits import ResourceLimits  # noqa: E402
 from luca_core.sandbox.sandbox_manager import (  # noqa: E402
     DockerSandboxExecutor,
     ProcessSandboxExecutor,
@@ -31,7 +32,7 @@ class TestSandboxConfig:
         config = SandboxConfig()
         assert config.strategy == SandboxStrategy.DOCKER
         assert config.cpu_limit == 1.0
-        assert config.memory_limit_mb == 512
+        assert config.memory_limit_mb == 1024  # Updated to match DEFAULT_LIMITS
         assert config.timeout_seconds == 30
         assert config.allowed_imports == []
         assert config.allowed_paths == []
@@ -40,14 +41,19 @@ class TestSandboxConfig:
 
     def test_custom_config(self):
         """Test custom configuration values."""
+        # Create custom limits
+        custom_limits = ResourceLimits(
+            cpu_cores=2.0,
+            memory_mb=1024,
+            timeout_seconds=60,
+            network_offline=False,  # network_access=True
+        )
+
         config = SandboxConfig(
             strategy=SandboxStrategy.PROCESS,
-            cpu_limit=2.0,
-            memory_limit_mb=1024,
-            timeout_seconds=60,
+            limits=custom_limits,
             allowed_imports=["math", "json"],
             allowed_paths=["/tmp"],
-            network_access=True,
             env_vars={"FOO": "bar"},
         )
         assert config.strategy == SandboxStrategy.PROCESS
@@ -128,9 +134,9 @@ class TestDockerSandboxExecutor:
             assert "--cap-drop" in cmd
             assert "ALL" in cmd
             assert "--cpus=1.0" in cmd
-            assert "--memory=512m" in cmd
+            assert "--memory=1024m" in cmd
             assert "--pids-limit" in cmd
-            assert "64" in cmd
+            assert "50" in cmd  # DEFAULT_LIMITS.max_processes
             assert "--read-only" in cmd
             assert "--tmpfs" in cmd
 
@@ -143,7 +149,7 @@ class TestDockerSandboxExecutor:
     async def test_timeout_handling(self):
         """Test timeout handling in Docker executor."""
         executor = DockerSandboxExecutor()
-        config = SandboxConfig(timeout_seconds=1)
+        config = SandboxConfig(limits=ResourceLimits(timeout_seconds=1))
 
         mock_proc = AsyncMock()
         mock_proc.returncode = None
@@ -161,7 +167,7 @@ class TestDockerSandboxExecutor:
     async def test_network_restriction(self):
         """Test network restriction in Docker."""
         executor = DockerSandboxExecutor()
-        config = SandboxConfig(network_access=False)
+        config = SandboxConfig()  # Default has network_offline=True
 
         mock_proc = AsyncMock()
         mock_proc.returncode = 0
@@ -220,7 +226,7 @@ class TestProcessSandboxExecutor:
         assert "cpu_limit" in result.resource_usage
         assert "memory_limit_mb" in result.resource_usage
         assert result.resource_usage["cpu_limit"] == 1.0
-        assert result.resource_usage["memory_limit_mb"] == 512
+        assert result.resource_usage["memory_limit_mb"] == 1024
 
 
 class TestRestrictedPythonExecutor:
@@ -281,7 +287,7 @@ class TestRestrictedPythonExecutor:
     async def test_timeout_handling(self):
         """Test timeout handling in restricted executor."""
         executor = RestrictedPythonExecutor()
-        config = SandboxConfig(timeout_seconds=1)
+        config = SandboxConfig(limits=ResourceLimits(timeout_seconds=1))
 
         result = await executor.execute("while True: pass", config)
         assert result.success is False
@@ -365,7 +371,7 @@ class TestSandboxManager:
 
         assert config.strategy == SandboxStrategy.PROCESS
         assert config.cpu_limit == 1.0
-        assert config.memory_limit_mb == 512
+        assert config.memory_limit_mb == 1024  # DEFAULT_LIMITS
         assert config.timeout_seconds == 30
         assert config.network_access is False
 
@@ -376,10 +382,10 @@ class TestSandboxManager:
 
         assert config.strategy == SandboxStrategy.RESTRICTED
         assert config.cpu_limit == 2.0
-        assert config.memory_limit_mb == 1024
+        assert config.memory_limit_mb == 2048  # RELAXED_LIMITS
         assert config.timeout_seconds == 60
         assert config.allowed_imports == ["math", "statistics", "json"]
-        assert config.network_access is False
+        assert config.network_access is True  # RELAXED_LIMITS has network enabled
 
     def test_get_recommended_config_default(self):
         """Test default recommended config for unknown trust level."""

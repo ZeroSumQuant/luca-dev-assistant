@@ -16,6 +16,7 @@ markers = [
     "issue_83: skip test due to app main import issues (GitHub #83)",
     "issue_84: skip test due to core module mock issues (GitHub #84)",
     "real_exec: tests requiring real function execution (not mocked)",
+    "asyncio: marks tests as requiring asyncio",
 ]
 filterwarnings = [
     "ignore::DeprecationWarning",

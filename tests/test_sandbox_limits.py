@@ -150,7 +150,7 @@ class TestLimitsValidator:
         is_valid, error = LimitsValidator.validate(limits)
         assert is_valid is False
         assert "CPU cores" in error
-        assert "exceeds maximum" in error
+        assert "exceeds max" in error
 
     def test_validate_negative_cpu(self):
         """Test validation fails for negative CPU."""
@@ -165,7 +165,7 @@ class TestLimitsValidator:
         is_valid, error = LimitsValidator.validate(limits)
         assert is_valid is False
         assert "Memory" in error
-        assert "exceeds maximum" in error
+        assert "exceeds max" in error
 
     def test_validate_zero_memory(self):
         """Test validation fails for zero memory."""
@@ -195,7 +195,7 @@ class TestLimitsValidator:
         is_valid, error = LimitsValidator.validate(limits)
         assert is_valid is False
         assert "Timeout" in error
-        assert "exceeds maximum" in error
+        assert "exceeds max" in error
 
     def test_validate_zero_timeout(self):
         """Test validation fails for zero timeout."""
