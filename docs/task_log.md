@@ -1,5 +1,15 @@
 # LUCA Dev Assistant - Task Log
 
+## 2025-06-08
+
+- **4:30 am — Fixed CI hanging issue** – Resolved test-and-build job hanging in PR #132:
+  - Modified `tests/test_sandbox_manager.py` and `tests/test_sandbox_manager_coverage.py`
+  - Replaced infinite loops (`while True: pass`) with finite loops (`for i in range(10**9): pass`)
+  - Enhanced thread diagnostics in `tests/conftest.py` for better debugging
+  - Root cause: RestrictedPythonExecutor daemon threads continuing after timeout
+  - All tests passing with 96% coverage maintained
+  - Applied research from CI-safe async integration testing document
+
 ## 2025-06-07
 
 - **11:45 pm — Sandbox limits module implementation** – Implemented issue #60 resource limits:
