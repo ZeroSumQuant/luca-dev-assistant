@@ -22,8 +22,10 @@ class TestMCPBridgeCoverage:
     @pytest.mark.timeout(5)
     async def test_bridge_tool_wrapper_string_result(self):
         """Test that string results are returned as-is - Integration test."""
-        # Create bridge with mock client
-        mock_client = mock.MagicMock()
+        # Use AsyncMock like the working test does
+        mock_client = mock.AsyncMock()
+
+        # Mock the tools property
         mock_tool = mock.Mock()
         mock_tool.name = "test_tool"
         mock_tool.description = "Test tool"
@@ -31,15 +33,10 @@ class TestMCPBridgeCoverage:
 
         mock_client.tools = {"test_tool": mock_tool}
 
+        # Set return_value directly like the working test
+        mock_client.execute_tool.return_value = "string result"
+
         bridge = MCPAutogenBridge(mock_client)
-
-        # Mock execute_tool to return a string
-        async def mock_execute_tool(tool_name, kwargs):
-            # Simulate some async work
-            await asyncio.sleep(0)
-            return "string result"
-
-        mock_client.execute_tool = mock_execute_tool
 
         # Get autogen tools
         tools = bridge.get_autogen_tools()
@@ -53,6 +50,12 @@ class TestMCPBridgeCoverage:
 
         # Verify string result is returned as-is
         assert result == "string result"
+
+        # Explicit cleanup - break circular references
+        del wrapped_func
+        del tools
+        del bridge
+        del mock_client
 
     @mock.patch("tools.mcp_autogen_bridge.FunctionTool")
     def test_bridge_creates_function_tools(self, mock_function_tool_class):
@@ -119,19 +122,15 @@ class TestMCPBridgeCoverage:
     @pytest.mark.timeout(5)
     async def test_tool_execution_method(self):
         """Test the test_tool_execution method for coverage."""
-        # Create bridge with mock client
-        mock_client = mock.MagicMock()
+        # Use AsyncMock for consistency
+        mock_client = mock.AsyncMock()
         mock_tool = mock.Mock()
         mock_tool.name = "test_tool"
 
         mock_client.tools = {"full_test_tool": mock_tool}
 
-        # Use a real async function instead of AsyncMock
-        async def mock_execute_tool(tool_name, kwargs):
-            await asyncio.sleep(0)  # Yield control
-            return {"result": "success"}
-
-        mock_client.execute_tool = mock_execute_tool
+        # Set return value directly
+        mock_client.execute_tool.return_value = {"result": "success"}
 
         bridge = MCPAutogenBridge(mock_client)
 
@@ -142,3 +141,7 @@ class TestMCPBridgeCoverage:
         # Test with non-existent tool
         with pytest.raises(ValueError, match="Tool not found: nonexistent"):
             await bridge.test_tool_execution("nonexistent", {})
+
+        # Explicit cleanup
+        del bridge
+        del mock_client
