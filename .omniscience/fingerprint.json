@@ -172,7 +172,8 @@
     "classes": [],
     "funcs": [
       "pytest_configure",
-      "resource_fixture"
+      "resource_fixture",
+      "ensure_clean_async_state"
     ],
     "doc": "Test configuration for LUCA Dev Assistant."
   },
@@ -214,6 +215,15 @@
     "doc": "Tests for MCP integration"
   },
   {
+    "path": "tests/test_subprocess_resource_limits.py",
+    "classes": [],
+    "funcs": [
+      "test_resource_limit_code_directly",
+      "test_resource_limits_with_low_current_limits"
+    ],
+    "doc": "Test subprocess resource limit code directly."
+  },
+  {
     "path": "tests/test_streamlit_app.py",
     "classes": [],
     "funcs": [
@@ -223,6 +233,14 @@
       "test_agent_manager_imports"
     ],
     "doc": "Tests for Streamlit app components."
+  },
+  {
+    "path": "tests/test_sandbox_runner_coverage.py",
+    "classes": [
+      "TestSandboxRunnerCoverage"
+    ],
+    "funcs": [],
+    "doc": "Additional tests for sandbox runner coverage."
   },
   {
     "path": "tests/test_luca_smoke.py",
@@ -269,6 +287,14 @@
     "doc": "Tests for git_tools module"
   },
   {
+    "path": "tests/test_sandbox_config_limits.py",
+    "classes": [
+      "TestSandboxConfigWithLimits"
+    ],
+    "funcs": [],
+    "doc": "Additional tests for sandbox config with limits integration."
+  },
+  {
     "path": "tests/test_sandbox_timeout.py",
     "classes": [],
     "funcs": [
@@ -286,12 +312,69 @@
     "doc": ""
   },
   {
+    "path": "tests/test_sandbox_limits.py",
+    "classes": [
+      "TestResourceLimits",
+      "TestGetLimitsForTrustLevel",
+      "TestLimitsValidator"
+    ],
+    "funcs": [],
+    "doc": "Tests for the sandbox limits module."
+  },
+  {
     "path": "tests/test_registry_specific_coverage.py",
     "classes": [
       "TestRegistrySpecificCoverage"
     ],
     "funcs": [],
     "doc": "Specific test for registry.py lines that aren't covered."
+  },
+  {
+    "path": "tests/test_sandbox_final_coverage.py",
+    "classes": [
+      "TestSandboxManagerEdgeCases"
+    ],
+    "funcs": [],
+    "doc": "Final tests to achieve better sandbox coverage."
+  },
+  {
+    "path": "tests/test_sandbox_restricted_import.py",
+    "classes": [
+      "TestRestrictedImport"
+    ],
+    "funcs": [],
+    "doc": "Test restricted import functionality in sandbox."
+  },
+  {
+    "path": "tests/test_final_core_coverage.py",
+    "classes": [
+      "TestRegistryDuplicateRegistration",
+      "TestDockerSandboxEnvironmentVars",
+      "TestRestrictedPythonImportError",
+      "TestRestrictedPythonExceptionHandling",
+      "TestProcessSandboxResourceLimits"
+    ],
+    "funcs": [],
+    "doc": "Final tests to achieve 100% coverage for core modules."
+  },
+  {
+    "path": "tests/test_sandbox_coverage_boost.py",
+    "classes": [
+      "TestProcessSandboxResourceLimits",
+      "TestRestrictedPythonValidation",
+      "TestSandboxEdgeCases"
+    ],
+    "funcs": [],
+    "doc": "Additional tests to boost sandbox coverage."
+  },
+  {
+    "path": "tests/test_sandbox_manager_coverage.py",
+    "classes": [
+      "TestRestrictedPythonEdgeCases",
+      "TestDockerSandboxEdgeCases"
+    ],
+    "funcs": [],
+    "doc": "Additional tests to improve sandbox_manager.py coverage."
   },
   {
     "path": "tests/test_file_io.py",
@@ -596,6 +679,17 @@
     ],
     "funcs": [],
     "doc": ""
+  },
+  {
+    "path": "luca_core/sandbox/limits.py",
+    "classes": [
+      "ResourceLimits",
+      "LimitsValidator"
+    ],
+    "funcs": [
+      "get_limits_for_trust_level"
+    ],
+    "doc": "Resource limits configuration for sandbox execution."
   },
   {
     "path": "luca_core/sandbox/__init__.py",

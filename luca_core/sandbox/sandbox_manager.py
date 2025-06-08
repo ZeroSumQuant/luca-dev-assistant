@@ -18,6 +18,13 @@ from pathlib import Path
 from types import MappingProxyType
 from typing import Any, Dict, List, Optional
 
+from .limits import (
+    DEFAULT_LIMITS,
+    LimitsValidator,
+    ResourceLimits,
+    get_limits_for_trust_level,
+)
+
 
 class SandboxStrategy(Enum):
     """Available sandboxing strategies."""
@@ -34,22 +41,43 @@ class SandboxConfig:
     def __init__(
         self,
         strategy: SandboxStrategy = SandboxStrategy.DOCKER,
-        cpu_limit: float = 1.0,  # CPU cores
-        memory_limit_mb: int = 512,  # Memory in MB
-        timeout_seconds: int = 30,
+        limits: Optional[ResourceLimits] = None,
         allowed_imports: Optional[List[str]] = None,
         allowed_paths: Optional[List[str]] = None,
-        network_access: bool = False,
         env_vars: Optional[Dict[str, str]] = None,
     ):
         self.strategy = strategy
-        self.cpu_limit = cpu_limit
-        self.memory_limit_mb = memory_limit_mb
-        self.timeout_seconds = timeout_seconds
+        self.limits = limits or DEFAULT_LIMITS
+
+        # Validate limits
+        is_valid, error = LimitsValidator.validate(self.limits)
+        if not is_valid:
+            raise ValueError(f"Invalid resource limits: {error}")
+
         self.allowed_imports = allowed_imports or []
         self.allowed_paths = allowed_paths or []
-        self.network_access = network_access
         self.env_vars = env_vars or {}
+
+    # Backward compatibility properties
+    @property
+    def cpu_limit(self) -> float:
+        """CPU limit in cores (backward compatibility)."""
+        return self.limits.cpu_cores
+
+    @property
+    def memory_limit_mb(self) -> int:
+        """Memory limit in MB (backward compatibility)."""
+        return self.limits.memory_mb
+
+    @property
+    def timeout_seconds(self) -> int:
+        """Timeout in seconds (backward compatibility)."""
+        return self.limits.timeout_seconds
+
+    @property
+    def network_access(self) -> bool:
+        """Network access allowed (backward compatibility)."""
+        return not self.limits.network_offline
 
 
 class SandboxResult:
@@ -111,10 +139,10 @@ class DockerSandboxExecutor(SandboxExecutor):
                 f"--cpus={config.cpu_limit}",
                 f"--memory={config.memory_limit_mb}m",
                 "--pids-limit",
-                "64",  # Prevent fork bombs
+                str(config.limits.max_processes),  # Prevent fork bombs
                 "--read-only",
                 "--tmpfs",
-                "/tmp:rw,noexec,nosuid,size=100m",  # nosec B108
+                f"/tmp:rw,noexec,nosuid,size={config.limits.disk_mb}m",  # nosec B108
             ]
 
             # Add network restrictions
@@ -231,18 +259,20 @@ class ProcessSandboxExecutor(SandboxExecutor):
 
         def set_limits():
             """Set resource limits for subprocess."""
+            limits = config.limits
+
             try:
                 # Set CPU time limit
                 resource.setrlimit(
                     resource.RLIMIT_CPU,
-                    (config.timeout_seconds, config.timeout_seconds),
+                    (limits.cpu_time_seconds, limits.cpu_time_seconds),
                 )
             except Exception:
                 pass  # Skip if not supported
 
             try:
                 # Set memory limit (in bytes) - only if current limit allows it
-                memory_bytes = config.memory_limit_mb * 1024 * 1024
+                memory_bytes = limits.memory_mb * 1024 * 1024
                 current_limit = resource.getrlimit(resource.RLIMIT_AS)
                 if current_limit[1] >= memory_bytes:  # Check against hard limit
                     resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
@@ -258,8 +288,19 @@ class ProcessSandboxExecutor(SandboxExecutor):
             try:
                 # Limit number of processes - be conservative
                 current_nproc = resource.getrlimit(resource.RLIMIT_NPROC)
-                if current_nproc[0] > 50:  # Only limit if we have more than 50
-                    resource.setrlimit(resource.RLIMIT_NPROC, (50, current_nproc[1]))
+                if current_nproc[0] > limits.max_processes:
+                    resource.setrlimit(
+                        resource.RLIMIT_NPROC, (limits.max_processes, current_nproc[1])
+                    )
+            except Exception:
+                pass
+
+            try:
+                # Limit number of open files
+                resource.setrlimit(
+                    resource.RLIMIT_NOFILE,
+                    (limits.max_open_files, limits.max_open_files),
+                )
             except Exception:
                 pass
 
@@ -497,33 +538,27 @@ class SandboxManager:
 
     def get_recommended_config(self, trust_level: str = "untrusted") -> SandboxConfig:
         """Get recommended sandbox configuration based on trust level."""
+        # Get appropriate limits based on trust level
+        limits = get_limits_for_trust_level(trust_level)
+
         if trust_level == "untrusted":
             # Maximum security for untrusted code
             return SandboxConfig(
                 strategy=SandboxStrategy.DOCKER,
-                cpu_limit=0.5,
-                memory_limit_mb=256,
-                timeout_seconds=10,
-                network_access=False,
+                limits=limits,
             )
         elif trust_level == "limited":
             # Some restrictions for limited trust
             return SandboxConfig(
                 strategy=SandboxStrategy.PROCESS,
-                cpu_limit=1.0,
-                memory_limit_mb=512,
-                timeout_seconds=30,
-                network_access=False,
+                limits=limits,
             )
         elif trust_level == "trusted":
             # Minimal restrictions for trusted code
             return SandboxConfig(
                 strategy=SandboxStrategy.RESTRICTED,
-                cpu_limit=2.0,
-                memory_limit_mb=1024,
-                timeout_seconds=60,
+                limits=limits,
                 allowed_imports=["math", "statistics", "json"],
-                network_access=False,
             )
         else:
             # Default to maximum security

@@ -7,8 +7,10 @@ This file configures pytest with:
 4. AsyncIO configuration
 """
 
+import asyncio
 import multiprocessing as mp
 import os
+import threading
 
 import pytest
 
@@ -58,3 +60,65 @@ def resource_fixture():
 
     # Cleanup - this always runs, even if tests fail
     print(f"Cleaning up test resource: {resource}")
+
+
+@pytest.fixture(autouse=True)
+def ensure_clean_async_state():
+    """Ensure clean async state after each test to prevent CI hangs.
+
+    Based on research into pytest-asyncio hanging issues, this fixture
+    checks for and cleans up:
+    - Non-daemon threads that could block process exit
+    - Pending asyncio tasks that weren't awaited
+
+    This is critical for CI stability when testing async code that uses
+    FunctionTool or similar patterns that may spawn background operations.
+    """
+    yield
+
+    # Check for non-daemon threads
+    non_daemon_threads = []
+    for thread in threading.enumerate():
+        if thread is not threading.main_thread() and not thread.daemon:
+            non_daemon_threads.append(thread)
+
+    if non_daemon_threads:
+        thread_info = ", ".join(
+            [f"{t.name} (alive={t.is_alive()})" for t in non_daemon_threads]
+        )
+        # Don't fail immediately - try to diagnose
+        print(f"WARNING: Non-daemon threads still running: {thread_info}")
+
+        # Try to stop threads if they're from our sandbox tests
+        for thread in non_daemon_threads:
+            if hasattr(thread, "_target") and thread._target:
+                # Log what the thread was doing
+                print(f"Thread {thread.name} target: {thread._target}")
+            # Note: We can't forcefully kill threads in Python, but logging helps
+
+    # Check for pending asyncio tasks
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        # No loop running, which is fine
+        return
+
+    try:
+        current_task = asyncio.current_task(loop)
+    except RuntimeError:
+        current_task = None
+
+    pending_tasks = [
+        task
+        for task in asyncio.all_tasks(loop)
+        if not task.done() and task != current_task
+    ]
+    if pending_tasks:
+        # Try to cancel them to prevent hangs
+        for task in pending_tasks:
+            task.cancel()
+
+        task_info = ", ".join([str(task) for task in pending_tasks[:5]])  # Limit output
+        print(
+            f"WARNING: Cancelled {len(pending_tasks)} pending async tasks: {task_info}"
+        )

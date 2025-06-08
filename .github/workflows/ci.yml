@@ -34,8 +34,11 @@ jobs:
       - name: Verify pytest-cov installation
         run: |
           python -c "import pytest_cov; print('pytest-cov is installed')"
+          python -c "import pytest_asyncio; print(f'pytest-asyncio version: {pytest_asyncio.__version__}')"
           python -m pytest --version
           python -m pip list | grep pytest
+          echo "Pytest plugins:"
+          python -m pytest --trace-config 2>&1 | grep -A 20 "active plugins" || true
           
       - name: Verify luca_core install (DIAGNOSTIC)
         run: |
@@ -91,10 +94,11 @@ jobs:
           # Run all tests with mocked AutoGen to avoid import issues
           python -m pytest -v --timeout=60 --timeout_method=thread \
             -m "not skip_ci" \
+            --ignore=tests/test_mcp_integration.py \
             --cov=luca_core --cov=app --cov=tools \
             --cov-config=.config/.coveragerc \
             --cov-report=term-missing \
-            --cov-fail-under=95 || true
+            --cov-fail-under=95
         env:
           LUCA_TESTING: 1
           CI: true

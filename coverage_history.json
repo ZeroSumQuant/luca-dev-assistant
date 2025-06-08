@@ -59,6 +59,41 @@
       "timestamp": "2025-06-07T21:57:25.985318+00:00",
       "percentage": 97.0,
       "commit_sha": "f074349"
+    },
+    {
+      "timestamp": "2025-06-08T01:24:14.200849+00:00",
+      "percentage": 96.0,
+      "commit_sha": "caa5471"
+    },
+    {
+      "timestamp": "2025-06-08T01:34:20.959328+00:00",
+      "percentage": 96.0,
+      "commit_sha": "test123"
+    },
+    {
+      "timestamp": "2025-06-08T02:11:10.520698+00:00",
+      "percentage": 96.0,
+      "commit_sha": "be012af"
+    },
+    {
+      "timestamp": "2025-06-08T03:02:32.285201+00:00",
+      "percentage": 96.0,
+      "commit_sha": "1ea31b6"
+    },
+    {
+      "timestamp": "2025-06-08T03:05:36.994201+00:00",
+      "percentage": 96.0,
+      "commit_sha": "2a942f7"
+    },
+    {
+      "timestamp": "2025-06-08T03:18:28.380905+00:00",
+      "percentage": 96.0,
+      "commit_sha": "b244163"
+    },
+    {
+      "timestamp": "2025-06-08T04:12:23.051065+00:00",
+      "percentage": 96.0,
+      "commit_sha": "98788db"
     }
   ]
 }

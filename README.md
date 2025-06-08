@@ -2,7 +2,7 @@
 
 [![CI Status](https://github.com/ZeroSumQuant/luca-dev-assistant/workflows/CI/badge.svg)](https://github.com/ZeroSumQuant/luca-dev-assistant/actions/workflows/ci.yml)
 [![Security](https://github.com/ZeroSumQuant/luca-dev-assistant/workflows/Security%20Scan/badge.svg)](https://github.com/ZeroSumQuant/luca-dev-assistant/actions/workflows/security.yml)
-[![Coverage](https://img.shields.io/badge/coverage-97.00%-brightgreen)](https://github.com/ZeroSumQuant/luca-dev-assistant/actions)
+[![Coverage](https://img.shields.io/badge/coverage-96.00%-brightgreen)](https://github.com/ZeroSumQuant/luca-dev-assistant/actions)
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
