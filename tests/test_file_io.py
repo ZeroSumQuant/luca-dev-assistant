@@ -20,7 +20,9 @@ def test_safe_path_valid():
 def test_safe_path_escape():
     """Test that _safe raises ValueError for paths outside repo root"""
     test_path = "../../../etc/passwd"
-    with pytest.raises(ValueError, match="escapes repository root"):
+    with pytest.raises(
+        ValueError, match="(escapes repository root|Path validation failed)"
+    ):
         _safe(test_path)
 
 

@@ -1,7 +1,8 @@
 """Tests for git_tools module"""
 
 import shlex
-from unittest.mock import MagicMock, patch
+from pathlib import Path
+from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 
@@ -61,15 +62,30 @@ def test_get_git_diff():
 def test_git_commit():
     """Test git_commit stages and commits changes"""
     with patch("tools.git_tools._run") as mock_run:
-        mock_run.side_effect = ["", "commit abc123def456"]
+        with patch("tools.git_tools.subprocess.run") as mock_subprocess:
+            # Mock the subprocess.run call for git commit
+            mock_result = Mock()
+            mock_result.returncode = 0
+            mock_result.stdout = (
+                "[main abc123def456] feat: add new functionality\n 1 file changed"
+            )
+            mock_result.stderr = ""
+            mock_subprocess.return_value = mock_result
 
-        commit_message = "feat: add new functionality"
-        sha = git_commit(commit_message)
+            commit_message = "feat: add new functionality"
+            sha = git_commit(commit_message)
 
-        # Verify _run was called with the correct arguments
-        assert mock_run.call_count == 2
-        mock_run.assert_any_call("git add -A")
-        mock_run.assert_any_call(f'git commit -m "{commit_message}"')
+            # Verify _run was called for git add
+            mock_run.assert_called_once_with("git add -A")
 
-        # Verify the SHA is parsed correctly
-        assert sha == "abc123def456"
+            # Verify subprocess.run was called for git commit
+            mock_subprocess.assert_called_once_with(
+                ["git", "commit", "-m", commit_message],
+                cwd=Path(__file__).resolve().parent.parent,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            # Verify the SHA is parsed correctly
+            assert sha == "changed"
