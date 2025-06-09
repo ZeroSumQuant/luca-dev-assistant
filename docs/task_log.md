@@ -2,6 +2,20 @@
 
 ## 2025-06-08
 
+- **Fix Legacy Async Tests (Issue #54)**: Re-enabled test_mcp_integration.py tests
+  - Fixed failing test by mocking file path validation in test_connect_to_stdio_server
+  - Changed absolute path to relative path in test configuration
+  - Added validation mock to bypass file existence check in tests
+  - Removed `--ignore=tests/test_mcp_integration.py` from pytest.ini
+  - All 27 tests now pass (1 skipped for full integration)
+
+- **Type Hygiene for store.py (Issue #55)**: Removed mypy exclusions and verified type safety
+  - Removed `ignore_errors = True` for `luca_core.context.store` from `.config/mypy.ini`
+  - Verified store.py passes all mypy checks including strict mode
+  - No type: ignore comments needed in the file
+  - All tests pass (7/7 in test_context_store.py)
+  - File already had proper type annotations throughout
+
 - **Changes**: Implemented comprehensive input validation (Issue #27)
   - Created `luca_core/validation/validators.py` with validation functions for paths, URLs, prompts, SQL, JSON, shell commands
   - Modified `tools/file_io.py` to add path validation and file size limits
@@ -16,13 +30,6 @@
 - **Coverage**: 95.78% (increased from baseline)
 - **Issues**: Pre-commit hooks required fixing test imports and formatting
 - **Next**: None - feature complete
-
-- **Type Hygiene for store.py (Issue #55)**: Removed mypy exclusions and verified type safety
-  - Removed `ignore_errors = True` for `luca_core.context.store` from `.config/mypy.ini`
-  - Verified store.py passes all mypy checks including strict mode
-  - No type: ignore comments needed in the file
-  - All tests pass (7/7 in test_context_store.py)
-  - File already had proper type annotations throughout
 
 - **5:00 am — Test suite performance optimization** – Achieved 6.5x speedup (36s → 5.6s):
   - Replaced sleep-based waits with direct method calls in SQLite backup tests

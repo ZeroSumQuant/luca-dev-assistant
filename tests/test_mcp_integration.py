@@ -112,7 +112,8 @@ async def mock_stdio_client():
     response_mock.tools = [tool1, tool2]
     session_mock.call = AsyncMock(return_value=response_mock)
 
-    # Create a mock for stdio_client that is an awaitable function that returns the session
+    # Create a mock for stdio_client that is an awaitable function that returns
+    # the session
     async def mock_stdio_client_func(*args, **kwargs):
         return session_mock
 
@@ -139,7 +140,8 @@ async def mock_http_client():
     response_mock.tools = [tool1]
     session_mock.call = AsyncMock(return_value=response_mock)
 
-    # Create a mock for http_client that is an awaitable function that returns the session
+    # Create a mock for http_client that is an awaitable function that returns
+    # the session
     async def mock_http_client_func(*args, **kwargs):
         return session_mock
 
@@ -203,21 +205,26 @@ class TestMCPClientManager:
         async def mock_stdio_client(*args, **kwargs):
             return session_mock
 
-        # Create a config for stdio server
+        # Create a config for stdio server with relative path
         config = MCPServerConfig(
             name="test_stdio",
             type="stdio",
-            script_path="/path/to/script.py",
+            script_path="./mcp_servers/test_script.py",
             description="Test stdio server",
         )
 
-        # Patch the stdio_client and connect to the server
+        # Patch the stdio_client and validation, then connect to the server
         with patch("tools.mcp_client.stdio_client", mock_stdio_client):
-            # Also patch the ListToolsRequest to return a valid request object
-            with patch.object(
-                types, "ListToolsRequest", return_value=make_list_tools_request()
+            # Mock the file validation to allow test paths
+            with patch(
+                "tools.mcp_client.validate_file_path",
+                return_value="./mcp_servers/test_script.py",
             ):
-                result = await mcp_client.connect_to_server(config)
+                # Also patch the ListToolsRequest to return a valid request object
+                with patch.object(
+                    types, "ListToolsRequest", return_value=make_list_tools_request()
+                ):
+                    result = await mcp_client.connect_to_server(config)
 
         # Verify the result
         assert result is True
@@ -958,7 +965,10 @@ class TestMCPClientAdvanced:
 # Special integration test that actually runs the filesystem server
 @pytest.mark.skipif(
     os.environ.get("RUN_MCP_INTEGRATION") != "1",
-    reason="Full integration test requires actual filesystem server and RUN_MCP_INTEGRATION=1",
+    reason=(
+        "Full integration test requires actual filesystem server "
+        "and RUN_MCP_INTEGRATION=1"
+    ),
 )
 class TestMCPFullIntegration:
     """Full integration test with actual MCP server"""
