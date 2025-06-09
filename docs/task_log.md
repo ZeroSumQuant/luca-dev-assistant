@@ -17,6 +17,13 @@
 - **Issues**: Pre-commit hooks required fixing test imports and formatting
 - **Next**: None - feature complete
 
+- **Type Hygiene for store.py (Issue #55)**: Removed mypy exclusions and verified type safety
+  - Removed `ignore_errors = True` for `luca_core.context.store` from `.config/mypy.ini`
+  - Verified store.py passes all mypy checks including strict mode
+  - No type: ignore comments needed in the file
+  - All tests pass (7/7 in test_context_store.py)
+  - File already had proper type annotations throughout
+
 - **5:00 am — Test suite performance optimization** – Achieved 6.5x speedup (36s → 5.6s):
   - Replaced sleep-based waits with direct method calls in SQLite backup tests
   - Reduced sandbox timeout test from 1s to 0.1s while maintaining test validity
