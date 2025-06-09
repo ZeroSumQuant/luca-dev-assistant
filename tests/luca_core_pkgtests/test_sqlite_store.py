@@ -34,13 +34,19 @@ class TestSQLiteContextStore:
         yield db_path
         # Clean up the test database after use
         if os.path.exists(db_path):
-            os.remove(db_path)
+            try:
+                os.remove(db_path)
+            except Exception:
+                pass  # Ignore cleanup errors
         # Clean up backups directory
         backup_dir = os.path.join(os.path.dirname(db_path), "backups")
         if os.path.exists(backup_dir):
             import shutil
 
-            shutil.rmtree(backup_dir)
+            try:
+                shutil.rmtree(backup_dir)
+            except Exception:
+                pass  # Ignore cleanup errors
 
     @pytest_asyncio.fixture
     async def store(self, temp_db_path):

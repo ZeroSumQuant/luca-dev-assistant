@@ -578,6 +578,47 @@
     "doc": "Base interface for context storage."
   },
   {
+    "path": "luca_core/config/__init__.py",
+    "classes": [],
+    "funcs": [],
+    "doc": "YAML configuration loader for LUCA."
+  },
+  {
+    "path": "luca_core/config/schemas.py",
+    "classes": [
+      "StorageType",
+      "SecurityLevel",
+      "SandboxType",
+      "RetryStrategy",
+      "EscalationStrategy",
+      "ContextStoreConfig",
+      "ToolRegistryConfig",
+      "ErrorSchemaConfig",
+      "ComponentConfig",
+      "SandboxConfig",
+      "AgentConfig",
+      "LucaConfig",
+      "DomainSpecificSettings",
+      "DomainConfig",
+      "RetryConfig",
+      "ErrorHandlingConfig",
+      "ConfigSchema"
+    ],
+    "funcs": [],
+    "doc": "Configuration schema definitions for LUCA."
+  },
+  {
+    "path": "luca_core/config/loader.py",
+    "classes": [
+      "ConfigurationError",
+      "ConfigLoader"
+    ],
+    "funcs": [
+      "load_config"
+    ],
+    "doc": "YAML configuration loader implementation."
+  },
+  {
     "path": "luca_core/schemas/error.py",
     "classes": [
       "ErrorCategory",
@@ -759,7 +800,8 @@
       "validate_shell_command",
       "validate_sql_input",
       "validate_json_data",
-      "validate_environment_var"
+      "validate_environment_var",
+      "validate_yaml_safe"
     ],
     "doc": "Core validation functions for external data inputs."
   },
@@ -1108,6 +1150,17 @@
       "test_create_timeout_error"
     ],
     "doc": "Tests for the ErrorPayload schema and error handling utilities."
+  },
+  {
+    "path": "tests/luca_core_pkgtests/test_config.py",
+    "classes": [
+      "TestConfigSchemas",
+      "TestConfigLoader",
+      "TestLoadConfigFunction",
+      "TestEdgeCases"
+    ],
+    "funcs": [],
+    "doc": "Unit tests for the YAML configuration loader."
   },
   {
     "path": "tests/luca_core_pkgtests/test_sqlite_store.py",

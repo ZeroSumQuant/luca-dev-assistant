@@ -407,3 +407,41 @@ def validate_environment_var(
 
     else:
         raise ValidationError(f"Unknown var_type: {var_type}")
+
+
+def validate_yaml_safe(content: str) -> None:
+    """Validate YAML content for safety.
+
+    Args:
+        content: YAML content to validate
+
+    Raises:
+        ValidationError: If YAML contains unsafe constructs
+    """
+    if not content:
+        return
+
+    # Check for Python-specific YAML tags that could execute code
+    unsafe_patterns = [
+        r"!!python/",  # Python object construction
+        r"!!map",  # While safe, can be used in complex attacks
+        r"!!omap",  # Ordered map
+        r"!!pairs",  # Key-value pairs
+        r"!!set",  # Set construction
+        r"!!timestamp",  # Could be used for timing attacks
+    ]
+
+    for pattern in unsafe_patterns:
+        if re.search(pattern, content, re.IGNORECASE):
+            raise ValidationError(f"Potentially unsafe YAML tag detected: {pattern}")
+
+    # Check for suspicious content
+    if "__" in content:  # Python magic methods
+        lines = content.split("\n")
+        for i, line in enumerate(lines, 1):
+            if "__" in line and not line.strip().startswith("#"):
+                # Allow __ in comments but not in actual content
+                raise ValidationError(
+                    f"Suspicious content with '__' on line {i}: "
+                    f"potential code execution attempt"
+                )

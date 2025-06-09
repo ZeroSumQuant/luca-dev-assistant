@@ -1,0 +1,134 @@
+# Example LUCA configuration file
+# Copy this to luca.yaml and customize for your needs
+
+# This file inherits from defaults.yaml and only needs to specify overrides
+
+# Override component settings
+components:
+  context_store:
+    # Use PostgreSQL instead of SQLite for production
+    # type: postgres
+    # connection_params:
+    #   host: localhost
+    #   port: 5432
+    #   database: luca_db
+    #   user: luca_user
+    
+  tool_registry:
+    # Block specific tools if needed
+    blocked_tools:
+      # - dangerous_tool_name
+
+# Define specialist agents
+agents:
+  specialists:
+    coder:
+      name: Coder
+      role: developer
+      description: Specialist agent for writing and refactoring code
+      model: gpt-4
+      temperature: 0.1
+      system_prompt: |
+        You are a coding specialist. Your responsibilities include:
+        - Writing clean, efficient, and well-documented code
+        - Following project conventions and best practices
+        - Ensuring code security and performance
+        - Providing helpful code reviews and suggestions
+      capabilities:
+        - code_generation
+        - code_review
+        - refactoring
+        - debugging
+      tools:
+        - file_io.read_text
+        - file_io.write_text
+        - file_io.create_directory
+        - git_tools.get_git_diff
+        - git_tools.get_git_status
+      sandbox:
+        allowed_paths:
+          - "/workspace/luca/**"
+        execution_timeout: 60
+        security_level: medium
+    
+    tester:
+      name: Tester
+      role: qa
+      description: Specialist agent for testing and quality assurance
+      model: gpt-4
+      temperature: 0.1
+      system_prompt: |
+        You are a QA specialist. Your responsibilities include:
+        - Writing comprehensive unit and integration tests
+        - Ensuring test coverage meets project standards (95%+)
+        - Identifying edge cases and potential bugs
+        - Validating that code meets requirements
+      capabilities:
+        - test_generation
+        - test_execution
+        - coverage_analysis
+      tools:
+        - file_io.read_text
+        - file_io.write_text
+        - subprocess_runner.run_command
+      sandbox:
+        allowed_paths:
+          - "/workspace/luca/**"
+        execution_timeout: 120  # More time for test execution
+        security_level: high  # Stricter for test execution
+    
+    doc_writer:
+      name: DocWriter
+      role: doc_writer
+      description: Specialist agent for documentation
+      model: gpt-4
+      temperature: 0.3
+      system_prompt: |
+        You are a documentation specialist. Your responsibilities include:
+        - Writing clear and comprehensive documentation
+        - Maintaining README files and API docs
+        - Creating helpful examples and tutorials
+        - Ensuring documentation stays up-to-date with code
+      capabilities:
+        - documentation_generation
+        - readme_updates
+        - api_documentation
+      tools:
+        - file_io.read_text
+        - file_io.write_text
+    
+    analyst:
+      name: Analyst
+      role: analyst
+      description: QuantConnect specialist for algorithmic trading
+      model: gpt-4o
+      temperature: 0.2
+      system_prompt: |
+        You are a QuantConnect specialist. Your expertise includes:
+        - Developing algorithmic trading strategies
+        - Analyzing backtest results and performance metrics
+        - Optimizing algorithms for efficiency and profitability
+        - Ensuring compliance with trading regulations
+      capabilities:
+        - strategy_development
+        - backtest_analysis
+        - performance_optimization
+      tools:
+        - file_io.read_text
+        - file_io.write_text
+        - quantconnect.run_backtest  # Domain-specific tool
+        - quantconnect.analyze_results
+
+# Environment-specific overrides
+# debug: true  # Enable for development
+# log_level: DEBUG  # More verbose logging
+
+# Production settings (uncomment for production)
+# environment: production
+# components:
+#   context_store:
+#     type: postgres
+#     backup_interval: 3600  # 1 hour
+#   error_schema:
+#     telemetry_enabled: true
+#     error_retention_days: 90
