@@ -1,0 +1,110 @@
+# Default configuration for LUCA Dev Assistant
+# This file contains baseline settings that can be overridden
+
+# Core component configuration
+components:
+  context_store:
+    type: sqlite
+    path: ./data/context.db
+    backup_interval: 300  # 5 minutes
+    
+  tool_registry:
+    default_scope: "/workspace/luca/**"
+    version_check: true
+    allowed_tools: []  # Empty means all tools allowed
+    blocked_tools: []  # Add tool names to block
+    
+  error_schema:
+    levels:
+      - info
+      - warning
+      - error
+      - critical
+    telemetry_enabled: true
+    error_retention_days: 30
+
+# Base agent configuration for Luca manager
+agents:
+  name: Luca
+  role: manager
+  description: Main orchestration agent that coordinates all tasks
+  model: gpt-4o
+  temperature: 0.2
+  system_prompt: |
+    You are Luca, the AutoGen development assistant manager. Your role is to:
+    1. Understand user requests and break them into tasks
+    2. Delegate tasks to appropriate specialist agents
+    3. Coordinate between specialists to achieve the user's goals
+    4. Provide clear, helpful responses to the user
+    
+    Always prioritize code quality, security, and user satisfaction.
+  max_retries: 3
+  timeout_seconds: 300
+  
+  # Empty specialists - to be defined in main config
+  specialists: {}
+
+# Domain configurations
+domains:
+  general:
+    description: General-purpose development
+    active_specialists:
+      - coder
+      - tester
+      - doc_writer
+    
+  web:
+    description: Web development
+    active_specialists:
+      - coder
+      - tester
+    default_tools:
+      - file_io.read_text
+      - file_io.write_text
+    
+  data_science:
+    description: Data science domain
+    active_specialists:
+      - coder
+      - tester
+    
+  quantitative_finance:
+    description: QuantConnect development
+    active_specialists:
+      - coder
+      - tester
+      - analyst
+    specialist_settings:
+      coder:
+        system_prompt: |
+          You are a coding specialist focusing on QuantConnect algorithms.
+          Ensure all code follows QuantConnect's API conventions and best practices.
+      analyst:
+        model: gpt-4o
+
+# Error handling configuration
+error_handling:
+  default:
+    max_retries: 3
+    backoff_factor: 1.5
+    retry_statuses:
+      - timeout
+      - temporary_failure
+    strategy: exponential
+    
+  critical:
+    escalation_path: user_notification
+    recovery_strategies:
+      - restart_agent
+      - switch_model
+      - human_intervention
+
+# Global settings
+debug: false
+log_level: INFO
+environment: development
+
+# API keys should be set via environment variables
+# LUCA_API_KEYS_OPENAI=<your-key>
+# LUCA_API_KEYS_ANTHROPIC=<your-key>
+api_keys: {}
