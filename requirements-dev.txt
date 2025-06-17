@@ -15,7 +15,7 @@ pytest-cov==6.1.1       # For coverage configuration
 pytest-xdist==3.5.0     # For parallel test execution
 
 # Security
-bandit==1.8.3
+bandit==1.8.5
 bandit[toml]  # For pyproject.toml configuration
 safety==3.5.1  # For dependency vulnerability scanning
 
